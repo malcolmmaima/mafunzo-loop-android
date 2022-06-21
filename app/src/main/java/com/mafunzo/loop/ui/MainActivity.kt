@@ -1,7 +1,8 @@
-package com.mafunzo.loop
+package com.mafunzo.loop.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.mafunzo.loop.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
