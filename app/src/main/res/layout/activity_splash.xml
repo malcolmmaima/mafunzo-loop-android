@@ -20,12 +20,11 @@
 
     <ProgressBar
         android:id="@+id/progressBar"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_below="@id/logo"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="20dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
         android:indeterminate="false"
         android:progressTint="@color/colorSecondary"
         android:visibility="visible" />
