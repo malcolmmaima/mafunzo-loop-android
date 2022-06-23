@@ -7,8 +7,6 @@ import android.widget.EditText
 import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
 
-
-
 fun View.snackbar(message: String, action: (() -> Unit)? = null) {
     val snackbar = Snackbar.make(this, message, Snackbar.LENGTH_LONG)
     action?.let {
@@ -51,4 +49,8 @@ fun EditText.showKeyboard() {
 
 fun View.gone() {
     this.visibility = View.GONE
+}
+
+fun View.visible(){
+    this.visibility = View.VISIBLE
 }
