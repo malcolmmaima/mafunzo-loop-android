@@ -27,6 +27,12 @@
         <argument
             android:name="otpCode"
             app:argType="string" />
+        <action
+            android:id="@+id/action_otpVerificationFragment2_to_mainActivity"
+            app:launchSingleTop="true"
+            app:popUpToInclusive="true"
+            app:popUpTo="@layout/activity_main"
+            app:destination="@id/mainActivity" />
     </fragment>
     <activity
         android:id="@+id/mainActivity"

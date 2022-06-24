@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.*
 import com.mafunzo.loop.R
@@ -18,6 +19,7 @@ import com.mafunzo.loop.utils.gone
 import com.mafunzo.loop.utils.snackbar
 import com.mafunzo.loop.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.activity_auth.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.*
@@ -72,7 +74,10 @@ class OtpVerificationFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 authViewModel.isOTPVerified.collect {isVerified ->
                     if (isVerified) {
-                        findNavController().navigate(R.id.mainActivity)
+                        findNavController().navigate(
+                            R.id.mainActivity,
+                            null,
+                            NavOptions.Builder().setPopUpTo(findNavController().graph.startDestinationId, true).build())
                     }
                 }
             }

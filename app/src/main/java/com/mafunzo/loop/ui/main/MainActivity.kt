@@ -21,8 +21,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initializeMain() {
-        supportFragmentManager.popBackStack(null,
-            androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
         Toast.makeText(this, "MainActivity", Toast.LENGTH_SHORT).show()
     }
