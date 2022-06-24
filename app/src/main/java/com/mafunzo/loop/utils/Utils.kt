@@ -51,6 +51,10 @@ fun View.gone() {
     this.visibility = View.GONE
 }
 
+fun View.enable(enabled: Boolean) {
+    this.isEnabled = enabled
+}
+
 fun View.visible(){
     this.visibility = View.VISIBLE
 }

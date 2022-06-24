@@ -1,0 +1,138 @@
+package com.mafunzo.loop.ui.auth
+
+import android.util.Log
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.google.firebase.FirebaseException
+import com.google.firebase.auth.*
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
+import javax.inject.Inject
+
+@HiltViewModel
+class AuthViewModel @Inject constructor(
+    val auth: FirebaseAuth
+) : ViewModel() {
+    val TAG = "AuthViewModel"
+    // we will use this to match the sent otp from firebase
+    lateinit var resendToken: PhoneAuthProvider.ForceResendingToken
+    private lateinit var callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
+
+    private val _codeSent = MutableSharedFlow<Boolean>()
+    val codeSent = _codeSent.asSharedFlow()
+
+    private val _verificationId = MutableSharedFlow<String>()
+    val verificationId = _verificationId.asSharedFlow()
+
+    private val _errorMessage = MutableSharedFlow<String>()
+    val errorMessage = _errorMessage.asSharedFlow()
+
+    private val _isLoading = MutableSharedFlow<Boolean>()
+    val isLoading = _isLoading.asSharedFlow()
+
+    private val _isOTPVerified = MutableSharedFlow<Boolean>()
+    val isOTPVerified = _isOTPVerified.asSharedFlow()
+
+
+    fun initiateFirebaseCallbacks() {
+        // Callback function for Phone Auth
+        callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+
+            override fun onVerificationCompleted(credential: PhoneAuthCredential) {
+                viewModelScope.launch {
+                    _isLoading.emit(false)
+                    Log.d(TAG , "onVerificationCompleted Success")
+
+                    // This callback will be invoked in two situations:
+                    // 1 - Instant verification. In some cases the phone number can be instantly
+                    //     verified without needing to send or enter a verification code.
+                    // 2 - Auto-retrieval. On some devices Google Play services can automatically
+                    //     detect the incoming verification SMS and perform verification without
+                    //     user action.
+
+                    signInWithPhoneAuthCredential(credential)
+                }
+            }
+
+            override fun onVerificationFailed(e: FirebaseException) {
+                viewModelScope.launch {
+                    _isLoading.emit(false)
+                    _errorMessage.emit(e.message.toString())
+                    Log.d(TAG , "onVerificationFailed Error: ${e.message}")
+                }
+            }
+
+            override fun onCodeAutoRetrievalTimeOut(verificationId: String) {
+                viewModelScope.launch {
+                    _isLoading.emit(false)
+                    _errorMessage.emit("OTP Timeout")
+                    Log.d(TAG , "onCodeAutoRetrievalTimeOut")
+                }
+            }
+
+            // On code is sent by the firebase this method is called
+            // in here we start OTP Fragment where user can enter the OTP
+            override fun onCodeSent(
+                verificationId: String,
+                token: PhoneAuthProvider.ForceResendingToken
+            ) {
+                viewModelScope.launch {
+                    _verificationId.emit(verificationId)
+                    _codeSent.emit(true)
+                    _isLoading.emit(false)
+                    resendToken = token
+                    Log.d(TAG,"onCodeSent: $verificationId resendToken: $resendToken")
+                }
+            }
+        }
+    }
+
+    fun sendVerificationCode(number: String, requireActivity: FragmentActivity) {
+        viewModelScope.launch {
+            _isLoading.emit(true)
+            _codeSent.emit(false)
+
+            val options = PhoneAuthOptions.newBuilder(auth)
+                .setPhoneNumber(number) // Phone number to verify
+                .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+                .setActivity(requireActivity) // Activity to display the dialog on
+                .setCallbacks(callbacks) // OnVerificationStateChangedCallbacks
+                .build()
+            PhoneAuthProvider.verifyPhoneNumber(options)
+            Log.d(TAG , "Auth started")
+        }
+    }
+
+    fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    viewModelScope.launch {
+                        _isOTPVerified.emit(true)
+                        _isLoading.emit(false)
+                        Log.d(TAG , "signInWithPhoneAuthCredential Success")
+                    }
+                } else {
+                    viewModelScope.launch{
+                        _isOTPVerified.emit(false)
+                        _isLoading.emit(false)
+                        _errorMessage.emit(task.exception?.message.toString())
+                        Log.d(TAG , "signInWithPhoneAuthCredential Error: ${task.exception?.message}")
+                    }
+                    // Sign in failed, display a message and update the UI
+                    if (task.exception is FirebaseAuthInvalidCredentialsException) {
+                        // The verification code entered was invalid
+                        viewModelScope.launch {
+                            _errorMessage.emit("Invalid code.")
+                            _isLoading.emit(false)
+                            Log.d(TAG , "signInWithPhoneAuthCredential Error: ${task.exception?.message}")
+                        }
+                    }
+                }
+            }
+    }
+}
