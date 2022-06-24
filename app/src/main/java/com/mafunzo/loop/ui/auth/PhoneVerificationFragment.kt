@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.hbb20.CountryCodePicker
 import com.mafunzo.loop.R
@@ -64,7 +65,7 @@ class PhoneVerificationFragment : Fragment() {
                     findNavController().navigate(R.id.action_phoneVerificationFragment2_to_passwordVerificationFragment2, Bundle().apply {
                         putString("storedVerificationId", verificationId)
                         putString("storedPhoneNumber", "+${countryCodePicker.fullNumber}")
-                    })
+                    }, NavOptions.Builder().setPopUpTo(R.id.phoneVerificationFragment2, true).build())
                 }
             }
         }

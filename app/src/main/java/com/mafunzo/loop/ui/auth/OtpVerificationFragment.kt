@@ -1,6 +1,8 @@
 package com.mafunzo.loop.ui.auth
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,12 +16,8 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.*
 import com.mafunzo.loop.R
 import com.mafunzo.loop.databinding.FragmentOtpVerificationBinding
-import com.mafunzo.loop.utils.enable
-import com.mafunzo.loop.utils.gone
-import com.mafunzo.loop.utils.snackbar
-import com.mafunzo.loop.utils.visible
+import com.mafunzo.loop.utils.*
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_auth.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.*
@@ -75,9 +73,9 @@ class OtpVerificationFragment : Fragment() {
                 authViewModel.isOTPVerified.collect {isVerified ->
                     if (isVerified) {
                         findNavController().navigate(
-                            R.id.mainActivity,
+                            R.id.action_otpVerificationFragment2_to_mainActivity,
                             null,
-                            NavOptions.Builder().setPopUpTo(findNavController().graph.startDestinationId, true).build())
+                            NavOptions.Builder().setPopUpTo(R.id.otpVerificationFragment2, false).build())
                     }
                 }
             }
@@ -108,6 +106,7 @@ class OtpVerificationFragment : Fragment() {
         }
     }
 
+
     private fun verifyOtpCode(verificationId: String?, storedPhoneNumber: String?) {
         binding.verifyButton.setOnClickListener {
             if (binding.squareField.text.isNullOrEmpty()) {
@@ -127,6 +126,30 @@ class OtpVerificationFragment : Fragment() {
             authViewModel.initiateFirebaseCallbacks()
             authViewModel.sendVerificationCode(storedPhoneNumber.toString(), requireActivity())
         }
+
+        //squareField text watcher, do something once the text length is 6
+        binding.squareField.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                if (s?.length == 6) {
+                    binding.root.hideKeyboard()
+                    binding.verifyButton.gone()
+                    toggleLoading(true)
+                    val credential : PhoneAuthCredential = PhoneAuthProvider.getCredential(
+                        verificationId.toString(), binding.squareField.text.toString()
+                    )
+                    authViewModel.signInWithPhoneAuthCredential(credential)
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (s?.length != 6) {
+                    binding.verifyButton.visible()
+                }
+            }
+        })
     }
 
     private fun toggleLoading(displayLoading: Boolean) {
