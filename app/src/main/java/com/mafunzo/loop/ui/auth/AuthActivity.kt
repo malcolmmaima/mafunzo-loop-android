@@ -8,11 +8,9 @@ import androidx.lifecycle.lifecycleScope
 import com.mafunzo.loop.databinding.ActivityAuthBinding
 import com.mafunzo.loop.ui.main.MainActivity
 import com.mafunzo.loop.ui.splash.SplashViewModel
-import com.mafunzo.loop.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-
 
 @AndroidEntryPoint
 class AuthActivity : AppCompatActivity() {
