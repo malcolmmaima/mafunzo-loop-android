@@ -128,19 +128,6 @@
             app:layout_constraintEnd_toEndOf="@id/ll_otp"
             app:layout_constraintStart_toStartOf="@id/ll_otp"
             app:layout_constraintTop_toBottomOf="@id/tv_resend" />
-        <ProgressBar
-            android:id="@+id/pb_otp_verification"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
-            android:indeterminate="true"
-            android:indeterminateDrawable="@drawable/progress_bg"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/verifyButton" />
 
     </LinearLayout>
 

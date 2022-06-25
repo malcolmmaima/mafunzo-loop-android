@@ -12,13 +12,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import com.github.razir.progressbutton.hideProgress
 import com.hbb20.CountryCodePicker
 import com.mafunzo.loop.R
 import com.mafunzo.loop.databinding.FragmentPhoneVerificationBinding
-import com.mafunzo.loop.utils.enable
-import com.mafunzo.loop.utils.gone
-import com.mafunzo.loop.utils.snackbar
-import com.mafunzo.loop.utils.visible
+import com.mafunzo.loop.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -91,11 +89,11 @@ class PhoneVerificationFragment : Fragment() {
 
     private fun toggleLoading(displayLoading: Boolean) {
         if (displayLoading) {
-            binding.pbPhoneVerification.visible()
             binding.nextButton.enable(false)
+            binding.nextButton.showProgress()
         } else {
-            binding.pbPhoneVerification.gone()
             binding.nextButton.enable(true)
+            binding.nextButton.hideProgress("LOGIN")
         }
     }
 

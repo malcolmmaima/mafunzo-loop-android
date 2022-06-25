@@ -13,6 +13,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import com.github.razir.progressbutton.hideProgress
+import com.github.razir.progressbutton.showProgress
 import com.google.firebase.auth.*
 import com.mafunzo.loop.R
 import com.mafunzo.loop.databinding.FragmentOtpVerificationBinding
@@ -154,11 +156,11 @@ class OtpVerificationFragment : Fragment() {
 
     private fun toggleLoading(displayLoading: Boolean) {
         if (displayLoading) {
-            binding.pbOtpVerification.visibility = View.VISIBLE
             binding.verifyButton.enable(false)
+            binding.verifyButton.showProgress()
         } else {
-            binding.pbOtpVerification.visibility = View.GONE
             binding.verifyButton.enable(true)
+            binding.verifyButton.hideProgress("VERIFY")
         }
     }
 

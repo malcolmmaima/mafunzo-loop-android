@@ -1,9 +1,13 @@
 package com.mafunzo.loop.utils
 
 import android.content.Context
+import android.graphics.Color
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import com.github.razir.progressbutton.hideProgress
+import com.github.razir.progressbutton.showProgress
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
 
@@ -57,4 +61,16 @@ fun View.enable(enabled: Boolean) {
 
 fun View.visible(){
     this.visibility = View.VISIBLE
+}
+
+fun MaterialButton.hideProgress(text: String) {
+    val button = this
+    button.hideProgress(text)
+}
+
+fun MaterialButton.showProgress() {
+    val button = this
+    button.showProgress {
+        progressColor = Color.WHITE
+    }
 }
