@@ -3,13 +3,17 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/drawable/button_gradient.xml" value="0.1995" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/drawable/gradient_background.xml" value="0.148" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/drawable/one_rounded_corner_rectangle.xml" value="0.1995" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/drawable/progress_bg.xml" value="0.1995" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/drawable/rounded_corner_rectangle.xml" value="0.148" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/font/open_sans.xml" value="0.2791666666666667" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/activity_auth.xml" value="0.1390625" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/activity_main.xml" value="0.1390625" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/activity_splash.xml" value="0.1598731884057971" />
-        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_otp_verification.xml" value="0.1" />
-        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_phone_verification.xml" value="0.2" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_otp_verification.xml" value="0.2" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_phone_verification.xml" value="0.264" />
       </map>
     </option>
   </component>

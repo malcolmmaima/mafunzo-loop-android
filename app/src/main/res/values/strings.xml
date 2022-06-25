@@ -3,9 +3,10 @@
     <string name="welcome_message_1">Welcome to Mafunzo</string>
     <string name="welcome_message_2">Please enter your number to start</string>
     <string name="phone">Enter phone number</string>
-    <string name="phone_verify">Verify</string>
-    <string name="otp_sms">OTP SMS</string>
+    <string name="phone_login">Login</string>
+    <string name="otp_sms">Enter OTP to verify your number</string>
     <string name="enter_otp_sms">Please enter otp sms sent to your number</string>
     <string name="did_not_receive_an_otp">Did not receive an otp sms?</string>
     <string name="resend_otp">Resend</string>
+    <string name="phone_verify">Verify</string>
 </resources>
