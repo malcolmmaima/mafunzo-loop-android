@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import android.R
 import android.content.Intent
+import com.mafunzo.loop.data.models.responses.SchoolResponse
 import com.mafunzo.loop.ui.main.MainActivity
 import com.mafunzo.loop.ui.main.MainViewModel
 
@@ -30,6 +31,8 @@ class AccountSetup : Fragment() {
     private lateinit var binding: FragmentAccountSetupBinding
     private val authViewModel: AuthViewModel by viewModels()
     private val mainViewModel: MainViewModel by viewModels()
+
+    private val schools = arrayListOf<SchoolResponse>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,6 +63,7 @@ class AccountSetup : Fragment() {
 
     private fun setupAccount() {
         mainViewModel.getAccountTypes()
+        mainViewModel.getSchools("KE")
 
         binding.apply {
             setUpNextButton.setOnClickListener {
@@ -107,11 +111,24 @@ class AccountSetup : Fragment() {
                       return@setOnClickListener
                   }
 
+                if(schoolSpinner.selectedItemPosition == 0){
+                    Toast.makeText(
+                        requireContext(),
+                        "Please Select a school",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                    setUpNextButton.isEnabled = true
+                    return@setOnClickListener
+                }
+
 
                 val firstName = editTextTextSecondName.text.trim().toString()
                 val secondName = editTextTextSecondName.text.trim().toString()
                 val email = editTextEmailAddress.text.trim().toString()
                 val accountType = accountTypeSpinner.selectedItem.toString().uppercase()
+                val school = getSchoolResponse(schoolSpinner.selectedItemId)
+                Log.d("AccountSetup", "school: $school")
 
                 this.setUpNextButton.showProgress()
                 this.setUpNextButton.enable(false)
@@ -119,11 +136,16 @@ class AccountSetup : Fragment() {
                     email = email,
                     firstName = firstName,
                     lastName = secondName,
-                    accountType = accountType
+                    accountType = accountType,
+                    schools = listOf(school.id)
                 )
                 registerUser(createUserRequest = userDetails)
             }
         }
+    }
+
+    private fun getSchoolResponse(selectedSchoolId: Long): SchoolResponse {
+        return schools[selectedSchoolId.toInt()]
     }
 
     private fun registerUser(createUserRequest: CreateUserRequest) {
@@ -170,6 +192,25 @@ class AccountSetup : Fragment() {
                             requireContext(),
                             R.layout.simple_spinner_dropdown_item,
                             accounts
+                        )
+                    }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mainViewModel.schools.collectLatest { mafunzoSchools ->
+                    if (mafunzoSchools.isNotEmpty()) {
+                        schools.clear()
+                        schools.add(SchoolResponse(schoolName = "Select School"))
+                        mafunzoSchools.sortedBy { it.schoolName }.forEach {
+                            schools.add(it)
+                        }
+                        binding.schoolSpinner.adapter = ArrayAdapter(
+                            requireContext(),
+                            R.layout.simple_spinner_dropdown_item,
+                            schools.map { it.schoolName }
                         )
                     }
                 }

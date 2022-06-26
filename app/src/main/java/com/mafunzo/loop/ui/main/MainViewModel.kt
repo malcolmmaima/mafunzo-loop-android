@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObject
+import com.mafunzo.loop.data.models.responses.SchoolResponse
 import com.mafunzo.loop.di.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -28,6 +30,9 @@ class MainViewModel @Inject constructor(
 
     private val _errorMessage = MutableSharedFlow<String>()
     val errorMessage = _errorMessage.asSharedFlow()
+
+    private val _schools = MutableSharedFlow<List<SchoolResponse>>()
+    val schools = _schools.asSharedFlow()
 
     fun getAccountTypes(){
         viewModelScope.launch {
@@ -55,6 +60,29 @@ class MainViewModel @Inject constructor(
                         exception.localizedMessage?.let { _errorMessage.emit(it) }
                     }
                     Log.d(TAG, "get failed with ", exception)
+                }
+        }
+    }
+
+    fun getSchools(countryCode: String){
+        viewModelScope.launch {
+            _isLoading.emit(true)
+            //empty list of schools
+            val schools = mutableListOf<SchoolResponse>()
+            firestoreDB.collection(Constants.FIREBASE_APP_SETTINGS)
+                .document(Constants.FIREBASE_APP_SCHOOLS)
+                .collection(countryCode).get().addOnSuccessListener { documents ->
+                    for(document in documents){
+                        viewModelScope.launch {
+                            _isLoading.emit(false)
+                            document.toObject<SchoolResponse>().let { school ->
+                                //add school to list of schools
+                                school.id = document.id
+                                schools.add(school)
+                                _schools.emit(schools)
+                            }
+                        }
+                    }
                 }
         }
     }
