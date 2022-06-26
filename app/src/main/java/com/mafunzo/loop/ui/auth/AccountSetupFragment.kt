@@ -12,8 +12,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.NavOptions
-import androidx.navigation.fragment.findNavController
 import com.mafunzo.loop.data.models.requests.CreateUserRequest
 import com.mafunzo.loop.databinding.FragmentAccountSetupBinding
 import com.mafunzo.loop.ui.auth.viewmodels.AuthViewModel
@@ -24,13 +22,14 @@ import kotlinx.coroutines.launch
 import android.R
 import android.content.Intent
 import com.mafunzo.loop.ui.main.MainActivity
-import com.mafunzo.loop.R as R2
+import com.mafunzo.loop.ui.main.MainViewModel
 
 @AndroidEntryPoint
 class AccountSetup : Fragment() {
     
     private lateinit var binding: FragmentAccountSetupBinding
     private val authViewModel: AuthViewModel by viewModels()
+    private val mainViewModel: MainViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,12 +59,7 @@ class AccountSetup : Fragment() {
     }
 
     private fun setupAccount() {
-        //initialize Spinner with some dummy list. we'll fetch this from firebase later.
-        binding.accountTypeSpinner.adapter = ArrayAdapter<String>(
-            requireContext(),
-            R.layout.simple_spinner_dropdown_item,
-            arrayOf("Select Account Type", "Parent", "Student", "Teacher", "Bus Driver")
-        )
+        mainViewModel.getAccountTypes()
 
         binding.apply {
             setUpNextButton.setOnClickListener {
@@ -160,5 +154,65 @@ class AccountSetup : Fragment() {
                 }
             }
         }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mainViewModel.accountTypes.collectLatest { accountTypes ->
+                    if (accountTypes.isNotEmpty()) {
+                        //add default option to spinner
+                        val accounts = arrayListOf<String>()
+                        accounts.add("Select Account Type")
+                        accountTypes.forEach {
+                            accounts.add(it)
+                        }
+                        Log.d("AccountSetup", "Account Types Loaded")
+                        binding.accountTypeSpinner.adapter = ArrayAdapter<String>(
+                            requireContext(),
+                            R.layout.simple_spinner_dropdown_item,
+                            accounts
+                        )
+                    }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mainViewModel.isLoading.collectLatest { isLoading ->
+                    if (isLoading) {
+                        binding.setUpNextButton.showProgress()
+                        binding.setUpNextButton.enable(false)
+                    } else {
+                        binding.setUpNextButton.enable(true)
+                        binding.setUpNextButton.hideProgress("NEXT")
+                    }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                authViewModel.isLoading.collectLatest { isLoading ->
+                    if (isLoading) {
+                        binding.setUpNextButton.showProgress()
+                        binding.setUpNextButton.enable(false)
+                    } else {
+                        binding.setUpNextButton.enable(true)
+                        binding.setUpNextButton.hideProgress("NEXT")
+                    }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mainViewModel.errorMessage.collectLatest { errorMessage ->
+                    if (errorMessage.isNotEmpty()) {
+                        binding.root.snackbar(errorMessage)
+                    }
+                }
+            }
+        }
+
     }
 }
