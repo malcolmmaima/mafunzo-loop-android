@@ -19,10 +19,8 @@ import com.mafunzo.loop.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import android.R
 import android.content.Intent
-import androidx.compose.ui.text.capitalize
-import androidx.compose.ui.text.toUpperCase
+import com.mafunzo.loop.R
 import com.mafunzo.loop.data.models.responses.SchoolResponse
 import com.mafunzo.loop.ui.main.MainActivity
 import com.mafunzo.loop.ui.main.MainViewModel
@@ -192,7 +190,7 @@ class AccountSetup : Fragment() {
                         Log.d("AccountSetup", "Account Types Loaded")
                         binding.accountTypeSpinner.adapter = ArrayAdapter<String>(
                             requireContext(),
-                            R.layout.simple_spinner_dropdown_item,
+                            R.layout.drop_down_spinner_layout,
                             accounts
                         )
                     }
@@ -211,7 +209,7 @@ class AccountSetup : Fragment() {
                         }
                         binding.schoolSpinner.adapter = ArrayAdapter(
                             requireContext(),
-                            R.layout.simple_spinner_dropdown_item,
+                            R.layout.drop_down_spinner_layout,
                             schools.map { it.schoolName }
                         )
                     }
