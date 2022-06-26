@@ -87,8 +87,9 @@ dependencies {
     // Import the BoM for the Firebase platform
     implementation platform('com.google.firebase:firebase-bom:30.1.0')
 
-    // Declare the dependency for the Firebase Authentication library
-    implementation 'com.google.firebase:firebase-auth'
+    // Declare the dependency for the Firebase Authentication and firestore library
+    implementation 'com.google.firebase:firebase-auth-ktx'
+    implementation 'com.google.firebase:firebase-firestore-ktx'
 
     implementation 'com.google.firebase:firebase-analytics-ktx'
 

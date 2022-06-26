@@ -12,10 +12,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
-import com.github.razir.progressbutton.hideProgress
 import com.hbb20.CountryCodePicker
 import com.mafunzo.loop.R
 import com.mafunzo.loop.databinding.FragmentPhoneVerificationBinding
+import com.mafunzo.loop.ui.auth.viewmodels.AuthViewModel
 import com.mafunzo.loop.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -100,6 +100,7 @@ class PhoneVerificationFragment : Fragment() {
     private fun validatePhoneNumber() {
         countryCodePicker = binding.ccp
         countryCodePicker.registerCarrierNumberEditText(binding.etPhoneNumber)
+        binding.etPhoneNumber.hideKeyboard()
 
         binding.nextButton.setOnClickListener {
             Log.d("PhoneVerification", "Phone number: ${countryCodePicker.fullNumber}")
@@ -108,10 +109,22 @@ class PhoneVerificationFragment : Fragment() {
                 binding.etPhoneNumber.error = "Invalid phone number"
                 toggleLoading(false)
                 return@setOnClickListener
-            } else {
+            }
+            //only KE is supported for now
+            else if(countryCodePicker.selectedCountryCode != "254"){
+                binding.root.snackbar("Only Kenya is supported for now")
+                toggleLoading(false)
+                return@setOnClickListener
+            }
+            else {
                 toggleLoading(true)
                 authViewModel.sendVerificationCode("+${countryCodePicker.fullNumber}", requireActivity())
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.etPhoneNumber.hideKeyboard()
     }
 }

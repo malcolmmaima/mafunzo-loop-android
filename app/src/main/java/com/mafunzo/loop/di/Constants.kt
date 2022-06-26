@@ -1,0 +1,6 @@
+package com.mafunzo.loop.di
+
+object Constants {
+    const val FIREBASE_APP_SETTINGS = "app_settings"
+    const val FIREBASE_APP_USERS = "users"
+}

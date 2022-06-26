@@ -1,11 +1,16 @@
-package com.mafunzo.loop.ui.auth
+package com.mafunzo.loop.ui.auth.viewmodels
 
 import android.util.Log
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
+import com.google.firebase.firestore.FirebaseFirestore
+import com.mafunzo.loop.data.models.requests.CreateUserRequest
+import com.mafunzo.loop.data.models.responses.UserResponse
+import com.mafunzo.loop.di.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -15,9 +20,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    val auth: FirebaseAuth
+    val auth: FirebaseAuth,
+    val firestoreDB: FirebaseFirestore
 ) : ViewModel() {
     val TAG = "AuthViewModel"
+
     // we will use this to match the sent otp from firebase
     lateinit var resendToken: PhoneAuthProvider.ForceResendingToken
     private lateinit var callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
@@ -37,6 +44,13 @@ class AuthViewModel @Inject constructor(
     private val _isOTPVerified = MutableSharedFlow<Boolean>()
     val isOTPVerified = _isOTPVerified.asSharedFlow()
 
+    val userPhoneNumber = auth.currentUser?.phoneNumber
+
+    private val _userCreated = MutableSharedFlow<Boolean>()
+    val userCreated = _userCreated.asSharedFlow()
+
+    private val _userExists = MutableSharedFlow<Boolean>()
+    val userExists = _userExists.asSharedFlow()
 
     fun initiateFirebaseCallbacks() {
         // Callback function for Phone Auth
@@ -134,5 +148,72 @@ class AuthViewModel @Inject constructor(
                     }
                 }
             }
+    }
+
+    fun createUser(newUser: CreateUserRequest) {
+        viewModelScope.launch {
+            _isLoading.emit(true)
+            val user = auth.currentUser
+            if (user != null) {
+                val phoneNumber = user.phoneNumber
+                if(phoneNumber != null) {
+                    firestoreDB.collection(Constants.FIREBASE_APP_USERS).document(phoneNumber).set(newUser).addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            viewModelScope.launch {
+                                _isLoading.emit(false)
+                                _userCreated.emit(true)
+                                Log.d(TAG, "createUser Success")
+                            }
+                        } else {
+                            viewModelScope.launch {
+                                _isLoading.emit(false)
+                                _userCreated.emit(false)
+                                _errorMessage.emit(task.exception?.message.toString())
+                                Log.d(TAG, "createUser Error: ${task.exception?.message}")
+                            }
+                        }
+                    }
+                }
+            } else {
+                _isLoading.emit(false)
+                _userCreated.emit(false)
+                _errorMessage.emit("User is null")
+            }
+        }
+    }
+
+    fun fetchUser(phoneNumber: String){
+        viewModelScope.launch {
+            _isLoading.emit(true)
+            firestoreDB.collection(Constants.FIREBASE_APP_USERS).document(phoneNumber).get().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val user = task.result?.toObject(UserResponse::class.java)
+                    if(user != null && user.accountType?.isNotEmpty() == true) {
+                        viewModelScope.launch {
+                            _isLoading.emit(false)
+                            _userExists.emit(true)
+                            Log.d(TAG, "fetchUser Success")
+                        }
+                    } else {
+                        viewModelScope.launch {
+                            _isLoading.emit(false)
+                            _userExists.emit(false)
+                            Log.d(TAG, "fetchUser Error: User is null")
+                        }
+                    }
+                } else {
+                    viewModelScope.launch {
+                        _isLoading.emit(false)
+                        _userExists.emit(false)
+                        _errorMessage.emit(task.exception?.message.toString())
+                        Log.d(TAG, "fetchUser Error: ${task.exception?.message}")
+                    }
+                }
+            }
+        }
+    }
+
+    fun signOutFirebaseUser() {
+        auth.signOut()
     }
 }

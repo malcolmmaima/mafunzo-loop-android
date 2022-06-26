@@ -2,6 +2,8 @@ package com.mafunzo.loop.di
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,4 +21,8 @@ object AppModule {
     @Singleton
     @Provides
     fun providesAuth() = FirebaseAuth.getInstance()
+
+    @Singleton
+    @Provides
+    fun provideFirestore() = Firebase.firestore
 }

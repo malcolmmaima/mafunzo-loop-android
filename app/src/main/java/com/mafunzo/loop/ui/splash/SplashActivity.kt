@@ -9,16 +9,19 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.mafunzo.loop.databinding.ActivitySplashBinding
 import com.mafunzo.loop.ui.auth.AuthActivity
+import com.mafunzo.loop.ui.auth.viewmodels.AuthViewModel
 import com.mafunzo.loop.ui.main.MainActivity
 import com.mafunzo.loop.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySplashBinding
     private val splashViewModel: SplashViewModel by viewModels()
+    private val authViewModel: AuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +35,13 @@ class SplashActivity : AppCompatActivity() {
     private fun initializeObservers() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                //observe something
+                authViewModel.userExists.collectLatest { userExists ->
+                    if (userExists) {
+                        loadMainActivity()
+                    } else {
+                        loadAuth()
+                    }
+                }
             }
         }
     }
@@ -40,10 +49,12 @@ class SplashActivity : AppCompatActivity() {
     private fun initSplash() {
         binding.progressBar.visible()
         lifecycleScope.launch {
-            delay(2000)
             if(splashViewModel.isUserLoggedIn()){
-                loadMainActivity()
+                authViewModel.userPhoneNumber?.let { phoneNumber ->
+                    authViewModel.fetchUser(phoneNumber)
+                }
             } else {
+                delay(3000)
                 loadAuth()
             }
         }

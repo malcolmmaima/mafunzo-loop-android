@@ -15,5 +15,4 @@ class SplashViewModel @Inject constructor(
 ) : ViewModel() {
 
     fun isUserLoggedIn() = auth.currentUser != null
-
 }

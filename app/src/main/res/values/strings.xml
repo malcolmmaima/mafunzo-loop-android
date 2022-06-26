@@ -9,4 +9,12 @@
     <string name="did_not_receive_an_otp">Did not receive an otp sms?</string>
     <string name="resend_otp">Resend</string>
     <string name="phone_verify">Verify</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="welcome_to_mafunzo">Welcome to Mafunzo Loop</string>
+    <string name="to_start_using_the_app">"Please setup your account "</string>
+    <string name="first_name">First Name</string>
+    <string name="second_name">Second Name</string>
+    <string name="email_address">Email Address</string>
+    <string name="next">NEXT</string>
 </resources>

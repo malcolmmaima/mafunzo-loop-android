@@ -1,8 +1,10 @@
 package com.mafunzo.loop.ui.auth
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,11 +15,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
-import com.github.razir.progressbutton.hideProgress
-import com.github.razir.progressbutton.showProgress
+import com.mafunzo.loop.utils.showProgress
 import com.google.firebase.auth.*
 import com.mafunzo.loop.R
 import com.mafunzo.loop.databinding.FragmentOtpVerificationBinding
+import com.mafunzo.loop.ui.auth.viewmodels.AuthViewModel
+import com.mafunzo.loop.ui.main.MainActivity
 import com.mafunzo.loop.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -26,6 +29,7 @@ import java.util.*
 
 @AndroidEntryPoint
 class OtpVerificationFragment : Fragment() {
+    val TAG = "OtpVerificationFragment"
     private lateinit var binding: FragmentOtpVerificationBinding
     private val authViewModel: AuthViewModel by viewModels()
     private var tt: TimerTask? = null
@@ -59,6 +63,7 @@ class OtpVerificationFragment : Fragment() {
         binding.tvOtpNotReceived.gone()
         binding.tvResend.gone()
         startTimer()
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 authViewModel.isLoading.collectLatest { isLoading ->
@@ -72,12 +77,10 @@ class OtpVerificationFragment : Fragment() {
         }
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                authViewModel.isOTPVerified.collect {isVerified ->
+                authViewModel.isOTPVerified.collectLatest { isVerified ->
                     if (isVerified) {
-                        findNavController().navigate(
-                            R.id.action_otpVerificationFragment2_to_mainActivity,
-                            null,
-                            NavOptions.Builder().setPopUpTo(R.id.otpVerificationFragment2, false).build())
+                        Log.d(TAG, "isVerified: $isVerified")
+                        checkUser()
                     }
                 }
             }
@@ -86,7 +89,7 @@ class OtpVerificationFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 authViewModel.codeSent.collectLatest { codeSent ->
-                    if(codeSent){
+                    if (codeSent) {
                         binding.root.snackbar("Code sent to $storedPhoneNumber")
                         stopTimer()
                         startTimer()
@@ -97,12 +100,49 @@ class OtpVerificationFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                authViewModel.errorMessage.collectLatest {errorMessage ->
+                authViewModel.errorMessage.collectLatest { errorMessage ->
+                    binding.root.snackbar(errorMessage)
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                authViewModel.errorMessage.collectLatest { errorMessage ->
                     binding.root.snackbar(errorMessage)
                     binding.tvOtpNotReceived.visible()
                     binding.tvResend.visible()
                     binding.timertv.gone()
                     binding.squareField.text?.clear()
+                    binding.verifyButton.hideProgress("VERIFY")
+                }
+            }
+        }
+    }
+
+    private fun checkUser() {
+        storedPhoneNumber?.let { phoneNumber ->
+            Log.d(TAG, "checkUser: $phoneNumber")
+            authViewModel.fetchUser(phoneNumber)
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
+                authViewModel.userExists.collectLatest { exists ->
+                    if (exists) {
+                        Log.d(TAG, "User exists")
+                        val intent = Intent(requireActivity(), MainActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(intent)
+                        requireActivity().finish()
+                    } else {
+                        Log.d(TAG, "User does not exist")
+                        findNavController().navigate(
+                            R.id.action_otpVerificationFragment2_to_accountSetupFragment2,
+                            null,
+                            NavOptions.Builder()
+                                .setPopUpTo(R.id.otpVerificationFragment2, false).build()
+                        )
+                    }
                 }
             }
         }
@@ -116,7 +156,7 @@ class OtpVerificationFragment : Fragment() {
                 binding.root.snackbar("Please Enter OTP")
                 return@setOnClickListener
             } else {
-                val credential : PhoneAuthCredential = PhoneAuthProvider.getCredential(
+                val credential: PhoneAuthCredential = PhoneAuthProvider.getCredential(
                     verificationId.toString(), binding.squareField.text.toString()
                 )
                 authViewModel.signInWithPhoneAuthCredential(credential)
@@ -134,9 +174,9 @@ class OtpVerificationFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {
                 if (s?.length == 6) {
                     binding.root.hideKeyboard()
-                    binding.verifyButton.gone()
+                    binding.verifyButton.showProgress()
                     toggleLoading(true)
-                    val credential : PhoneAuthCredential = PhoneAuthProvider.getCredential(
+                    val credential: PhoneAuthCredential = PhoneAuthProvider.getCredential(
                         verificationId.toString(), binding.squareField.text.toString()
                     )
                     authViewModel.signInWithPhoneAuthCredential(credential)
@@ -179,8 +219,7 @@ class OtpVerificationFragment : Fragment() {
                         binding.timertv.gone()
                         timer.cancel()
                     }
-                }
-                else {
+                } else {
                     activity?.runOnUiThread {
                         binding.timertv.text = "00:" + second--
                     }

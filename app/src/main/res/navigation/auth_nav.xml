@@ -30,6 +30,19 @@
         <action
             android:id="@+id/action_otpVerificationFragment2_to_mainActivity"
             app:destination="@id/mainActivity" />
+        <action
+            android:id="@+id/action_otpVerificationFragment2_to_accountSetupFragment2"
+            app:destination="@id/accountSetupFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/accountSetupFragment2"
+        android:name="com.mafunzo.loop.ui.auth.AccountSetup"
+        android:label="AccountSetupFragment"
+        tools:layout="@layout/fragment_account_setup">
+
+        <action
+            android:id="@+id/action_accountSetupFragment2_to_mainActivity"
+            app:destination="@id/mainActivity" />
     </fragment>
     <activity
         android:id="@+id/mainActivity"
