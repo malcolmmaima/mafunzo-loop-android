@@ -37,6 +37,7 @@ class SplashActivity : AppCompatActivity() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 authViewModel.userExists.collectLatest { userExists ->
                     if (userExists) {
+                        delay(2000)
                         loadMainActivity()
                     } else {
                         loadAuth()
