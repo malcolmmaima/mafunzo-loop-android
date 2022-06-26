@@ -21,6 +21,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import android.R
 import android.content.Intent
+import androidx.compose.ui.text.capitalize
+import androidx.compose.ui.text.toUpperCase
 import com.mafunzo.loop.data.models.responses.SchoolResponse
 import com.mafunzo.loop.ui.main.MainActivity
 import com.mafunzo.loop.ui.main.MainViewModel
@@ -185,7 +187,7 @@ class AccountSetup : Fragment() {
                         val accounts = arrayListOf<String>()
                         accounts.add("Select Account Type")
                         accountTypes.forEach {
-                            accounts.add(it)
+                            accounts.add(it.lowercase())
                         }
                         Log.d("AccountSetup", "Account Types Loaded")
                         binding.accountTypeSpinner.adapter = ArrayAdapter<String>(
