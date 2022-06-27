@@ -20,7 +20,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initializeMain() {
-
-        Toast.makeText(this, "MainActivity", Toast.LENGTH_SHORT).show()
+        //do something
     }
 }

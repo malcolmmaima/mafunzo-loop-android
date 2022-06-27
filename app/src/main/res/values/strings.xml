@@ -17,4 +17,8 @@
     <string name="next">NEXT</string>
     <string name="announcements">Announcements</string>
     <string name="calendar_title">Calendar</string>
+    <string name="requests">Requests</string>
+    <string name="teachers">Teachers</string>
+    <string name="school_bus">School bus</string>
+    <string name="contacts">Contacts</string>
 </resources>

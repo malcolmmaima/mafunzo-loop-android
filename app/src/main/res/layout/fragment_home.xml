@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_background">
@@ -24,8 +27,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
+        android:layout_marginEnd="50dp"
         android:layout_marginBottom="80dp"
-        android:text="Hi John Doe"
+        android:text="Hi Malcolm,"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:fontFamily="monospace"
@@ -67,8 +71,10 @@
             android:layout_height="150dp"
             android:layout_margin="10dp"
             android:clickable="true"
-            android:focusable="true"
-            app:cardCornerRadius="12dp">
+            android:focusableInTouchMode="false"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:cardCornerRadius="12dp"
+            android:focusable="true">
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -90,11 +96,13 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/ic_calendar"
+            android:id="@+id/cv_calendar"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_margin="10dp"
             android:clickable="true"
+            android:focusableInTouchMode="false"
+            android:foreground="?android:attr/selectableItemBackground"
             app:cardCornerRadius="12dp"
             android:focusable="true">
             <ImageView
@@ -130,7 +138,138 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
+        <GridLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:columnCount="2"
+            android:rowCount="2"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:paddingBottom="20dp"
+            android:layout_marginTop="120dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_requests"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_margin="10dp"
+                android:clickable="true"
+                android:focusableInTouchMode="false"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardCornerRadius="12dp"
+                android:focusable="true">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_requests"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/requests"
+                    android:fontFamily="monospace"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:layout_marginTop="100dp"
+                    android:layout_gravity="center_horizontal"
+                    />
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_school_bus"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_margin="10dp"
+                android:clickable="true"
+                android:focusableInTouchMode="false"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardCornerRadius="12dp"
+                android:focusable="true">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_school_bus"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/school_bus"
+                    android:fontFamily="monospace"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:layout_marginTop="100dp"
+                    android:layout_gravity="center_horizontal"
+                    />
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_teachers"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_margin="10dp"
+                android:clickable="true"
+                android:focusableInTouchMode="false"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardCornerRadius="12dp"
+                android:focusable="true">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_teachers"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/teachers"
+                    android:fontFamily="monospace"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:layout_marginTop="100dp"
+                    android:layout_gravity="center_horizontal"
+                    />
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_contact"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_margin="10dp"
+                android:clickable="true"
+                android:focusableInTouchMode="false"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardCornerRadius="12dp"
+                android:focusable="true">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_contacts"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/contacts"
+                    android:fontFamily="monospace"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:layout_marginTop="100dp"
+                    android:layout_gravity="center_horizontal"
+                    />
+            </androidx.cardview.widget.CardView>
+        </GridLayout>
+
     </LinearLayout>
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
