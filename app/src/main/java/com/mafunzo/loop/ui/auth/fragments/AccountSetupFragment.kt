@@ -124,7 +124,7 @@ class AccountSetup : Fragment() {
                 }
 
 
-                val firstName = editTextTextSecondName.text.trim().toString()
+                val firstName = editTextTextFirstName.text.trim().toString()
                 val secondName = editTextTextSecondName.text.trim().toString()
                 val email = editTextEmailAddress.text.trim().toString()
                 val accountType = accountTypeSpinner.selectedItem.toString().uppercase()

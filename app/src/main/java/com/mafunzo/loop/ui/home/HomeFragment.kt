@@ -6,14 +6,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.mafunzo.loop.data.models.responses.UserResponse
 import com.mafunzo.loop.databinding.FragmentHomeBinding
+import com.mafunzo.loop.ui.auth.viewmodels.AuthViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
+    private val authViewModel: AuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -28,6 +38,28 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initializeHomeWidgets()
+        getUserDetails()
+        initializeObservers()
+    }
+
+
+    private fun initializeObservers() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                authViewModel.userDetails.collectLatest {user ->
+                    setWidgetValues(user)
+                }
+            }
+        }
+    }
+
+    private fun getUserDetails() {
+        //fetch user details from firebase
+        authViewModel.userPhoneNumber.let { phoneNumber ->
+            if (phoneNumber != null) {
+                authViewModel.fetchUser(phoneNumber)
+            }
+        }
     }
 
     private fun initializeHomeWidgets() {
@@ -58,5 +90,9 @@ class HomeFragment : Fragment() {
         binding.cvContact.setOnClickListener {
             Toast.makeText(context, "Contact", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun setWidgetValues(user: UserResponse) {
+        binding.helloMessageTV.text = "Hi ${user.firstName},"
     }
 }

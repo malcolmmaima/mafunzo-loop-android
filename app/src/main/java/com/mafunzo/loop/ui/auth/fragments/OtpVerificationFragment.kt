@@ -148,7 +148,6 @@ class OtpVerificationFragment : Fragment() {
         }
     }
 
-
     private fun verifyOtpCode(verificationId: String?, storedPhoneNumber: String?) {
         binding.verifyButton.setOnClickListener {
             if (binding.squareField.text.isNullOrEmpty()) {
