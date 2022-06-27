@@ -136,6 +136,8 @@ class AccountSetup : Fragment() {
                     email = email,
                     firstName = firstName,
                     lastName = secondName,
+                    profilePic = "",
+                    dateCreated = getCurrentTimeInMillis(),
                     accountType = accountType,
                     schools = listOf(school.id)
                 )

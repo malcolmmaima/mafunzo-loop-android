@@ -74,3 +74,7 @@ fun MaterialButton.showProgress() {
         progressColor = Color.WHITE
     }
 }
+
+fun getCurrentTimeInMillis(): Long {
+    return System.currentTimeMillis()
+}

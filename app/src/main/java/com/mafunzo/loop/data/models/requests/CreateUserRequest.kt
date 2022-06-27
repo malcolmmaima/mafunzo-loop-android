@@ -7,6 +7,8 @@ data class CreateUserRequest(
     val email: String,
     val firstName: String,
     val lastName: String,
+    val profilePic: String,
+    val dateCreated: Long,
     val accountType: String,
     val schools: List<String?>
 )
