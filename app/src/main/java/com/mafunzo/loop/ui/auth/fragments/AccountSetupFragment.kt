@@ -1,4 +1,4 @@
-package com.mafunzo.loop.ui.auth
+package com.mafunzo.loop.ui.auth.fragments
 
 import android.os.Bundle
 import android.util.Log
@@ -22,8 +22,9 @@ import kotlinx.coroutines.launch
 import android.content.Intent
 import com.mafunzo.loop.R
 import com.mafunzo.loop.data.models.responses.SchoolResponse
+import com.mafunzo.loop.ui.auth.AuthActivity
 import com.mafunzo.loop.ui.main.MainActivity
-import com.mafunzo.loop.ui.main.MainViewModel
+import com.mafunzo.loop.ui.main.viewmodel.MainViewModel
 
 @AndroidEntryPoint
 class AccountSetup : Fragment() {

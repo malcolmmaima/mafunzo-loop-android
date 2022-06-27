@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/phoneVerificationFragment2"
-        android:name="com.mafunzo.loop.ui.auth.PhoneVerificationFragment"
+        android:name="com.mafunzo.loop.ui.auth.fragments.PhoneVerificationFragment"
         android:label="PhoneVerificationFragment"
         tools:layout="@layout/fragment_phone_verification">
 
@@ -21,7 +21,7 @@
 
     <fragment
         android:id="@+id/otpVerificationFragment2"
-        android:name="com.mafunzo.loop.ui.auth.OtpVerificationFragment"
+        android:name="com.mafunzo.loop.ui.auth.fragments.OtpVerificationFragment"
         android:label="OtpVerificationFragment"
         tools:layout="@layout/fragment_otp_verification">
         <argument
@@ -36,7 +36,7 @@
     </fragment>
     <fragment
         android:id="@+id/accountSetupFragment2"
-        android:name="com.mafunzo.loop.ui.auth.AccountSetup"
+        android:name="com.mafunzo.loop.ui.auth.fragments.AccountSetup"
         android:label="AccountSetupFragment"
         tools:layout="@layout/fragment_account_setup">
 

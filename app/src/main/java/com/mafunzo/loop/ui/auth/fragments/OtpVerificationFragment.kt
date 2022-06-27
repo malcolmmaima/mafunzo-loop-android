@@ -1,4 +1,4 @@
-package com.mafunzo.loop.ui.auth
+package com.mafunzo.loop.ui.auth.fragments
 
 import android.content.Intent
 import android.os.Bundle

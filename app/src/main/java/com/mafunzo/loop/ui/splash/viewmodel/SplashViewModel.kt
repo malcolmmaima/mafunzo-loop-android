@@ -1,4 +1,4 @@
-package com.mafunzo.loop.ui.splash
+package com.mafunzo.loop.ui.splash.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

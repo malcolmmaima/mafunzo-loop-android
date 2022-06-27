@@ -62,10 +62,12 @@
         app:layout_constraintTop_toBottomOf="@+id/profilePicIV">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cv_notices"
+            android:id="@+id/cv_announcements"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_margin="10dp"
+            android:clickable="true"
+            android:focusable="true"
             app:cardCornerRadius="12dp">
             <ImageView
                 android:layout_width="wrap_content"
@@ -88,11 +90,13 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cv_newsletter"
+            android:id="@+id/ic_calendar"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_margin="10dp"
-            app:cardCornerRadius="12dp">
+            android:clickable="true"
+            app:cardCornerRadius="12dp"
+            android:focusable="true">
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
