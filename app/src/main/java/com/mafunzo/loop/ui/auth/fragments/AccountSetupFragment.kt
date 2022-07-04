@@ -14,7 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.mafunzo.loop.data.models.requests.CreateUserRequest
 import com.mafunzo.loop.databinding.FragmentAccountSetupBinding
-import com.mafunzo.loop.ui.auth.viewmodels.AuthViewModel
+import com.mafunzo.loop.ui.auth.viewmodel.AuthViewModel
 import com.mafunzo.loop.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest

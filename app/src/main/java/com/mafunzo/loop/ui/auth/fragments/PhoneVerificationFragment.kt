@@ -15,7 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.hbb20.CountryCodePicker
 import com.mafunzo.loop.R
 import com.mafunzo.loop.databinding.FragmentPhoneVerificationBinding
-import com.mafunzo.loop.ui.auth.viewmodels.AuthViewModel
+import com.mafunzo.loop.ui.auth.viewmodel.AuthViewModel
 import com.mafunzo.loop.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest

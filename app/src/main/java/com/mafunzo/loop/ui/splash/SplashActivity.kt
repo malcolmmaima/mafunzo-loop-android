@@ -9,7 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.mafunzo.loop.databinding.ActivitySplashBinding
 import com.mafunzo.loop.ui.auth.AuthActivity
-import com.mafunzo.loop.ui.auth.viewmodels.AuthViewModel
+import com.mafunzo.loop.ui.auth.viewmodel.AuthViewModel
 import com.mafunzo.loop.ui.main.MainActivity
 import com.mafunzo.loop.ui.splash.viewmodel.SplashViewModel
 import com.mafunzo.loop.utils.visible

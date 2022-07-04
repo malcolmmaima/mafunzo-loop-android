@@ -78,3 +78,13 @@ fun MaterialButton.showProgress() {
 fun getCurrentTimeInMillis(): Long {
     return System.currentTimeMillis()
 }
+
+// a function that takes time in milliseconds and returns formatted string of date and time e.g. 4 July 2022, 9:02:33 AM
+fun Long.formatDateTime(): String {
+    return try {
+        val dateTime = SimpleDateFormat("dd MMM yyyy, hh:mm a").format(this)
+        dateTime
+    } catch (e: Exception) {
+        ""
+    }
+}

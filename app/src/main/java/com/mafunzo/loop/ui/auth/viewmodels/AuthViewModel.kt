@@ -1,4 +1,4 @@
-package com.mafunzo.loop.ui.auth.viewmodels
+package com.mafunzo.loop.ui.auth.viewmodel
 
 import android.util.Log
 import androidx.fragment.app.FragmentActivity

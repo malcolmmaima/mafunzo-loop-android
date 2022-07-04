@@ -5,4 +5,5 @@ object Constants {
     const val FIREBASE_APP_ACCOUNT_TYPES = "account_types"
     const val FIREBASE_APP_SCHOOLS = "schools"
     const val FIREBASE_APP_USERS = "users"
+    const val FIREBASE_SCHOOL_ANNOUNCEMENTS = "announcements"
 }

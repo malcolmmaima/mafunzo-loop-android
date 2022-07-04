@@ -1,19 +1,35 @@
 package com.mafunzo.loop.ui.announcements
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.material.snackbar.Snackbar
 import com.mafunzo.loop.R
 import com.mafunzo.loop.databinding.FragmentAnnouncementsBinding
+import com.mafunzo.loop.ui.announcements.adapters.AnnouncementAdapter
+import com.mafunzo.loop.ui.announcements.viewmodel.AnnouncementsViewModel
 import com.mafunzo.loop.ui.main.MainActivity
+import com.mafunzo.loop.utils.gone
+import com.mafunzo.loop.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class AnnouncementsFragment : Fragment() {
+class AnnouncementsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var binding: FragmentAnnouncementsBinding
+    private val announcementsViewModel: AnnouncementsViewModel by viewModels()
+    private lateinit var announcementAdapter: AnnouncementAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,12 +40,77 @@ class AnnouncementsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentAnnouncementsBinding.inflate(inflater, container, false)
+
+        binding.swipeContainer.setOnRefreshListener(this)
+        binding.swipeContainer.setColorSchemeResources(
+            R.color.colorPrimary,
+            android.R.color.holo_green_dark,
+            android.R.color.holo_orange_dark,
+            android.R.color.holo_blue_dark
+        )
+
+        binding.swipeContainer.post {
+            binding.swipeContainer.isRefreshing = true
+        }
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpToolbar()
+        fetchAnnouncements()
+        initObservers()
+        setupAnnouncementAdapter()
+    }
+
+    private fun initObservers() {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                announcementsViewModel.announcements.observe(viewLifecycleOwner) { announcements ->
+                    binding.swipeContainer.isRefreshing = false
+                    if(announcements.isNotEmpty()) {
+                        binding.rvAnnouncements.visible()
+                        binding.tvNoAnnouncements.gone()
+                        announcementAdapter.saveData(announcements)
+                        binding.rvAnnouncements.scrollToPosition(0)
+                    } else {
+                        binding.rvAnnouncements.gone()
+                        binding.tvNoAnnouncements.visible()
+                    }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                announcementsViewModel.errorMessage.observe(viewLifecycleOwner) { error ->
+                    binding.swipeContainer.isRefreshing = false
+                    if(error != null) {
+                        Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).show()
+                    }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                announcementsViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+                    if(isLoading) {
+                        binding.swipeContainer.isRefreshing = true
+                        binding.rvAnnouncements.gone()
+                        binding.tvNoAnnouncements.gone()
+                    } else {
+                        binding.swipeContainer.isRefreshing = false
+                        binding.rvAnnouncements.visible()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun fetchAnnouncements() {
+        announcementsViewModel.getAnnouncements("BrU5poiKIoaJqYs0TnfV","parents")
     }
 
     private fun setUpToolbar() {
@@ -41,5 +122,23 @@ class AnnouncementsFragment : Fragment() {
         binding.toolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
+    }
+
+    private fun setupAnnouncementAdapter() {
+        announcementAdapter = AnnouncementAdapter()
+        announcementAdapter.onItemClick { announcementResponse ->
+            Log.d("AnnouncementsFragment", "Announcement: $announcementResponse")
+        }
+
+        binding.rvAnnouncements.apply {
+            adapter = announcementAdapter
+            layoutManager =
+                LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        }
+
+    }
+
+    override fun onRefresh() {
+        fetchAnnouncements()
     }
 }
