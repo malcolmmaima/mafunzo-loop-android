@@ -22,4 +22,5 @@
     <string name="school_bus">School bus</string>
     <string name="contacts">Contacts</string>
     <string name="profile_welcome">Hi,</string>
+    <string name="setup_account">Setup Account</string>
 </resources>

@@ -56,7 +56,7 @@ class AccountSetup : Fragment() {
         binding.toolbarWelcome.showOverflowMenu()
         (requireActivity() as AuthActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         (requireActivity() as AuthActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
-        (requireActivity() as AuthActivity).supportActionBar?.title = "Setup Account"
+        (requireActivity() as AuthActivity).supportActionBar?.title = getString(R.string.setup_account)
         binding.toolbarWelcome.setNavigationOnClickListener {
             requireActivity().finish()
         }

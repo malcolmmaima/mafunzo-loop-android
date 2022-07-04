@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.mafunzo.loop.data.models.responses.UserResponse
 import com.mafunzo.loop.databinding.FragmentHomeBinding
 import com.mafunzo.loop.ui.auth.viewmodels.AuthViewModel
@@ -36,9 +37,8 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        initializeHomeWidgets()
         getUserDetails()
+        initializeHomeWidgets()
         initializeObservers()
     }
 
@@ -64,11 +64,7 @@ class HomeFragment : Fragment() {
 
     private fun initializeHomeWidgets() {
         binding.cvAnnouncements.setOnClickListener {
-//            activity?.supportFragmentManager?.beginTransaction()
-//                ?.replace(R.id.fragment_container, AnnouncementsFragment())
-//                ?.addToBackStack(null)
-//                ?.commit()
-            Toast.makeText(context, "Announcements", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToAnnouncementsFragment())
         }
 
         binding.cvCalendar.setOnClickListener {
