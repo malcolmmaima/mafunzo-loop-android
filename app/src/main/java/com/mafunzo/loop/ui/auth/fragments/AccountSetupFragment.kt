@@ -28,7 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class AccountSetupFragment : Fragment() {
-    
+
     private lateinit var binding: FragmentAccountSetupBinding
     private val authViewModel: AuthViewModel by viewModels()
     private val mainViewModel: MainViewModel by viewModels()
@@ -100,15 +100,15 @@ class AccountSetupFragment : Fragment() {
                     return@setOnClickListener
                 }
                 if (accountTypeSpinner.selectedItemPosition == 0) {
-                      Toast.makeText(
-                          requireContext(),
-                          getString(R.string.account_type_required),
-                          Toast.LENGTH_SHORT
-                      )
-                          .show()
-                      setUpNextButton.isEnabled = true
-                      return@setOnClickListener
-                  }
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.account_type_required),
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                    setUpNextButton.isEnabled = true
+                    return@setOnClickListener
+                }
 
                 if(schoolSpinner.selectedItemPosition == 0){
                     Toast.makeText(
