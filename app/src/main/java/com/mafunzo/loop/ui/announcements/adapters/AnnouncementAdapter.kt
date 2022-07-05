@@ -5,9 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.mafunzo.loop.data.models.responses.AnnouncementResponse
 import com.mafunzo.loop.databinding.AnnouncementItemBinding
 import com.mafunzo.loop.utils.formatDateTime
+import com.mafunzo.loop.utils.visible
 
 
 class AnnouncementAdapter : RecyclerView.Adapter<AnnouncementAdapter.AnnouncementViewHolder>() {
@@ -56,6 +58,13 @@ class AnnouncementAdapter : RecyclerView.Adapter<AnnouncementAdapter.Announcemen
             cardAnnouncementTitle.text = announcementData.announcementTitle
             announcementTimeTV.text = announcementData.announcementTime?.formatDateTime()
             announcementBodyTV.text = announcementData.announcementBody
+
+            if(announcementData.announcementImage?.isEmpty() == false) {
+                announcementImage.visible()
+                Glide.with(root)
+                    .load(announcementData.announcementImage)
+                    .into(announcementImage);
+            }
         }
 
         holder.binding.announcementCard.setOnClickListener {
