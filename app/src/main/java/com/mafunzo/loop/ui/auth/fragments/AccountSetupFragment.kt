@@ -69,7 +69,7 @@ class AccountSetupFragment : Fragment() {
         binding.apply {
             setUpNextButton.setOnClickListener {
 
-                if (editTextTextFirstName.text.trim().isNullOrEmpty()) {
+                if (editTextTextFirstName.text.trim().isEmpty()) {
                     editTextTextFirstName.error = "Please Enter Name"
                     setUpNextButton.isEnabled = true
                     return@setOnClickListener
@@ -160,9 +160,7 @@ class AccountSetupFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 authViewModel.userCreated.collectLatest { isCreated ->
                     if (isCreated) {
-                        Log.d("AccountSetup", "User Created")
-
-                        //load MainActivity and clear backstack
+                        // load MainActivity and clear backstack
                         val intent = Intent(requireActivity(), MainActivity::class.java)
                         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                         startActivity(intent)
