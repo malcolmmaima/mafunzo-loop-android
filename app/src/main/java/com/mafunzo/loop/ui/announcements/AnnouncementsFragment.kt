@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +18,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.snackbar.Snackbar
 import com.mafunzo.loop.R
 import com.mafunzo.loop.databinding.FragmentAnnouncementsBinding
+import com.mafunzo.loop.di.Constants
 import com.mafunzo.loop.ui.announcements.adapters.AnnouncementAdapter
 import com.mafunzo.loop.ui.announcements.viewmodel.AnnouncementsViewModel
 import com.mafunzo.loop.ui.main.MainActivity
@@ -118,7 +120,7 @@ class AnnouncementsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         binding.toolbar.showOverflowMenu()
         (requireActivity() as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         (requireActivity() as MainActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
-        (requireActivity() as MainActivity).supportActionBar?.title = getString(R.string.announcements)
+        (requireActivity() as MainActivity).supportActionBar?.title = "Announcements"
         binding.toolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
@@ -127,7 +129,9 @@ class AnnouncementsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private fun setupAnnouncementAdapter() {
         announcementAdapter = AnnouncementAdapter()
         announcementAdapter.onItemClick { announcementResponse ->
-            Log.d("AnnouncementsFragment", "Announcement: $announcementResponse")
+            findNavController().navigate(R.id.action_announcementsFragment_to_viewAnnouncementFragment, Bundle().apply {
+                putParcelable(Constants.ANNOUNCEMENT_STRING_KEY, announcementResponse)
+            })
         }
 
         binding.rvAnnouncements.apply {

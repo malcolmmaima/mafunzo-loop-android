@@ -22,5 +22,18 @@
         android:id="@+id/announcementsFragment"
         android:name="com.mafunzo.loop.ui.announcements.AnnouncementsFragment"
         android:label="fragment_announcements"
-        tools:layout="@layout/fragment_announcements" />
+        tools:layout="@layout/fragment_announcements" >
+        <action
+            android:id="@+id/action_announcementsFragment_to_viewAnnouncementFragment"
+            app:destination="@id/viewAnnouncementFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:launchSingleTop="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/viewAnnouncementFragment"
+        android:name="com.mafunzo.loop.ui.announcements.ViewAnnouncementFragment"
+        android:label="fragment_view_announcement"
+        tools:layout="@layout/fragment_view_announcement" />
 </navigation>
