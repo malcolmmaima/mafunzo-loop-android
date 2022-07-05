@@ -2,7 +2,6 @@ package com.mafunzo.loop.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import com.mafunzo.loop.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 

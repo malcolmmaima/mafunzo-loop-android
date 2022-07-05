@@ -34,7 +34,7 @@ class AnnouncementsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentAnnouncementsBinding.inflate(inflater, container, false)
 
         binding.swipeContainer.setOnRefreshListener(this)
@@ -105,7 +105,7 @@ class AnnouncementsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         }
     }
 
-    //Todo: get schoolid and account type from sharedprefs
+    // later, get schoolid and account type from sharedprefs
     private fun fetchAnnouncements() {
         announcementsViewModel.getAnnouncements("BrU5poiKIoaJqYs0TnfV","parents")
     }

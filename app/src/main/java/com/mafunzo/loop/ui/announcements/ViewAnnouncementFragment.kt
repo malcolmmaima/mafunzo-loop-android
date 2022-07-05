@@ -36,7 +36,7 @@ class ViewAnnouncementFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentViewAnnouncementBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -57,7 +57,7 @@ class ViewAnnouncementFragment : Fragment() {
 
             Glide.with(this)
                 .load(announcement?.announcementImage)
-                .into(binding.announcementImage);
+                .into(binding.announcementImage)
         }
     }
 

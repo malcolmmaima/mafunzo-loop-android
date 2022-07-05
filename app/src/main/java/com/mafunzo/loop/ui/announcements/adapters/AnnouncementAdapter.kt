@@ -63,7 +63,7 @@ class AnnouncementAdapter : RecyclerView.Adapter<AnnouncementAdapter.Announcemen
                 announcementImage.visible()
                 Glide.with(root)
                     .load(announcementData.announcementImage)
-                    .into(announcementImage);
+                    .into(announcementImage)
             }
         }
 

@@ -16,7 +16,6 @@ import com.mafunzo.loop.data.models.requests.CreateUserRequest
 import com.mafunzo.loop.databinding.FragmentAccountSetupBinding
 import com.mafunzo.loop.ui.auth.viewmodel.AuthViewModel
 import com.mafunzo.loop.utils.*
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import android.content.Intent
@@ -25,6 +24,7 @@ import com.mafunzo.loop.data.models.responses.SchoolResponse
 import com.mafunzo.loop.ui.auth.AuthActivity
 import com.mafunzo.loop.ui.main.MainActivity
 import com.mafunzo.loop.ui.main.viewmodel.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class AccountSetupFragment : Fragment() {
@@ -38,7 +38,7 @@ class AccountSetupFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentAccountSetupBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -80,7 +80,7 @@ class AccountSetupFragment : Fragment() {
                     setUpNextButton.isEnabled = true
                     return@setOnClickListener
                 }
-                if (editTextTextSecondName.text.trim().isNullOrEmpty()) {
+                if (editTextTextSecondName.text.trim().isEmpty()) {
                     editTextTextSecondName.error = "Please Enter Name "
                     setUpNextButton.isEnabled = true
                     return@setOnClickListener
@@ -91,7 +91,7 @@ class AccountSetupFragment : Fragment() {
                     setUpNextButton.isEnabled = true
                     return@setOnClickListener
                 }
-                if (editTextEmailAddress.text.trim().isNullOrEmpty()) {
+                if (editTextEmailAddress.text.trim().isEmpty()) {
                     editTextEmailAddress.error = "Please Enter an email address"
                     setUpNextButton.isEnabled = true
                     return@setOnClickListener
@@ -187,7 +187,7 @@ class AccountSetupFragment : Fragment() {
                             accounts.add(it.lowercase())
                         }
                         Log.d("AccountSetup", "Account Types Loaded")
-                        binding.accountTypeSpinner.adapter = ArrayAdapter<String>(
+                        binding.accountTypeSpinner.adapter = ArrayAdapter(
                             requireContext(),
                             R.layout.drop_down_spinner_layout,
                             accounts
