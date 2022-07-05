@@ -27,7 +27,7 @@ import com.mafunzo.loop.ui.main.MainActivity
 import com.mafunzo.loop.ui.main.viewmodel.MainViewModel
 
 @AndroidEntryPoint
-class AccountSetup : Fragment() {
+class AccountSetupFragment : Fragment() {
     
     private lateinit var binding: FragmentAccountSetupBinding
     private val authViewModel: AuthViewModel by viewModels()
@@ -161,10 +161,6 @@ class AccountSetup : Fragment() {
                 authViewModel.userCreated.collectLatest { isCreated ->
                     if (isCreated) {
                         Log.d("AccountSetup", "User Created")
-//                        findNavController().navigate(
-//                            R2.id.action_accountSetupFragment2_to_mainActivity,
-//                            null,
-//                            NavOptions.Builder().setPopUpTo(R2.id.accountSetupFragment2, true).build())
 
                         //load MainActivity and clear backstack
                         val intent = Intent(requireActivity(), MainActivity::class.java)
@@ -187,7 +183,7 @@ class AccountSetup : Fragment() {
                         //add default option to spinner
                         val accounts = arrayListOf<String>()
                         accounts.add("Select Account Type")
-                        accountTypes.forEach {
+                        accountTypes.map {
                             accounts.add(it.lowercase())
                         }
                         Log.d("AccountSetup", "Account Types Loaded")

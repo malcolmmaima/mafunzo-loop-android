@@ -51,7 +51,6 @@ class AnnouncementAdapter : RecyclerView.Adapter<AnnouncementAdapter.Announcemen
 
     override fun onBindViewHolder(holder: AnnouncementViewHolder, position: Int) {
         val announcementData = asyncListDiffer.currentList[position]
-        val context = holder.binding.root.context
         holder.binding.apply {
 
             cardAnnouncementTitle.text = announcementData.announcementTitle

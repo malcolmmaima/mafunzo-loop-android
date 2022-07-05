@@ -1,12 +1,12 @@
 package com.mafunzo.loop.ui.announcements
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.ui.text.capitalize
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.mafunzo.loop.R
 import com.mafunzo.loop.data.models.responses.AnnouncementResponse
@@ -15,7 +15,6 @@ import com.mafunzo.loop.di.Constants
 import com.mafunzo.loop.ui.main.MainActivity
 import com.mafunzo.loop.utils.formatDateTime
 import com.mafunzo.loop.utils.visible
-import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -55,8 +54,10 @@ class ViewAnnouncementFragment : Fragment() {
 
         if(announcement?.announcementImage?.isEmpty() == false) {
             binding.announcementImage.visible()
-            val picasso = Picasso.get()
-            picasso.load(announcement?.announcementImage).into(binding.announcementImage)
+
+            Glide.with(this)
+                .load(announcement?.announcementImage)
+                .into(binding.announcementImage);
         }
     }
 

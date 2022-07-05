@@ -36,7 +36,7 @@
     </fragment>
     <fragment
         android:id="@+id/accountSetupFragment2"
-        android:name="com.mafunzo.loop.ui.auth.fragments.AccountSetup"
+        android:name="com.mafunzo.loop.ui.auth.fragments.AccountSetupFragment"
         android:label="AccountSetupFragment"
         tools:layout="@layout/fragment_account_setup">
 

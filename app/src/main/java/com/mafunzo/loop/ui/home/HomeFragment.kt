@@ -16,7 +16,6 @@ import com.mafunzo.loop.databinding.FragmentHomeBinding
 import com.mafunzo.loop.ui.auth.viewmodel.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {

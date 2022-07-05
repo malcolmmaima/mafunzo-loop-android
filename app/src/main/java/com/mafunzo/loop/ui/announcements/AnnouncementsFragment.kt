@@ -1,7 +1,6 @@
 package com.mafunzo.loop.ui.announcements
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +9,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -32,10 +30,6 @@ class AnnouncementsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var binding: FragmentAnnouncementsBinding
     private val announcementsViewModel: AnnouncementsViewModel by viewModels()
     private lateinit var announcementAdapter: AnnouncementAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -111,6 +105,7 @@ class AnnouncementsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         }
     }
 
+    //Todo: get schoolid and account type from sharedprefs
     private fun fetchAnnouncements() {
         announcementsViewModel.getAnnouncements("BrU5poiKIoaJqYs0TnfV","parents")
     }
