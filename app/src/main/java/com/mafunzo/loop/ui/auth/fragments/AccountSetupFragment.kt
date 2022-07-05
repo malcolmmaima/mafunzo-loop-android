@@ -70,41 +70,39 @@ class AccountSetupFragment : Fragment() {
             setUpNextButton.setOnClickListener {
 
                 if (editTextTextFirstName.text.trim().isEmpty()) {
-                    editTextTextFirstName.error = "Please Enter Name"
+                    editTextTextFirstName.error = getString(R.string.first_name_required)
                     setUpNextButton.isEnabled = true
                     return@setOnClickListener
                 }
                 if (editTextTextFirstName.text.trim().length <= 2) {
-                    editTextTextFirstName.error =
-                        "Please enter a name with more than 2 characters"
+                    editTextTextFirstName.error = getString(R.string.first_name_too_short)
                     setUpNextButton.isEnabled = true
                     return@setOnClickListener
                 }
                 if (editTextTextSecondName.text.trim().isEmpty()) {
-                    editTextTextSecondName.error = "Please Enter Name "
+                    editTextTextSecondName.error = getString(R.string.second_name_required)
                     setUpNextButton.isEnabled = true
                     return@setOnClickListener
                 }
                 if (editTextTextSecondName.text.trim().length <= 2) {
-                    editTextTextSecondName.error =
-                        "Please enter a name with more than 2 characters"
+                    editTextTextSecondName.error = getString(R.string.second_name_too_short)
                     setUpNextButton.isEnabled = true
                     return@setOnClickListener
                 }
                 if (editTextEmailAddress.text.trim().isEmpty()) {
-                    editTextEmailAddress.error = "Please Enter an email address"
+                    editTextEmailAddress.error = getString(R.string.email_required)
                     setUpNextButton.isEnabled = true
                     return@setOnClickListener
                 }
                 if (!validateEmail(editTextEmailAddress.text.trim().toString())) {
-                    editTextEmailAddress.error = "Please Enter a valid Email"
+                    editTextEmailAddress.error = getString(R.string.email_invalid)
                     setUpNextButton.isEnabled = true
                     return@setOnClickListener
                 }
                 if (accountTypeSpinner.selectedItemPosition == 0) {
                       Toast.makeText(
                           requireContext(),
-                          "Please Select an account type",
+                          getString(R.string.account_type_required),
                           Toast.LENGTH_SHORT
                       )
                           .show()
@@ -115,7 +113,7 @@ class AccountSetupFragment : Fragment() {
                 if(schoolSpinner.selectedItemPosition == 0){
                     Toast.makeText(
                         requireContext(),
-                        "Please Select a school",
+                        getString(R.string.school_required),
                         Toast.LENGTH_SHORT
                     )
                         .show()
@@ -168,7 +166,7 @@ class AccountSetupFragment : Fragment() {
                     } else {
                         binding.setUpNextButton.enable(true)
                         binding.setUpNextButton.hideProgress("NEXT")
-                        binding.root.snackbar("User Creation Failed")
+                        binding.root.snackbar(getString(R.string.error_creating_account))
                     }
                 }
             }
