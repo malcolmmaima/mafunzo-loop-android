@@ -14,6 +14,8 @@ import com.mafunzo.loop.databinding.FragmentViewAnnouncementBinding
 import com.mafunzo.loop.di.Constants
 import com.mafunzo.loop.ui.main.MainActivity
 import com.mafunzo.loop.utils.formatDateTime
+import com.mafunzo.loop.utils.visible
+import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -50,6 +52,12 @@ class ViewAnnouncementFragment : Fragment() {
         binding.cardAnnouncementTitle.text = announcement?.announcementTitle
         binding.announcementTimeTV.text = announcement?.announcementTime?.formatDateTime()
         binding.announcementBodyTV.text = announcement?.announcementBody
+
+        if(announcement?.announcementImage?.isEmpty() == false) {
+            binding.announcementImage.visible()
+            val picasso = Picasso.get()
+            picasso.load(announcement?.announcementImage).into(binding.announcementImage)
+        }
     }
 
     private fun setUpToolbar() {

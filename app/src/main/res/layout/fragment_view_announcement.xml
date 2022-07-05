@@ -84,22 +84,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ll_announcement">
 
-            <!-- hmmm, needs more thinking -->
-            <ImageView
-                android:id="@+id/announcementImage"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:visibility="gone"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:src="@drawable/ic_announcement"
-                app:layout_constraintTop_toBottomOf="@id/ll_announcement"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                />
-
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -120,6 +104,19 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/ccp"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/announcementImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:visibility="gone"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_announcement"
+                    />
 
                 <TextView
                     android:id="@+id/announcementBodyTV"
