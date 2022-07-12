@@ -17,5 +17,5 @@ data class UserEntity(
     @ColumnInfo(name = "email") val email: String?,
     @ColumnInfo(name = "date_created") val dateCreated: Long?,
     @ColumnInfo(name = "profile_pic") val profilePic: String?,
-    @ColumnInfo(name = "account_type") val accountType: String?
+    @ColumnInfo(name = "account_type") val accountType: String?,
 ): Parcelable

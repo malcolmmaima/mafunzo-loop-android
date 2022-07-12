@@ -21,7 +21,7 @@ data class UserResponse(
             email = email ?: "",
             dateCreated = dateCreated ?: 0,
             profilePic = profilePic ?: "",
-            accountType = accountType ?: "",
+            accountType = accountType ?: ""
         )
     }
 }
