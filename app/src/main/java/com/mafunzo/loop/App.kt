@@ -3,7 +3,6 @@ package com.mafunzo.loop
 import android.app.Activity
 import android.app.Application
 import com.mafunzo.loop.utils.AppActivityLifecycleCb
-
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
@@ -21,4 +20,5 @@ class App : Application() {
 
         application = this
     }
+
 }
