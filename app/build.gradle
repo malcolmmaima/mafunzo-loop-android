@@ -98,4 +98,13 @@ dependencies {
 
     //progress button
     implementation 'com.github.razir.progressbutton:progressbutton:2.1.0'
+
+    //Room db
+    def room_version = "2.4.1"
+
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+
+    // To use Kotlin annotation processing tool (kapt)
+    kapt("androidx.room:room-compiler:$room_version")
 }
