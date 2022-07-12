@@ -1,6 +1,7 @@
 package com.mafunzo.loop.data.models.responses
 
 import androidx.annotation.Keep
+import com.mafunzo.loop.data.local.database.entities.UserEntity
 
 @Keep
 data class UserResponse(
@@ -11,4 +12,16 @@ data class UserResponse(
     val profilePic: String? = null,
     val accountType: String? = null,
     val schools: List<String?>? = null,
-)
+) {
+    fun toUserEntity(phoneNumber: String): UserEntity {
+        return UserEntity(
+            phoneNumber = phoneNumber,
+            firstName = firstName ?: "",
+            lastName = lastName ?: "",
+            email = email ?: "",
+            dateCreated = dateCreated ?: 0,
+            profilePic = profilePic ?: "",
+            accountType = accountType ?: "",
+        )
+    }
+}

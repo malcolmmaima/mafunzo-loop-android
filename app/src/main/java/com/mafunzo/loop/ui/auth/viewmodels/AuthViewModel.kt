@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
 import com.google.firebase.firestore.FirebaseFirestore
+import com.mafunzo.loop.data.local.database.MafunzoDatabase
 import com.mafunzo.loop.data.models.requests.CreateUserRequest
 import com.mafunzo.loop.data.models.responses.UserResponse
 import com.mafunzo.loop.di.Constants
@@ -20,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     val auth: FirebaseAuth,
-    val firestoreDB: FirebaseFirestore
+    val firestoreDB: FirebaseFirestore,
+    val localDB: MafunzoDatabase
 ) : ViewModel() {
     val TAG = "AuthViewModel"
 
@@ -192,10 +194,12 @@ class AuthViewModel @Inject constructor(
                     if (task.isSuccessful) {
                         val user = task.result?.toObject(UserResponse::class.java)
                         if(user != null && user.accountType?.isNotEmpty() == true) {
+
                             viewModelScope.launch {
                                 _isLoading.emit(false)
                                 _userExists.emit(true)
                                 _userDetails.emit(user)
+                                localDB.userDao().insertUser(user.toUserEntity(phoneNumber))
                             }
                         } else {
                             viewModelScope.launch {

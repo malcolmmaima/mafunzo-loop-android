@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    val auth: FirebaseAuth
+    val auth: FirebaseAuth,
 ) : ViewModel() {
 
     fun isUserLoggedIn() = auth.currentUser != null
