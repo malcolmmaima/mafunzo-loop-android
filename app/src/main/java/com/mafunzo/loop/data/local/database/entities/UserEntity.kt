@@ -1,10 +1,15 @@
-package com.mafunzo.loop.data.local.database
+package com.mafunzo.loop.data.local.database.entities
 
+import android.os.Parcelable
+import androidx.annotation.Keep
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 
-@Entity
+@Entity(tableName = "user_details")
+@Parcelize
+@Keep
 data class UserEntity(
     @PrimaryKey val phoneNumber: String,
     @ColumnInfo(name = "first_name") val firstName: String?,
@@ -14,4 +19,4 @@ data class UserEntity(
     @ColumnInfo(name = "profile_pic") val profilePic: String?,
     @ColumnInfo(name = "account_type") val accountType: String?,
     @ColumnInfo(name = "schools") val schools: List<String>?
-)
+): Parcelable
