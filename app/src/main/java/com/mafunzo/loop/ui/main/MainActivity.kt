@@ -9,17 +9,13 @@ import androidx.activity.viewModels
 import androidx.core.text.toSpannable
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.findNavController
-import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mafunzo.loop.R
 import com.mafunzo.loop.databinding.ActivityMainBinding
-import com.mafunzo.loop.ui.announcements.AnnouncementsFragment
 import com.mafunzo.loop.ui.auth.fragments.PhoneVerificationFragment
 import com.mafunzo.loop.ui.auth.viewmodel.AuthViewModel
-import com.mafunzo.loop.utils.snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -72,12 +68,25 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.nav_logout -> {
+    fun dialogLogout() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Logout")
+            .setMessage("Are you sure you want to logout?")
+            .setPositiveButton("Yes") { dialog, _ ->
                 lifecycleScope.launch(Dispatchers.IO) {
                     authViewModel.signOutUser()
                 }
+            }
+            .setNegativeButton("No") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.nav_logout -> {
+                dialogLogout()
                 true
             }
             else -> super.onOptionsItemSelected(item)
