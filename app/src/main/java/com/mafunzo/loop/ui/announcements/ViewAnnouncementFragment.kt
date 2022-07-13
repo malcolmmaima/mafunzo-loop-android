@@ -2,6 +2,7 @@ package com.mafunzo.loop.ui.announcements
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -63,12 +64,17 @@ class ViewAnnouncementFragment : Fragment() {
 
     private fun setUpToolbar() {
         (requireActivity() as MainActivity).setSupportActionBar(binding.toolbar)
-        binding.toolbar.showOverflowMenu()
+        setHasOptionsMenu(true)
         (requireActivity() as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         (requireActivity() as MainActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
         (requireActivity() as MainActivity).supportActionBar?.title = "Announcement"
         binding.toolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        menu.clear()
     }
 }

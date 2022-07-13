@@ -37,7 +37,7 @@ class AuthActivity : AppCompatActivity() {
                     if (exists) {
                         loadMainActivity()
                     } else {
-                        authViewModel.signOutFirebaseUser()
+                        authViewModel.signOutUser()
                     }
                 }
             }

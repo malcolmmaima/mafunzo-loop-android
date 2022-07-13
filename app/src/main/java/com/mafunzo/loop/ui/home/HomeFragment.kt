@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.mafunzo.loop.data.models.responses.UserResponse
 import com.mafunzo.loop.databinding.FragmentHomeBinding
 import com.mafunzo.loop.ui.auth.viewmodel.AuthViewModel
+import com.mafunzo.loop.ui.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
@@ -35,8 +36,14 @@ class HomeFragment : Fragment() {
         getUserDetails()
         initializeHomeWidgets()
         initializeObservers()
+        setUpToolbar()
     }
 
+    private fun setUpToolbar() {
+        (requireActivity() as MainActivity).setSupportActionBar(binding.mainToolBar)
+        binding.mainToolBar.showOverflowMenu()
+        (requireActivity() as MainActivity).supportActionBar?.title = ""
+    }
 
     private fun initializeObservers() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {

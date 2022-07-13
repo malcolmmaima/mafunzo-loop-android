@@ -35,4 +35,5 @@
     <string name="account_type_required">Please Select an account type</string>
     <string name="school_required">Please Select a school</string>
     <string name="error_creating_account">User Creation Failed</string>
+    <string name="menu_logout">Logout</string>
 </resources>

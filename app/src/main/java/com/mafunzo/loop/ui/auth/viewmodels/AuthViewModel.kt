@@ -60,6 +60,9 @@ class AuthViewModel @Inject constructor(
     private val _userDetails = MutableSharedFlow<UserResponse>()
     val userDetails = _userDetails.asSharedFlow()
 
+    private val _loggedOut = MutableSharedFlow<Boolean>()
+    val loggedOut = _loggedOut.asSharedFlow()
+
     fun initiateFirebaseCallbacks() {
         // Callback function for Phone Auth
         callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -230,9 +233,12 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    suspend fun signOutFirebaseUser() {
+    suspend fun signOutUser() {
         auth.signOut()
         clearUserData()
+        viewModelScope.launch {
+            _loggedOut.emit(true)
+        }
     }
 
     //clear room and shared prefs
