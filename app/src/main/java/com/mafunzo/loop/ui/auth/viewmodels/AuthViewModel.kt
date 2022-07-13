@@ -8,6 +8,7 @@ import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.mafunzo.loop.data.local.database.MafunzoDatabase
+import com.mafunzo.loop.data.local.preferences.AppDatasource
 import com.mafunzo.loop.data.models.requests.CreateUserRequest
 import com.mafunzo.loop.data.models.responses.UserResponse
 import com.mafunzo.loop.di.Constants
@@ -22,7 +23,8 @@ import javax.inject.Inject
 class AuthViewModel @Inject constructor(
     val auth: FirebaseAuth,
     val firestoreDB: FirebaseFirestore,
-    val localDB: MafunzoDatabase
+    val localDB: MafunzoDatabase,
+    val userPrefs: AppDatasource
 ) : ViewModel() {
     val TAG = "AuthViewModel"
 
@@ -200,6 +202,10 @@ class AuthViewModel @Inject constructor(
                                 _userExists.emit(true)
                                 _userDetails.emit(user)
                                 localDB.userDao().insertUser(user.toUserEntity(phoneNumber))
+                                user.schools?.first()?.let { school ->
+                                    userPrefs.saveCurrentWorkspace(school)
+                                    Log.d(TAG, "saveCurrentWorkspace: $school")
+                                }
                             }
                         } else {
                             viewModelScope.launch {
