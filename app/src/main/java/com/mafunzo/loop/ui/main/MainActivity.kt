@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         MaterialAlertDialogBuilder(this)
             .setTitle("Logout")
             .setMessage("Are you sure you want to logout?")
-            .setPositiveButton("Yes") { dialog, _ ->
+            .setPositiveButton("Yes") { _, _ ->
                 lifecycleScope.launch(Dispatchers.IO) {
                     authViewModel.signOutUser()
                 }
