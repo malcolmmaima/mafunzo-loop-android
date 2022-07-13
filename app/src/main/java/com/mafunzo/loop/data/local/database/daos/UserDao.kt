@@ -21,4 +21,8 @@ interface UserDao {
     //delete user where phoneNumber = :phoneNumber
     @Query("DELETE FROM user_details WHERE phoneNumber = :phoneNumber")
     suspend fun deleteUser(phoneNumber: String)
+
+    //delete all user data
+    @Query("DELETE FROM user_details")
+    suspend fun deleteAll()
 }

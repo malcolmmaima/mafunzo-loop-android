@@ -9,6 +9,9 @@ import com.google.firebase.ktx.Firebase
 import com.mafunzo.loop.App
 import com.mafunzo.loop.data.local.database.MafunzoDatabase
 import com.mafunzo.loop.data.local.database.daos.UserDao
+import com.mafunzo.loop.data.local.preferences.AppDatasource
+import com.mafunzo.loop.data.repository.UserRepositoryImpl
+import com.mafunzo.loop.domain.repository.UserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,6 +31,13 @@ object AppModule {
             return appDatabase.userDao()
         }
     }
+
+    @Singleton
+    @Provides
+    fun provideUserRepository(
+        userPrefs: AppDatasource,
+        userDao: UserDao
+    ): UserRepository = UserRepositoryImpl(userDao,userPrefs)
 
     @Provides
     @Singleton

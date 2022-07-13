@@ -105,9 +105,8 @@ class AnnouncementsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         }
     }
 
-    // later, get schoolid and account type from sharedprefs
     private fun fetchAnnouncements() {
-        announcementsViewModel.getAnnouncements("parents")
+        announcementsViewModel.getAnnouncements()
     }
 
     private fun setUpToolbar() {

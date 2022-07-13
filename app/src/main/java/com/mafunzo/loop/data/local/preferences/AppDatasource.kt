@@ -18,6 +18,7 @@ class AppDatasource @Inject constructor(@ApplicationContext context: Context) {
 
     companion object {
         val CURRENT_WORKSPACE = stringPreferencesKey("current_workspace")
+        val ACCOUNT_TYPE = stringPreferencesKey("account_type")
     }
 
     suspend fun saveCurrentWorkspace(workspace: String) {
@@ -34,5 +35,15 @@ class AppDatasource @Inject constructor(@ApplicationContext context: Context) {
         applicationContext.dataStore.edit {
             it.clear()
         }
+    }
+
+    suspend fun saveAccountType(accountType: String) {
+        applicationContext.dataStore.edit { preferences ->
+            preferences[ACCOUNT_TYPE] = accountType
+        }
+    }
+
+    fun getAccountType(): Flow<String?> = applicationContext.dataStore.data.map { preferences ->
+        preferences[ACCOUNT_TYPE]
     }
 }
