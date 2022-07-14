@@ -194,8 +194,11 @@ class AuthViewModel @Inject constructor(
     }
 
     fun fetchUser(phoneNumber: String){
+        Log.d(TAG , "fetchUser")
         if(!phoneNumber.isNullOrEmpty()){
             viewModelScope.launch {
+                Log.d(TAG , "fetching user: $phoneNumber")
+                userPrefs.clear()
                 _isLoading.emit(true)
                 firestoreDB.collection(Constants.FIREBASE_APP_USERS).document(phoneNumber).get().addOnCompleteListener { task ->
                     if (task.isSuccessful) {

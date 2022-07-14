@@ -67,8 +67,12 @@ class HomeFragment : Fragment() {
             homeViewModel.schoolDetails.observe(viewLifecycleOwner) {schoolDetails ->
                 if(schoolDetails != null) {
                     binding.currentWorkspaceText.text = schoolDetails.schoolName
+                    disableAllModules(false)
                 } else {
                     binding.currentWorkspaceText.text = "No school selected - Refresh"
+                    //fetch user details again which saves new workspace id to local storage
+                    authViewModel.userPhoneNumber?.let { authViewModel.fetchUser(it) }
+                    disableAllModules(true)
                 }
             }
         }
@@ -96,6 +100,27 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                homeViewModel.isLoading.observe(viewLifecycleOwner) { loading ->
+                    if(loading) {
+                        binding.progressBar.visible()
+                    } else {
+                        binding.progressBar.gone()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun disableAllModules(disable: Boolean) {
+        binding.cvAnnouncements.isEnabled = !disable
+        binding.cvCalendar.isEnabled = !disable
+        binding.cvRequests.isEnabled = !disable
+        binding.cvTeachers.isEnabled = !disable
+        binding.cvSchoolBus.isEnabled = !disable
+        binding.cvContact.isEnabled = !disable
     }
 
     private fun getUserDetails() {
@@ -139,5 +164,10 @@ class HomeFragment : Fragment() {
 
     private fun setWidgetValues(user: UserResponse) {
         binding.helloMessageTV.text = "Hi ${user.firstName},"
+    }
+
+    override fun onResume() {
+        super.onResume()
+        homeViewModel.getCurrentWorkspace()
     }
 }

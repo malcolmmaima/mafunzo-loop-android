@@ -12,9 +12,6 @@ import com.mafunzo.loop.data.models.responses.SchoolResponse
 import com.mafunzo.loop.di.Constants.FIREBASE_APP_SCHOOLS
 import com.mafunzo.loop.di.Constants.FIREBASE_APP_SETTINGS
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -22,24 +19,29 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     val sharedPrefs: AppDatasource,
-    val firestoreDB: FirebaseFirestore
+    val firestoreDB: FirebaseFirestore,
 ): ViewModel() {
+
     private val _schoolDetails = MutableLiveData<SchoolResponse>()
     val schoolDetails = _schoolDetails
 
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage = _errorMessage
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading = _isLoading
+
     //fetch current workspace from shared prefs
     fun getCurrentWorkspace() {
         viewModelScope.launch {
+            _isLoading.value = true
             sharedPrefs.getCurrentWorkSpace().first().let {schoolWorkspace ->
                 Log.d("HomeViewModel", "Current workspace: $schoolWorkspace")
                 if (schoolWorkspace != null) {
                     getCurrentWorkspaceName(schoolWorkspace.trim())
                 } else {
                     Log.d("HomeViewModel", "No current workspace found")
-                    _schoolDetails.value = null
+                    isLoading.value = false
                 }
             }
         }
@@ -53,10 +55,10 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             firestoreDB.collection(FIREBASE_APP_SETTINGS).document(FIREBASE_APP_SCHOOLS).collection(deviceLocale).document(schoolId.trim()).get()
                 .addOnSuccessListener { document ->
-                    if (document != null) {
+                    isLoading.value = false
+                    if (document.exists()) {
                         Log.d("HomeViewModel", "DocumentSnapshot data: ${document.data}")
-                        val school = document.toObject(SchoolResponse::class.java)
-                        _schoolDetails.value = school
+                        _schoolDetails.value = document.toObject(SchoolResponse::class.java)
                     } else {
                         Log.d("HomeViewModel", "No such document")
                         _errorMessage.value = "No workspace found"
