@@ -19,6 +19,8 @@ import com.mafunzo.loop.utils.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import android.content.Intent
+import android.content.res.Resources
+import androidx.core.os.ConfigurationCompat
 import com.mafunzo.loop.R
 import com.mafunzo.loop.data.models.responses.SchoolResponse
 import com.mafunzo.loop.ui.auth.AuthActivity
@@ -63,8 +65,9 @@ class AccountSetupFragment : Fragment() {
     }
 
     private fun setupAccount() {
+        val deviceLocale = ConfigurationCompat.getLocales(Resources.getSystem().configuration)[0].country
         mainViewModel.getAccountTypes()
-        mainViewModel.getSchools("KE")
+        mainViewModel.getSchools(deviceLocale)
 
         binding.apply {
             setUpNextButton.setOnClickListener {

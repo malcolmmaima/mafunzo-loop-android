@@ -12,6 +12,7 @@ import com.mafunzo.loop.data.models.responses.SchoolResponse
 import com.mafunzo.loop.di.Constants.FIREBASE_APP_SCHOOLS
 import com.mafunzo.loop.di.Constants.FIREBASE_APP_SETTINGS
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.first
@@ -23,9 +24,6 @@ class HomeViewModel @Inject constructor(
     val sharedPrefs: AppDatasource,
     val firestoreDB: FirebaseFirestore
 ): ViewModel() {
-    private val _currentWorkspace = MutableLiveData<String>()
-    val currentWorkspace = _currentWorkspace
-
     private val _schoolDetails = MutableLiveData<SchoolResponse>()
     val schoolDetails = _schoolDetails
 
@@ -36,10 +34,12 @@ class HomeViewModel @Inject constructor(
     fun getCurrentWorkspace() {
         viewModelScope.launch {
             sharedPrefs.getCurrentWorkSpace().first().let {schoolWorkspace ->
+                Log.d("HomeViewModel", "Current workspace: $schoolWorkspace")
                 if (schoolWorkspace != null) {
-                    _currentWorkspace.value = schoolWorkspace.trim()
+                    getCurrentWorkspaceName(schoolWorkspace.trim())
                 } else {
-                    _errorMessage.value = "No workspace selected"
+                    Log.d("HomeViewModel", "No current workspace found")
+                    _schoolDetails.value = null
                 }
             }
         }
@@ -47,17 +47,22 @@ class HomeViewModel @Inject constructor(
 
     //get current workspace from firestore db
     fun getCurrentWorkspaceName(schoolId: String) {
+        Log.d("HomeViewModel", "Getting current details from $schoolId")
         //get device current local e.g. "KE" for Kenya
         val deviceLocale = ConfigurationCompat.getLocales(Resources.getSystem().configuration)[0].country
         viewModelScope.launch {
-            firestoreDB.collection(FIREBASE_APP_SETTINGS).document(FIREBASE_APP_SCHOOLS).collection(deviceLocale).document(schoolId).get()
+            firestoreDB.collection(FIREBASE_APP_SETTINGS).document(FIREBASE_APP_SCHOOLS).collection(deviceLocale).document(schoolId.trim()).get()
                 .addOnSuccessListener { document ->
                     if (document != null) {
-                        _schoolDetails.value = document.toObject(SchoolResponse::class.java)
+                        Log.d("HomeViewModel", "DocumentSnapshot data: ${document.data}")
+                        val school = document.toObject(SchoolResponse::class.java)
+                        _schoolDetails.value = school
                     } else {
+                        Log.d("HomeViewModel", "No such document")
                         _errorMessage.value = "No workspace found"
                     }
                 }.addOnFailureListener { exception ->
+                    Log.d("HomeViewModel", "get failed with ", exception)
                     _errorMessage.value = exception.localizedMessage
                 }
         }

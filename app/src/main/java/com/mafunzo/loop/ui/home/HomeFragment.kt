@@ -22,6 +22,7 @@ import com.mafunzo.loop.utils.gone
 import com.mafunzo.loop.utils.snackbar
 import com.mafunzo.loop.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -59,22 +60,15 @@ class HomeFragment : Fragment() {
     }
 
     private fun initializeObservers() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                homeViewModel.currentWorkspace.observe(viewLifecycleOwner) { schoolId ->
-                    if(schoolId.isNotEmpty()) {
-                        homeViewModel.getCurrentWorkspaceName(schoolId)
-                    } else {
-                        binding.currentWorkspace.gone()
-                    }
-                }
-            }
-        }
+        Log.d("HomeFragment", "initializeObservers")
 
+        //observe current workspace / school name fetched from firestore
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                homeViewModel.schoolDetails.observe(viewLifecycleOwner) { schoolDetails ->
+            homeViewModel.schoolDetails.observe(viewLifecycleOwner) {schoolDetails ->
+                if(schoolDetails != null) {
                     binding.currentWorkspaceText.text = schoolDetails.schoolName
+                } else {
+                    binding.currentWorkspaceText.text = "No school selected - Refresh"
                 }
             }
         }
@@ -136,6 +130,10 @@ class HomeFragment : Fragment() {
 
         binding.cvContact.setOnClickListener {
             Toast.makeText(context, "Contact", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.currentWorkspace.setOnClickListener {
+            homeViewModel.getCurrentWorkspace()
         }
     }
 

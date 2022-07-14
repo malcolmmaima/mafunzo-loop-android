@@ -211,6 +211,7 @@ class AuthViewModel @Inject constructor(
                                 user.schools?.first()?.let { school ->
                                     userPrefs.saveCurrentWorkspace(school)
                                     userPrefs.saveAccountType(user.accountType)
+                                    Log.d(TAG, "Save current workspace: $school")
                                 }
                             }
                         } else {
