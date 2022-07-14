@@ -1,11 +1,13 @@
 package com.mafunzo.loop.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isGone
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -14,14 +16,20 @@ import androidx.navigation.fragment.findNavController
 import com.mafunzo.loop.data.models.responses.UserResponse
 import com.mafunzo.loop.databinding.FragmentHomeBinding
 import com.mafunzo.loop.ui.auth.viewmodel.AuthViewModel
+import com.mafunzo.loop.ui.home.viewmodels.HomeViewModel
 import com.mafunzo.loop.ui.main.MainActivity
+import com.mafunzo.loop.utils.gone
+import com.mafunzo.loop.utils.snackbar
+import com.mafunzo.loop.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private val authViewModel: AuthViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,9 +42,14 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getUserDetails()
+        getCurrentSchoolWorkSpace()
         initializeHomeWidgets()
         initializeObservers()
         setUpToolbar()
+    }
+
+    private fun getCurrentSchoolWorkSpace() {
+        homeViewModel.getCurrentWorkspace()
     }
 
     private fun setUpToolbar() {
@@ -46,10 +59,46 @@ class HomeFragment : Fragment() {
     }
 
     private fun initializeObservers() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                homeViewModel.currentWorkspace.observe(viewLifecycleOwner) { schoolId ->
+                    if(schoolId.isNotEmpty()) {
+                        homeViewModel.getCurrentWorkspaceName(schoolId)
+                    } else {
+                        binding.currentWorkspace.gone()
+                    }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                homeViewModel.schoolDetails.observe(viewLifecycleOwner) { schoolDetails ->
+                    binding.currentWorkspaceText.text = schoolDetails.schoolName
+                }
+            }
+        }
+
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 authViewModel.userDetails.collectLatest {user ->
                     setWidgetValues(user)
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                authViewModel.errorMessage.collectLatest { errorMessage ->
+                    binding.root.snackbar(errorMessage)
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                homeViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
+                    binding.root.snackbar(errorMessage)
                 }
             }
         }

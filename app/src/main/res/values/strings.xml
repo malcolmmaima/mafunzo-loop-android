@@ -36,4 +36,5 @@
     <string name="school_required">Please Select a school</string>
     <string name="error_creating_account">User Creation Failed</string>
     <string name="menu_logout">Logout</string>
+    <string name="current_school">My school</string>
 </resources>
