@@ -1,4 +1,4 @@
-package com.mafunzo.loop.ui.announcements
+package com.mafunzo.loop.ui.announcements.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,8 +6,6 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.children
-import androidx.core.view.forEach
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -23,7 +21,6 @@ import com.mafunzo.loop.di.Constants
 import com.mafunzo.loop.ui.announcements.adapters.AnnouncementAdapter
 import com.mafunzo.loop.ui.announcements.viewmodel.AnnouncementsViewModel
 import com.mafunzo.loop.ui.main.MainActivity
-import com.mafunzo.loop.utils.enable
 import com.mafunzo.loop.utils.gone
 import com.mafunzo.loop.utils.visible
 import dagger.hilt.android.AndroidEntryPoint

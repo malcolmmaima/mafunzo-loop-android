@@ -1,4 +1,4 @@
-package com.mafunzo.loop.ui.announcements
+package com.mafunzo.loop.ui.announcements.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater

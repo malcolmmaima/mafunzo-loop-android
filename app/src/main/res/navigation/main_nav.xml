@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/announcementsFragment"
-        android:name="com.mafunzo.loop.ui.announcements.AnnouncementsFragment"
+        android:name="com.mafunzo.loop.ui.announcements.fragments.AnnouncementsFragment"
         android:label="fragment_announcements"
         tools:layout="@layout/fragment_announcements" >
         <action
@@ -33,7 +33,7 @@
 
     <fragment
         android:id="@+id/viewAnnouncementFragment"
-        android:name="com.mafunzo.loop.ui.announcements.ViewAnnouncementFragment"
+        android:name="com.mafunzo.loop.ui.announcements.fragments.ViewAnnouncementFragment"
         android:label="fragment_view_announcement"
         tools:layout="@layout/fragment_view_announcement" />
 </navigation>
