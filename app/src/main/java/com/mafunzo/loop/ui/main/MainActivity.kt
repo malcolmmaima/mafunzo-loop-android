@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
             .setTitle("Logout")
             .setMessage("Are you sure you want to logout?")
             .setPositiveButton("Yes") { _, _ ->
-                lifecycleScope.launch(Dispatchers.IO) {
+                lifecycleScope.launch {
                     authViewModel.signOutUser()
                 }
             }

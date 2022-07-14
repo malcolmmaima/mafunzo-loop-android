@@ -32,7 +32,7 @@ class AnnouncementsViewModel@Inject constructor(
 
             fun getAnnouncements() {
                 _isLoading.value = true
-                viewModelScope.launch(Dispatchers.IO) {
+                viewModelScope.launch {
                     val currentWorkSpace = userPrefs.getCurrentWorkSpace().first()?.trim()
                     val accountType = userPrefs.getAccountType().first()?.trim()
                     if (currentWorkSpace != null && accountType != null) {

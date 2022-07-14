@@ -20,13 +20,13 @@
     </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
-        android:id="@+id/ll_otp"
+        android:id="@+id/ll_announcements"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="80dp"
         android:orientation="vertical"
         android:background="@drawable/rounded_corner_rectangle"
-        android:paddingBottom="20dp"
+        android:paddingBottom="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -58,8 +58,18 @@
                 android:layout_marginStart="4dp"
                 tools:listitem="@layout/announcement_item"
                 android:layout_marginEnd="4dp"
+                android:paddingBottom="10dp"
                 />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:translationZ="-1dp"
+            android:layout_marginTop="-120dp"
+            android:background="@drawable/bottom_pattern"
+            />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
