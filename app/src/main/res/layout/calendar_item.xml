@@ -7,6 +7,7 @@
     android:layout_marginTop="15dp"
     android:layout_marginEnd="20dp"
     android:layout_marginStart="20dp">
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/eventCard"
         android:layout_width="match_parent"
@@ -22,41 +23,61 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:strokeColor="#1B808080"
-        app:strokeWidth="1dp">
+        app:strokeWidth="1dp" >
 
         <LinearLayout
-            android:id="@+id/ll_calendar_item_body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="5dp"
-            android:orientation="vertical"
-            android:padding="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ll_announcement">
+            android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/card_event_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="monospace"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                tools:text="Event Title" />
-
-            <TextView
-                android:id="@+id/eventTimeTV"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/tv_month"
+                android:padding="10dp"
+                android:gravity="center"
+                android:text="JUL 19"
                 android:textColor="@color/colorSecondary"
-                android:fontFamily="monospace"
-                android:textStyle="bold"
+                android:background="@color/colorPrimary"
                 android:textSize="14sp"
-                tools:text="8:30AM - 10:30AM" />
+                android:textStyle="bold"
+                android:fontFamily="monospace"
+                />
 
+            <LinearLayout
+                android:id="@+id/ll_calendar_item_body"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:orientation="vertical"
+                android:padding="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ll_announcement">
+
+                <TextView
+                    android:id="@+id/card_event_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="monospace"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    tools:text="Event Title" />
+
+                <TextView
+                    android:id="@+id/eventTimeTV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorSecondary"
+                    android:fontFamily="monospace"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    tools:text="8:30AM - 10:30AM" />
+
+            </LinearLayout>
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>

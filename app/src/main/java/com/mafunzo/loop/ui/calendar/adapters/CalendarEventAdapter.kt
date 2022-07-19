@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.mafunzo.loop.data.models.responses.CalendarEventResponse
 import com.mafunzo.loop.databinding.CalendarItemBinding
+import com.mafunzo.loop.utils.formatMonthDay
 import com.mafunzo.loop.utils.formatStartEndTime
 
 class CalendarEventAdapter : RecyclerView.Adapter<CalendarEventAdapter.CalendarViewHolder>() {
@@ -51,6 +52,7 @@ class CalendarEventAdapter : RecyclerView.Adapter<CalendarEventAdapter.CalendarV
         val calendarData = asyncListDiffer.currentList[position]
         holder.binding.apply {
 
+            tvMonth.text = formatMonthDay(calendarData.start)
             cardEventTitle.text = calendarData.title
             eventTimeTV.text = formatStartEndTime(calendarData.start, calendarData.end)
         }

@@ -56,4 +56,29 @@ class CalendarViewModel@Inject constructor(
             }
         }
     }
+
+    fun fetchAllUpcoming(currentDateTime: Long) {
+        _isLoading.value = true
+        viewModelScope.launch {
+            val currentWorkSpace = userPrefs.getCurrentWorkSpace().first()?.trim()
+            val accountType = userPrefs.getAccountType().first()?.trim()
+            if (currentWorkSpace != null && accountType != null) {
+                firestoreDB.collection(Constants.FIREBASE_CALENDAR_EVENTS).document(currentWorkSpace).collection(accountType)
+                    .whereGreaterThan("start", currentDateTime).get()
+                    .addOnSuccessListener { result ->
+                        Log.d("CalendarVM", "Successfully fetched calendar events: ${result.size()}")
+                        _isLoading.value = false
+                        val events = result.toObjects(CalendarEventResponse::class.java)
+                        _calendarEvents.postValue(events)
+                    }
+                    .addOnFailureListener { exception ->
+                        _isLoading.value = false
+                        _errorMessage.value = exception.localizedMessage
+                    }
+            } else {
+                _isLoading.value = false
+                _errorMessage.value = "No current workspace or account type found"
+            }
+        }
+    }
 }
