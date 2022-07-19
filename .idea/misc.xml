@@ -16,10 +16,11 @@
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/activity_main.xml" value="0.1390625" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/activity_splash.xml" value="0.1598731884057971" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/announcement_item.xml" value="0.2" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/calendar_item.xml" value="0.22780797101449277" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/drop_down_spinner_layout.xml" value="0.25" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_account_setup.xml" value="0.2" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_announcements.xml" value="0.176" />
-        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_calendar.xml" value="0.10989583333333333" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_calendar.xml" value="0.2" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_home.xml" value="0.176" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_otp_verification.xml" value="0.2" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_phone_verification.xml" value="0.264" />
