@@ -138,7 +138,7 @@ class HomeFragment : Fragment() {
         }
 
         binding.cvCalendar.setOnClickListener {
-            Toast.makeText(context, "Calendar", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToCalendarFragment())
         }
 
         binding.cvRequests.setOnClickListener {

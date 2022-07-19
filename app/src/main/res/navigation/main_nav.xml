@@ -16,6 +16,9 @@
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:launchSingleTop="true" />
+        <action
+            android:id="@+id/action_homeFragment_to_calendarFragment"
+            app:destination="@id/calendarFragment" />
     </fragment>
 
     <fragment
@@ -36,4 +39,9 @@
         android:name="com.mafunzo.loop.ui.announcements.fragments.ViewAnnouncementFragment"
         android:label="fragment_view_announcement"
         tools:layout="@layout/fragment_view_announcement" />
+    <fragment
+        android:id="@+id/calendarFragment"
+        android:name="com.mafunzo.loop.ui.calendar.fragments.CalendarFragment"
+        android:label="fragment_calendar"
+        tools:layout="@layout/fragment_calendar" />
 </navigation>
