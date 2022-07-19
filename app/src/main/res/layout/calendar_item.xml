@@ -8,7 +8,7 @@
     android:layout_marginEnd="20dp"
     android:layout_marginStart="20dp">
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/announcementCard"
+        android:id="@+id/eventCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
@@ -37,16 +37,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ll_announcement">
 
-            <ImageView
-                android:id="@+id/eventImage"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:visibility="gone"
-                android:layout_marginBottom="5dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_announcement"
-                />
-
             <TextView
                 android:id="@+id/card_event_title"
                 android:layout_width="match_parent"
@@ -65,8 +55,7 @@
                 android:fontFamily="monospace"
                 android:textStyle="bold"
                 android:textSize="14sp"
-                tools:text="4 July 2022, 8:30PM"
-                app:drawableLeftCompat="@drawable/ic_baseline_access_time_24" />
+                tools:text="8:30AM - 10:30AM" />
 
         </LinearLayout>
 

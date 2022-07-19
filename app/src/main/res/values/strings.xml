@@ -37,6 +37,5 @@
     <string name="error_creating_account">User Creation Failed</string>
     <string name="menu_logout">Logout</string>
     <string name="current_school">My school</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_events">No available events</string>
 </resources>

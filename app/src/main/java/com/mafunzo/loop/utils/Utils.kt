@@ -88,3 +88,14 @@ fun Long.formatDateTime(): String {
         ""
     }
 }
+
+// a function that takes time in milliseconds with first paramer as the start and second parameter as the end ... formats it to a string of time e.g. 8:30 AM to 10:30 AM ... assumes start and end are on the same day
+fun formatStartEndTime(start: Long, end: Long): String {
+    return try {
+        val startTime = SimpleDateFormat("hh:mm a").format(start)
+        val endTime = SimpleDateFormat("hh:mm a").format(end)
+        "$startTime to $endTime"
+    } catch (e: Exception) {
+        ""
+    }
+}
