@@ -99,3 +99,13 @@ fun formatStartEndTime(start: Long, end: Long): String {
         ""
     }
 }
+
+//convert a date string in format yyyy-MM-dd to time in milliseconds
+fun String.convertDateToTimeInMillis(): Long {
+    return try {
+        val dateTime = SimpleDateFormat("yyyy-MM-dd").parse(this)
+        dateTime.time
+    } catch (e: Exception) {
+        0
+    }
+}

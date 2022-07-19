@@ -30,13 +30,16 @@ class CalendarViewModel@Inject constructor(
     private val _calendarEvents = MutableLiveData<List<CalendarEventResponse>>()
     val calendarEvents: LiveData<List<CalendarEventResponse>> = _calendarEvents
 
-    fun fetchCalendar() {
+    fun fetchCalendar(eventsDate: Long) {
         _isLoading.value = true
+
         viewModelScope.launch {
             val currentWorkSpace = userPrefs.getCurrentWorkSpace().first()?.trim()
             val accountType = userPrefs.getAccountType().first()?.trim()
             if (currentWorkSpace != null && accountType != null) {
-                firestoreDB.collection(Constants.FIREBASE_CALENDAR_EVENTS).document(currentWorkSpace).collection(accountType).get()
+                firestoreDB.collection(Constants.FIREBASE_CALENDAR_EVENTS).document(currentWorkSpace).collection(accountType)
+                    .whereGreaterThan("start", eventsDate)
+                    .whereLessThan("start", eventsDate + 86400000).get()
                     .addOnSuccessListener { result ->
                         Log.d("CalendarVM", "Successfully fetched calendar events: ${result.size()}")
                         _isLoading.value = false

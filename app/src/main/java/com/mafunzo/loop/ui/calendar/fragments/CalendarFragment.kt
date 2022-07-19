@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -21,17 +20,20 @@ import com.mafunzo.loop.databinding.FragmentCalendarBinding
 import com.mafunzo.loop.ui.calendar.adapters.CalendarEventAdapter
 import com.mafunzo.loop.ui.calendar.viewmodel.CalendarViewModel
 import com.mafunzo.loop.ui.main.MainActivity
+import com.mafunzo.loop.utils.convertDateToTimeInMillis
 import com.mafunzo.loop.utils.gone
 import com.mafunzo.loop.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-
+import java.util.*
 
 @AndroidEntryPoint
 class CalendarFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener  {
     private lateinit var binding: FragmentCalendarBinding
     private val calendarViewModel: CalendarViewModel by viewModels()
     private lateinit var calendarEventAdapter: CalendarEventAdapter
+    private var selectedDate: Long = 0L
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -121,18 +123,29 @@ class CalendarFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener  {
     }
 
     private fun initializeCalendar() {
-        calendarViewModel.fetchCalendar()
+        //initialize calendar for initial fetch
+        var c = Calendar.getInstance()
+        var year = c.get(Calendar.YEAR).toString()
+        var month = (c.get(Calendar.MONTH) + 1).toString()
+        var day = c.get(Calendar.DAY_OF_MONTH).toString()
+        var date = "$year-$month-$day"
+
+        selectedDate = date.convertDateToTimeInMillis()
+
+        calendarViewModel.fetchCalendar(selectedDate) //fetch today's events
 
         binding.calendarView.setOnDateChangeListener {
                 _, calYear, calMonth, calDay ->
-            val year = calYear.toString()
-            val month = (calMonth+1).toString()
-            val day = calDay.toString()
-            val date = "$year-$month-$day"
+             year = calYear.toString()
+             month = (calMonth+1).toString()
+             day = calDay.toString()
+             date = "$year-$month-$day"
 
-            Toast.makeText(context, date, Toast.LENGTH_LONG).show()
+            //convert selected date to milliseconds
+            selectedDate = date.convertDateToTimeInMillis()
+
+            calendarViewModel.fetchCalendar(selectedDate)
         }
-
     }
 
     private fun setUpToolbar() {
@@ -152,6 +165,6 @@ class CalendarFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener  {
     }
 
     override fun onRefresh() {
-        calendarViewModel.fetchCalendar()
+        calendarViewModel.fetchCalendar(selectedDate)
     }
 }
