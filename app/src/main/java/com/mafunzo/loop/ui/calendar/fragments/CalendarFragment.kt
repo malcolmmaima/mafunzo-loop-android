@@ -35,6 +35,11 @@ class CalendarFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener  {
     private lateinit var calendarEventAdapter: CalendarEventAdapter
     private var selectedDate: Long = 0L
 
+    private var c = Calendar.getInstance()
+    private var year = c.get(Calendar.YEAR).toString()
+    private var month = (c.get(Calendar.MONTH) + 1).toString()
+    private var day = c.get(Calendar.DAY_OF_MONTH).toString()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -125,10 +130,6 @@ class CalendarFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener  {
 
     private fun initializeCalendar() {
         //initialize calendar for initial fetch
-        var c = Calendar.getInstance()
-        var year = c.get(Calendar.YEAR).toString()
-        var month = (c.get(Calendar.MONTH) + 1).toString()
-        var day = c.get(Calendar.DAY_OF_MONTH).toString()
         var date = "$year-$month-$day"
 
         selectedDate = date.convertDateToTimeInMillis()
@@ -184,6 +185,11 @@ class CalendarFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener  {
     }
 
     override fun onRefresh() {
-        calendarViewModel.fetchCalendar(selectedDate)
+        var today = "$year-$month-$day"
+        if(binding.calendarView.isVisible){
+            calendarViewModel.fetchCalendar(today.convertDateToTimeInMillis())
+        } else {
+            calendarViewModel.fetchAllUpcoming(selectedDate)
+        }
     }
 }
