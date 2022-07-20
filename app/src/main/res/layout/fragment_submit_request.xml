@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        android:fontFamily="monospace"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <LinearLayout
+        android:id="@+id/ll_request_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="80dp"
+        android:orientation="vertical"
+        android:background="@drawable/rounded_corner_rectangle"
+        android:paddingBottom="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+
+        <Spinner
+            android:id="@+id/requestTypeSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="20dp"
+            android:textColorHint="@android:color/black"
+            android:textSize="20sp"
+            android:ems="10" />
+
+        <View
+            android:id="@+id/spinnerView"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginRight="25dp"
+            android:background="@color/black" />
+
+        <EditText
+            android:id="@+id/editTextRequestSubject"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="20dp"
+            android:ems="10"
+            android:hint="@string/request_subject"
+            android:importantForAutofill="no"
+            android:inputType="textEmailSubject"
+            android:textColorHint="@android:color/black"
+            android:fontFamily="monospace"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/editTextRequestDescription"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="20dp"
+            android:ems="10"
+            android:hint="@string/request_description"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine"
+            android:textColorHint="@android:color/black"
+            android:fontFamily="monospace"
+            android:textSize="18sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/submitRequestBtn"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="20dp"
+            android:backgroundTint="@color/colorSecondary"
+            android:text="@string/submit"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/accountTypeSpinner" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

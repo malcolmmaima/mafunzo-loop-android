@@ -41,4 +41,9 @@
     <string name="view_all_upcoming">View all upcoming</string>
     <string name="show_calendar">Show Calendar</string>
     <string name="no_event_found">No Event found</string>
+    <string name="request_subject">Request Subject</string>
+    <string name="request_description">Request Description</string>
+    <string name="submit">Submit</string>
+    <string name="request_type_required">Please Select Request Type</string>
+    <string name="pending">PENDING</string>
 </resources>
