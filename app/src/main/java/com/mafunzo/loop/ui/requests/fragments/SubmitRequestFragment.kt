@@ -53,8 +53,8 @@ class SubmitRequestFragment : Fragment() {
     }
 
     private fun initializeObservers() {
-        lifecycleScope.launchWhenStarted {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 submitRequestViewModel.submittedSuccessfully.observe(viewLifecycleOwner){
                     if(it){
                         clearFields()
@@ -66,8 +66,8 @@ class SubmitRequestFragment : Fragment() {
             }
         }
 
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 submitRequestViewModel.requestTypes.observe(viewLifecycleOwner) { requestTypes ->
                     if (requestTypes.isNotEmpty()) {
                         //add default option to spinner
@@ -86,8 +86,8 @@ class SubmitRequestFragment : Fragment() {
             }
         }
 
-        lifecycleScope.launchWhenStarted {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 submitRequestViewModel.loading.observe(viewLifecycleOwner) {
                     if (it) {
                         binding.submitRequestBtn.gone()
@@ -98,8 +98,8 @@ class SubmitRequestFragment : Fragment() {
             }
         }
 
-        lifecycleScope.launchWhenStarted {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 submitRequestViewModel.errorMessage.observe(viewLifecycleOwner) {error ->
                     if(error != null) {
                         Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).show()
