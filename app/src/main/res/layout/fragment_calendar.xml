@@ -41,7 +41,7 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:id="@+id/tv_view_all"
             android:text="@string/view_all_upcoming"
             android:gravity="center"

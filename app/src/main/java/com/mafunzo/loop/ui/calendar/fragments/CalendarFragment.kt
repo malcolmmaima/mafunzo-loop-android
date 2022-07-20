@@ -176,13 +176,13 @@ class CalendarFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener  {
 
     private fun refreshEvents() {
         if(binding.calendarView.isVisible){
+            calendarViewModel.fetchCalendar(selectedDate)
+        } else {
             year = c.get(Calendar.YEAR).toString()
             month = (c.get(Calendar.MONTH) + 1).toString()
             day = c.get(Calendar.DAY_OF_MONTH).toString()
             var today = "$year-$month-$day"
-            calendarViewModel.fetchCalendar(today.convertDateToTimeInMillis())
-        } else {
-            calendarViewModel.fetchAllUpcoming(selectedDate)
+            calendarViewModel.fetchAllUpcoming(today.convertDateToTimeInMillis())
         }
     }
 
