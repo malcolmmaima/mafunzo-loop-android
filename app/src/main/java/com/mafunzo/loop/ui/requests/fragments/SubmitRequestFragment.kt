@@ -1,7 +1,6 @@
 package com.mafunzo.loop.ui.requests.fragments
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
@@ -25,7 +24,6 @@ import com.mafunzo.loop.utils.gone
 import com.mafunzo.loop.utils.showProgress
 import com.mafunzo.loop.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -73,7 +71,7 @@ class SubmitRequestFragment : Fragment() {
                         //add default option to spinner
                         val reqTypes = arrayListOf<String>()
                         reqTypes.add("Select Request Type")
-                        reqTypes.map {
+                        requestTypes.map {
                             reqTypes.add(it.lowercase())
                         }
                         binding.requestTypeSpinner.adapter = ArrayAdapter(
@@ -90,9 +88,9 @@ class SubmitRequestFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 submitRequestViewModel.loading.observe(viewLifecycleOwner) {
                     if (it) {
-                        binding.submitRequestBtn.gone()
+                        binding.submitRequestBtn.enable(false)
                     } else {
-                        binding.submitRequestBtn.visible()
+                        binding.submitRequestBtn.enable(true)
                     }
                 }
             }
@@ -121,12 +119,12 @@ class SubmitRequestFragment : Fragment() {
             submitRequestBtn.setOnClickListener {
 
                 if (editTextRequestSubject.text.trim().isEmpty()) {
-                    editTextRequestSubject.error = getString(R.string.first_name_required)
+                    editTextRequestSubject.error = getString(R.string.subject_required)
                     submitRequestBtn.isEnabled = true
                     return@setOnClickListener
                 }
                 if (editTextRequestDescription.text.trim().length <= 2) {
-                    editTextRequestDescription.error = getString(R.string.first_name_too_short)
+                    editTextRequestDescription.error = getString(R.string.description_required)
                     submitRequestBtn.isEnabled = true
                     return@setOnClickListener
                 }

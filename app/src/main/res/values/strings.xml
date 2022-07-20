@@ -46,4 +46,6 @@
     <string name="submit">Submit</string>
     <string name="request_type_required">Please Select Request Type</string>
     <string name="pending">PENDING</string>
+    <string name="subject_required">Please enter subject</string>
+    <string name="description_required">Please enter a longer description</string>
 </resources>
