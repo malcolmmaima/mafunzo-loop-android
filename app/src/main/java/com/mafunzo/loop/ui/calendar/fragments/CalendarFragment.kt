@@ -41,6 +41,7 @@ class CalendarFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener  {
     private var month = (c.get(Calendar.MONTH) + 1).toString()
     private var day = c.get(Calendar.DAY_OF_MONTH).toString()
 
+    private var calendarIsVisible = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -161,10 +162,12 @@ class CalendarFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener  {
 
             if(binding.calendarView.isVisible){
                 binding.calendarView.gone()
+                calendarIsVisible = false
                 binding.tvViewAll.text = getString(R.string.show_calendar)
                 calendarViewModel.fetchAllUpcoming(today.convertDateToTimeInMillis())
             } else {
                 binding.calendarView.visible()
+                calendarIsVisible = true
                 binding.tvViewAll.text = getString(R.string.view_all_upcoming)
                 calendarViewModel.fetchCalendar(selectedDate)
             }
@@ -205,6 +208,13 @@ class CalendarFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener  {
 
     override fun onResume() {
         super.onResume()
+
+        if(calendarIsVisible) {
+            binding.calendarView.visible()
+        } else {
+            binding.calendarView.gone()
+            binding.tvViewAll.text = getString(R.string.show_calendar)
+        }
         refreshEvents()
     }
 }
