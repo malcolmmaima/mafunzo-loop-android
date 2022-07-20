@@ -171,6 +171,18 @@ class CalendarFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener  {
         }
     }
 
+    private fun refreshEvents() {
+        if(binding.calendarView.isVisible){
+            year = c.get(Calendar.YEAR).toString()
+            month = (c.get(Calendar.MONTH) + 1).toString()
+            day = c.get(Calendar.DAY_OF_MONTH).toString()
+            var today = "$year-$month-$day"
+            calendarViewModel.fetchCalendar(today.convertDateToTimeInMillis())
+        } else {
+            calendarViewModel.fetchAllUpcoming(selectedDate)
+        }
+    }
+
     private fun setUpToolbar() {
         setHasOptionsMenu(true)
         (requireActivity() as MainActivity).setSupportActionBar(binding.toolbar)
@@ -188,11 +200,11 @@ class CalendarFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener  {
     }
 
     override fun onRefresh() {
-        var today = "$year-$month-$day"
-        if(binding.calendarView.isVisible){
-            calendarViewModel.fetchCalendar(today.convertDateToTimeInMillis())
-        } else {
-            calendarViewModel.fetchAllUpcoming(selectedDate)
-        }
+        refreshEvents()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        refreshEvents()
     }
 }
