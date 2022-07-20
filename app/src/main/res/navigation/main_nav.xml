@@ -43,5 +43,14 @@
         android:id="@+id/calendarFragment"
         android:name="com.mafunzo.loop.ui.calendar.fragments.CalendarFragment"
         android:label="fragment_calendar"
-        tools:layout="@layout/fragment_calendar" />
+        tools:layout="@layout/fragment_calendar" >
+        <action
+            android:id="@+id/action_calendarFragment_to_viewEventFragment"
+            app:destination="@id/viewEventFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewEventFragment"
+        android:name="com.mafunzo.loop.ui.calendar.fragments.ViewEventFragment"
+        android:label="fragment_view_event"
+        tools:layout="@layout/fragment_view_event" />
 </navigation>

@@ -40,4 +40,5 @@
     <string name="no_events">No available events</string>
     <string name="view_all_upcoming">View all upcoming</string>
     <string name="show_calendar">Show Calendar</string>
+    <string name="no_event_found">No Event found</string>
 </resources>

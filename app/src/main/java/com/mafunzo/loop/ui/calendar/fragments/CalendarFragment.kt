@@ -18,6 +18,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.snackbar.Snackbar
 import com.mafunzo.loop.R
 import com.mafunzo.loop.databinding.FragmentCalendarBinding
+import com.mafunzo.loop.di.Constants
 import com.mafunzo.loop.ui.calendar.adapters.CalendarEventAdapter
 import com.mafunzo.loop.ui.calendar.viewmodel.CalendarViewModel
 import com.mafunzo.loop.ui.main.MainActivity
@@ -118,7 +119,9 @@ class CalendarFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener  {
     private fun setupCalendarAdapter() {
         calendarEventAdapter = CalendarEventAdapter()
         calendarEventAdapter.onItemClick { calendarEventResponse ->
-            //TODO: navigate to event details
+            findNavController().navigate(R.id.action_calendarFragment_to_viewEventFragment, Bundle().apply {
+                putParcelable(Constants.EVENT_STRING_KEY, calendarEventResponse)
+            })
         }
 
         binding.rvEvents.apply {
