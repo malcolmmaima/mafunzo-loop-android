@@ -19,10 +19,7 @@ import com.mafunzo.loop.data.models.requests.StandardRequest
 import com.mafunzo.loop.databinding.FragmentSubmitRequestBinding
 import com.mafunzo.loop.ui.main.MainActivity
 import com.mafunzo.loop.ui.requests.viewmodels.SubmitRequestViewModel
-import com.mafunzo.loop.utils.enable
-import com.mafunzo.loop.utils.gone
-import com.mafunzo.loop.utils.showProgress
-import com.mafunzo.loop.utils.visible
+import com.mafunzo.loop.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -56,6 +53,7 @@ class SubmitRequestFragment : Fragment() {
                 submitRequestViewModel.submittedSuccessfully.observe(viewLifecycleOwner){
                     if(it){
                         clearFields()
+                        binding.submitRequestBtn.hideProgress(getString(R.string.submit))
                         Snackbar.make(binding.root, "Request submitted successfully", Snackbar.LENGTH_LONG).show()
                     } else {
                         Snackbar.make(binding.root, "Request failed to submit", Snackbar.LENGTH_LONG).show()
@@ -140,9 +138,10 @@ class SubmitRequestFragment : Fragment() {
                 }
 
                 val message = editTextRequestDescription.text.trim().toString()
-                val subject = requestTypeSpinner.selectedItem.toString().uppercase()
+                val subject = editTextRequestSubject.text.trim().toString()
                 val createdAt = System.currentTimeMillis()
                 val status = getString(R.string.pending)
+                val type = requestTypeSpinner.selectedItem.toString().uppercase()
 
                 this.submitRequestBtn.showProgress()
                 this.submitRequestBtn.enable(false)
@@ -150,7 +149,8 @@ class SubmitRequestFragment : Fragment() {
                     message,
                     subject,
                     createdAt,
-                    status
+                    status,
+                    type
                 )
                 submitRequestViewModel.submitRequest(standardRequest)
             }

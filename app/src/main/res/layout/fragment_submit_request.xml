@@ -99,4 +99,11 @@
 
     </LinearLayout>
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_pattern"
+        app:layout_constraintBottom_toBottomOf="@id/ll_request_form"
+        android:translationZ="1dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

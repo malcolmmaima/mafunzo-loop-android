@@ -11,4 +11,5 @@ data class StandardRequest(
     val subject: String,
     val createdAt: Long,
     val status: String,
+    val type: String,
 ) : Parcelable
