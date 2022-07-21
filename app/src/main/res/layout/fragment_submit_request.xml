@@ -121,7 +121,6 @@
             android:id="@+id/tv_view_all"
             android:text="@string/view_requests"
             android:gravity="center"
-            android:background="@color/white"
             android:textColor="@color/colorSecondary"
             android:textStyle="bold"
             android:fontFamily="monospace"
