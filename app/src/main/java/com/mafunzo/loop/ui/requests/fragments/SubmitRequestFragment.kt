@@ -21,9 +21,10 @@ import com.google.android.material.snackbar.Snackbar
 import com.mafunzo.loop.R
 import com.mafunzo.loop.data.models.requests.StandardRequest
 import com.mafunzo.loop.databinding.FragmentSubmitRequestBinding
+import com.mafunzo.loop.di.Constants
 import com.mafunzo.loop.ui.main.MainActivity
 import com.mafunzo.loop.ui.requests.adapters.RequestsAdapter
-import com.mafunzo.loop.ui.requests.viewmodels.SubmitRequestViewModel
+import com.mafunzo.loop.ui.requests.viewmodel.SubmitRequestViewModel
 import com.mafunzo.loop.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -224,7 +225,9 @@ class SubmitRequestFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private fun setupRequestAdapter() {
         requestsAdapter = RequestsAdapter()
         requestsAdapter.onItemClick { userRequestResponse ->
-            //do something
+            findNavController().navigate(R.id.action_requestsFragment_to_viewRequestFragment, Bundle().apply {
+                putParcelable(Constants.REQUEST_STRING_KEY, userRequestResponse)
+            })
         }
 
         binding.rvRequests.apply {
@@ -232,7 +235,6 @@ class SubmitRequestFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
             layoutManager =
                 LinearLayoutManager(context, RecyclerView.VERTICAL, false)
         }
-
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {

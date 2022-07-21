@@ -1,4 +1,4 @@
-package com.mafunzo.loop.ui.requests.viewmodels
+package com.mafunzo.loop.ui.requests.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

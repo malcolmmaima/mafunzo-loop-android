@@ -11,4 +11,5 @@ object Constants {
     const val FIREBASE_REQUESTS = "requests"
     const val ANNOUNCEMENT_STRING_KEY = "announcement"
     const val EVENT_STRING_KEY = "event"
+    const val REQUEST_STRING_KEY = "request"
 }

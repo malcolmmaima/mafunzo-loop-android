@@ -59,5 +59,13 @@
     <fragment
         android:id="@+id/requestsFragment"
         android:name="com.mafunzo.loop.ui.requests.fragments.SubmitRequestFragment"
-        android:label="RequestsFragment" />
+        android:label="RequestsFragment" >
+        <action
+            android:id="@+id/action_requestsFragment_to_viewRequestFragment"
+            app:destination="@id/viewRequestFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewRequestFragment"
+        android:name="com.mafunzo.loop.ui.requests.fragments.ViewRequestFragment"
+        android:label="ViewRequestFragment" />
 </navigation>
