@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
 import com.mafunzo.loop.data.local.preferences.AppDatasource
-import com.mafunzo.loop.data.models.responses.AnnouncementResponse
 import com.mafunzo.loop.data.models.responses.CalendarEventResponse
 import com.mafunzo.loop.di.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel

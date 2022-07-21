@@ -7,6 +7,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Keep
 data class AnnouncementResponse (
+    val id: String? = null,
     val announcementTitle: String? = null,
     val announcementBody: String? = null,
     val announcementTime: Long? = null,
