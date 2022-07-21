@@ -7,6 +7,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Keep
 data class UserRequestResponse(
+    val id: String = "",
     val message: String = "",
     val subject: String = "",
     val createdAt: Long = 0,

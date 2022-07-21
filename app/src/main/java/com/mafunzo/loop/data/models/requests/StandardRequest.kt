@@ -7,9 +7,10 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Keep
 data class StandardRequest(
-    val message: String,
-    val subject: String,
-    val createdAt: Long,
-    val status: String,
-    val type: String,
+    var id: String,
+    var message: String,
+    var subject: String,
+    var createdAt: Long,
+    var status: String,
+    var type: String,
 ) : Parcelable

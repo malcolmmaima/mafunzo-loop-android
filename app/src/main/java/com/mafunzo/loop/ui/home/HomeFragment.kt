@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.isGone
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -16,13 +15,12 @@ import androidx.navigation.fragment.findNavController
 import com.mafunzo.loop.data.models.responses.UserResponse
 import com.mafunzo.loop.databinding.FragmentHomeBinding
 import com.mafunzo.loop.ui.auth.viewmodel.AuthViewModel
-import com.mafunzo.loop.ui.home.viewmodels.HomeViewModel
+import com.mafunzo.loop.ui.home.viewmodel.HomeViewModel
 import com.mafunzo.loop.ui.main.MainActivity
 import com.mafunzo.loop.utils.gone
 import com.mafunzo.loop.utils.snackbar
 import com.mafunzo.loop.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -65,21 +63,14 @@ class HomeFragment : Fragment() {
 
         //observe current workspace / school name fetched from firestore
         viewLifecycleOwner.lifecycleScope.launch {
-            homeViewModel.schoolDetails.observe(viewLifecycleOwner) {schoolDetails ->
-                if(schoolDetails != null) {
-                    binding.currentWorkspaceText.text = schoolDetails.schoolName
-                    disableAllModules(false)
-                } else {
-                    binding.currentWorkspaceText.text = "No school selected - Refresh"
-                    //fetch user details again which saves new workspace id to local storage
-                    authViewModel.userPhoneNumber?.let { authViewModel.fetchUser(it) }
-                    disableAllModules(true)
-                }
+            homeViewModel.schoolDetails.collectLatest {schoolDetails ->
+                binding.currentWorkspaceText.text = schoolDetails.schoolName
+                disableAllModules(false)
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            homeViewModel.workSpacePresent.observe(viewLifecycleOwner) {workspaceAvailable ->
+            homeViewModel.workSpacePresent.collectLatest { workspaceAvailable ->
                 if(workspaceAvailable) {
                     disableAllModules(false)
                 } else {
@@ -109,7 +100,7 @@ class HomeFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                homeViewModel.errorMessage.observe(viewLifecycleOwner) { errorMessage ->
+                homeViewModel.errorMessage.collectLatest { errorMessage ->
                     binding.root.snackbar(errorMessage)
                 }
             }

@@ -75,6 +75,18 @@
                     tools:text="4 July 2022, 8:30PM"
                     app:drawableLeftCompat="@drawable/ic_baseline_access_time_24" />
 
+                <TextView
+                    android:id="@+id/requestStatusTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/grey"
+                    android:fontFamily="monospace"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    tools:text="PENDING" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -118,6 +130,25 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center"
+                android:indeterminate="true" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/withdrawRequestBtn"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="20dp"
+                android:backgroundTint="@color/red"
+                android:text="@string/withdraw_request"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

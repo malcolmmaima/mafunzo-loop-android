@@ -12,6 +12,8 @@ import com.mafunzo.loop.data.models.requests.StandardRequest
 import com.mafunzo.loop.data.models.responses.UserRequestResponse
 import com.mafunzo.loop.di.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,17 +28,18 @@ class SubmitRequestViewModel @Inject constructor(
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
 
-    private val _errorMessage = MutableLiveData<String>()
-    val errorMessage: LiveData<String> = _errorMessage
+    private val _errorMessage = MutableSharedFlow<String>()
+    val errorMessage = _errorMessage
 
-    private val _submittedSuccessfully = MutableLiveData<Boolean>()
-    val submittedSuccessfully: LiveData<Boolean> = _submittedSuccessfully
+    private val _submittedSuccessfully = MutableSharedFlow<Boolean>()
+    val submittedSuccessfully = _submittedSuccessfully.asSharedFlow()
 
     private val _requestTypes = MutableLiveData<List<String>>()
     val requestTypes: LiveData<List<String>> = _requestTypes
 
     private val _requests = MutableLiveData<List<UserRequestResponse>>()
     val requests: LiveData<List<UserRequestResponse>> = _requests
+
 
     fun submitRequest(request: StandardRequest) {
         val user = firebaseAuth.currentUser
@@ -47,22 +50,34 @@ class SubmitRequestViewModel @Inject constructor(
                 val accountType = userPrefs.getAccountType().first()?.trim()
 
                 if (currentWorkSpace != null && accountType != null) {
-                    user.phoneNumber?.let {phonenumber ->
+                    val submitRef = user.phoneNumber?.let {phonenumber ->
                         firestoreDB.collection(Constants.FIREBASE_REQUESTS)
-                            .document(currentWorkSpace).collection(phonenumber).document().set(request)
-                            .addOnCompleteListener {
+                            .document(currentWorkSpace).collection(phonenumber).document()
+                    }
+
+                    request.id = submitRef?.id.toString() //append firestore auto-generated id to request
+                    if(request.id.isNotEmpty()){
+                        submitRef?.set(request)?.addOnCompleteListener {
+                            viewModelScope.launch {
                                 _loading.value = false
                                 if (it.isSuccessful) {
                                     getRequests(5)
-                                    _submittedSuccessfully.value = true
+                                    _submittedSuccessfully.emit(true)
                                 }  else {
-                                    _errorMessage.value = it.exception?.message
+                                    viewModelScope.launch {
+                                        it.exception?.message?.let { it1 -> _errorMessage.emit(it1) }
+                                    }
                                 }
                             }
-                            .addOnFailureListener {
+                        }?.addOnFailureListener {
+                            viewModelScope.launch {
                                 _loading.value = false
-                                _errorMessage.value = it.message
+                                it.message?.let { it1 -> _errorMessage.emit(it1) }
                             }
+                        }
+                    } else {
+                        _loading.value = false
+                        _errorMessage.emit("Error submitting request")
                     }
                 }
             }
@@ -90,7 +105,7 @@ class SubmitRequestViewModel @Inject constructor(
                 .addOnFailureListener { exception ->
                     viewModelScope.launch {
                         _loading.value = false
-                        exception.localizedMessage?.let { _errorMessage.value = it }
+                        exception.localizedMessage?.let { _errorMessage.emit(it) }
                     }
                 }
         }
@@ -127,15 +142,19 @@ class SubmitRequestViewModel @Inject constructor(
                                 .addOnFailureListener { exception ->
                                     viewModelScope.launch {
                                         _loading.value = false
-                                        exception.localizedMessage?.let { _errorMessage.value = exception.message }
+                                        exception.localizedMessage?.let { exception.message?.let { it1 ->
+                                            _errorMessage.emit(
+                                                it1
+                                            )
+                                        } }
                                     }
                                 }
                         }
                     } else {
-                        _errorMessage.value = "No work space selected"
+                        _errorMessage.emit("No work space selected")
                     }
                 } else {
-                    _errorMessage.value = "User not logged in"
+                    _errorMessage.emit("User not logged in")
                 }
             }
         } else {
@@ -166,15 +185,19 @@ class SubmitRequestViewModel @Inject constructor(
                                 .addOnFailureListener { exception ->
                                     viewModelScope.launch {
                                         _loading.value = false
-                                        exception.localizedMessage?.let { _errorMessage.value = exception.message }
+                                        exception.localizedMessage?.let { exception.message?.let { it1 ->
+                                            _errorMessage.emit(
+                                                it1
+                                            )
+                                        } }
                                     }
                                 }
                         }
                     } else {
-                        _errorMessage.value = "No work space selected"
+                        _errorMessage.emit("No work space selected")
                     }
                 } else {
-                    _errorMessage.value = "User not logged in"
+                    _errorMessage.emit("User not logged in")
                 }
             }
         }

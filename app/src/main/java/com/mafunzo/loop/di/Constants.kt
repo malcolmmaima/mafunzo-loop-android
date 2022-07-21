@@ -12,4 +12,7 @@ object Constants {
     const val ANNOUNCEMENT_STRING_KEY = "announcement"
     const val EVENT_STRING_KEY = "event"
     const val REQUEST_STRING_KEY = "request"
+
+    //request statuses
+    const val  REQUEST_STATUS_PENDING = "PENDING"
 }

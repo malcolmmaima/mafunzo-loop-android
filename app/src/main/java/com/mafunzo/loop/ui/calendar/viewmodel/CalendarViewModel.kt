@@ -11,6 +11,8 @@ import com.mafunzo.loop.data.models.responses.AnnouncementResponse
 import com.mafunzo.loop.data.models.responses.CalendarEventResponse
 import com.mafunzo.loop.di.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,8 +23,8 @@ class CalendarViewModel@Inject constructor(
     private val userPrefs: AppDatasource
     ): ViewModel() {
 
-    private val _errorMessage = MutableLiveData<String>()
-    val errorMessage: LiveData<String> = _errorMessage
+    private val _errorMessage = MutableSharedFlow<String>()
+    val errorMessage = _errorMessage.asSharedFlow()
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -47,12 +49,16 @@ class CalendarViewModel@Inject constructor(
                         _calendarEvents.postValue(events)
                     }
                     .addOnFailureListener { exception ->
-                        _isLoading.value = false
-                        _errorMessage.value = exception.localizedMessage
+                        viewModelScope.launch {
+                            _isLoading.value = false
+                            _errorMessage.emit(exception.localizedMessage)
+                        }
                     }
             } else {
-                _isLoading.value = false
-                _errorMessage.value = "No current workspace or account type found"
+                viewModelScope.launch {
+                    _isLoading.value = false
+                    _errorMessage.emit("No current workspace or account type found")
+                }
             }
         }
     }
@@ -72,12 +78,16 @@ class CalendarViewModel@Inject constructor(
                         _calendarEvents.postValue(events)
                     }
                     .addOnFailureListener { exception ->
-                        _isLoading.value = false
-                        _errorMessage.value = exception.localizedMessage
+                        viewModelScope.launch {
+                            _isLoading.value = false
+                            _errorMessage.emit(exception.localizedMessage)
+                        }
                     }
             } else {
-                _isLoading.value = false
-                _errorMessage.value = "No current workspace or account type found"
+                viewModelScope.launch {
+                    _isLoading.value = false
+                    _errorMessage.emit("No current workspace or account type found")
+                }
             }
         }
     }

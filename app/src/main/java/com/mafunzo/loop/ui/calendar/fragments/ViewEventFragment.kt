@@ -7,7 +7,6 @@ import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.snackbar.Snackbar
 import com.mafunzo.loop.R
 import com.mafunzo.loop.data.models.responses.CalendarEventResponse
 import com.mafunzo.loop.databinding.FragmentViewEventBinding
@@ -15,6 +14,7 @@ import com.mafunzo.loop.di.Constants
 import com.mafunzo.loop.ui.main.MainActivity
 import com.mafunzo.loop.utils.formatMonthDay
 import com.mafunzo.loop.utils.formatStartEndTime
+import com.mafunzo.loop.utils.snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,7 +28,7 @@ class ViewEventFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if(calendarEvent == null) {
-            Snackbar.make(binding.root, getString(R.string.no_event_found), Snackbar.LENGTH_LONG).show()
+            binding.root.snackbar(getString(R.string.no_event_found))
             findNavController().navigateUp()
         }
     }

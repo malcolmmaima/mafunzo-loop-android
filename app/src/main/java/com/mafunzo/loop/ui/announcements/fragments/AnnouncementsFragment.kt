@@ -14,7 +14,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.google.android.material.snackbar.Snackbar
 import com.mafunzo.loop.R
 import com.mafunzo.loop.databinding.FragmentAnnouncementsBinding
 import com.mafunzo.loop.di.Constants
@@ -22,6 +21,7 @@ import com.mafunzo.loop.ui.announcements.adapters.AnnouncementAdapter
 import com.mafunzo.loop.ui.announcements.viewmodel.AnnouncementsViewModel
 import com.mafunzo.loop.ui.main.MainActivity
 import com.mafunzo.loop.utils.gone
+import com.mafunzo.loop.utils.snackbar
 import com.mafunzo.loop.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -84,7 +84,7 @@ class AnnouncementsFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 announcementsViewModel.errorMessage.observe(viewLifecycleOwner) { error ->
                     binding.swipeContainer.isRefreshing = false
                     if(error != null) {
-                        Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).show()
+                        binding.root.snackbar(error)
                     }
                 }
             }

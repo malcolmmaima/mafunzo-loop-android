@@ -8,13 +8,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.google.android.material.snackbar.Snackbar
 import com.mafunzo.loop.R
 import com.mafunzo.loop.data.models.responses.AnnouncementResponse
 import com.mafunzo.loop.databinding.FragmentViewAnnouncementBinding
 import com.mafunzo.loop.di.Constants
 import com.mafunzo.loop.ui.main.MainActivity
 import com.mafunzo.loop.utils.formatDateTime
+import com.mafunzo.loop.utils.snackbar
 import com.mafunzo.loop.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,7 +29,7 @@ class ViewAnnouncementFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if(announcement == null) {
-            Snackbar.make(binding.root, getString(R.string.no_announcement_found), Snackbar.LENGTH_LONG).show()
+            binding.root.snackbar(getString(R.string.no_announcements))
             findNavController().navigateUp()
         }
     }

@@ -51,4 +51,6 @@
     <string name="view_requests">View all requests</string>
     <string name="submit_new_request">Submit new request</string>
     <string name="no_request_found">No request found</string>
+    <string name="cancel">CANCEL</string>
+    <string name="withdraw_request">WITHDRAW</string>
 </resources>

@@ -17,7 +17,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.google.android.material.snackbar.Snackbar
 import com.mafunzo.loop.R
 import com.mafunzo.loop.data.models.requests.StandardRequest
 import com.mafunzo.loop.databinding.FragmentSubmitRequestBinding
@@ -27,6 +26,7 @@ import com.mafunzo.loop.ui.requests.adapters.RequestsAdapter
 import com.mafunzo.loop.ui.requests.viewmodel.SubmitRequestViewModel
 import com.mafunzo.loop.utils.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -85,13 +85,13 @@ class SubmitRequestFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private fun initializeObservers() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                submitRequestViewModel.submittedSuccessfully.observe(viewLifecycleOwner){
+                submitRequestViewModel.submittedSuccessfully.collectLatest {
                     if(it){
                         clearFields()
                         binding.submitRequestBtn.hideProgress(getString(R.string.submit))
-                        Snackbar.make(binding.root, "Request submitted successfully", Snackbar.LENGTH_LONG).show()
+                        binding.root.snackbar("Request submitted successfully")
                     } else {
-                        Snackbar.make(binding.root, "Request failed to submit", Snackbar.LENGTH_LONG).show()
+                        binding.root.snackbar("Request failed to submit")
                     }
                 }
             }
@@ -133,10 +133,8 @@ class SubmitRequestFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                submitRequestViewModel.errorMessage.observe(viewLifecycleOwner) {error ->
-                    if(error != null) {
-                        Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).show()
-                    }
+                submitRequestViewModel.errorMessage.collectLatest {error ->
+                    binding.root.snackbar(error)
                 }
             }
         }
@@ -200,6 +198,7 @@ class SubmitRequestFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 this.submitRequestBtn.showProgress()
                 this.submitRequestBtn.enable(false)
                 val standardRequest = StandardRequest(
+                    id = "",
                     message,
                     subject,
                     createdAt,
