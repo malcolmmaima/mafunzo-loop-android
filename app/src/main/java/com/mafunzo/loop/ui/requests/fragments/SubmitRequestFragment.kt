@@ -8,31 +8,50 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.snackbar.Snackbar
 import com.mafunzo.loop.R
 import com.mafunzo.loop.data.models.requests.StandardRequest
 import com.mafunzo.loop.databinding.FragmentSubmitRequestBinding
 import com.mafunzo.loop.ui.main.MainActivity
+import com.mafunzo.loop.ui.requests.adapters.RequestsAdapter
 import com.mafunzo.loop.ui.requests.viewmodels.SubmitRequestViewModel
 import com.mafunzo.loop.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class SubmitRequestFragment : Fragment() {
+class SubmitRequestFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var binding: FragmentSubmitRequestBinding
     private val submitRequestViewModel: SubmitRequestViewModel by viewModels()
+    private lateinit var requestsAdapter: RequestsAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSubmitRequestBinding.inflate(inflater, container, false)
+
+        binding.swipeContainer.setOnRefreshListener(this)
+        binding.swipeContainer.setColorSchemeResources(
+            R.color.colorPrimary,
+            android.R.color.holo_green_dark,
+            android.R.color.holo_orange_dark,
+            android.R.color.holo_blue_dark
+        )
+
+        binding.swipeContainer.post {
+            binding.swipeContainer.isRefreshing = true
+        }
+
         return binding.root
     }
 
@@ -40,7 +59,26 @@ class SubmitRequestFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpToolbar()
         submitRequest()
+        viewRequests()
         initializeObservers()
+        setupRequestAdapter()
+    }
+
+    private fun viewRequests() {
+        submitRequestViewModel.getRequests(5)
+        binding.apply {
+            tvViewAll.setOnClickListener {
+                if(llRequestForm.isVisible){
+                    llRequestForm.gone()
+                    tvViewAll.text = getString(R.string.submit_new_request)
+                } else {
+                    llRequestForm.visible()
+                    tvViewAll.text = getString(R.string.view_requests)
+                }
+
+                submitRequestViewModel.getRequests(null)
+            }
+        }
     }
 
     private fun initializeObservers() {
@@ -82,9 +120,11 @@ class SubmitRequestFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 submitRequestViewModel.loading.observe(viewLifecycleOwner) {
                     if (it) {
+                        binding.swipeContainer.isRefreshing = true
                         binding.submitRequestBtn.enable(false)
                     } else {
                         binding.submitRequestBtn.enable(true)
+                        binding.swipeContainer.isRefreshing = false
                     }
                 }
             }
@@ -95,6 +135,23 @@ class SubmitRequestFragment : Fragment() {
                 submitRequestViewModel.errorMessage.observe(viewLifecycleOwner) {error ->
                     if(error != null) {
                         Snackbar.make(binding.root, error, Snackbar.LENGTH_LONG).show()
+                    }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                submitRequestViewModel.requests.observe(viewLifecycleOwner) {requests ->
+                    if(requests.isNotEmpty()) {
+                        binding.rvRequests.visible()
+                        requestsAdapter.saveData(requests)
+                        binding.rvRequests.scrollToPosition(0)
+                        binding.tvViewAll.visible()
+                    } else {
+                        binding.tvViewAll.gone()
+                        binding.llRequestForm.visible()
+                        binding.tvViewAll.gone()
                     }
                 }
             }
@@ -153,7 +210,6 @@ class SubmitRequestFragment : Fragment() {
         }
     }
 
-
     private fun setUpToolbar() {
         setHasOptionsMenu(true)
         (requireActivity() as MainActivity).setSupportActionBar(binding.toolbar)
@@ -165,8 +221,39 @@ class SubmitRequestFragment : Fragment() {
         }
     }
 
+    private fun setupRequestAdapter() {
+        requestsAdapter = RequestsAdapter()
+        requestsAdapter.onItemClick { userRequestResponse ->
+            //do something
+        }
+
+        binding.rvRequests.apply {
+            adapter = requestsAdapter
+            layoutManager =
+                LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        }
+
+    }
+
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
         menu.clear()
+    }
+
+    override fun onRefresh() {
+        if(binding.llRequestForm.isVisible) {
+            submitRequestViewModel.getRequests(5)
+        } else {
+            submitRequestViewModel.getRequests(null)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(binding.llRequestForm.isVisible) {
+            submitRequestViewModel.getRequests(5)
+        } else {
+            submitRequestViewModel.getRequests(null)
+        }
     }
 }

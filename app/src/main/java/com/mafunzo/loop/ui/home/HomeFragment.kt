@@ -77,6 +77,19 @@ class HomeFragment : Fragment() {
             }
         }
 
+        viewLifecycleOwner.lifecycleScope.launch {
+            homeViewModel.workSpacePresent.observe(viewLifecycleOwner) {workspaceAvailable ->
+                if(workspaceAvailable) {
+                    disableAllModules(false)
+                } else {
+                    binding.currentWorkspaceText.text = "No school selected - Refresh"
+                    //fetch user details again which saves new workspace id to local storage
+                    authViewModel.userPhoneNumber?.let { authViewModel.fetchUser(it) }
+                    disableAllModules(true)
+                }
+            }
+        }
+
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 authViewModel.userDetails.collectLatest {user ->

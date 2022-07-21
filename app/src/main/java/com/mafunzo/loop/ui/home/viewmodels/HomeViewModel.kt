@@ -31,6 +31,9 @@ class HomeViewModel @Inject constructor(
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading = _isLoading
 
+    private val _workSpacePresent = MutableLiveData<Boolean>()
+    val workSpacePresent = _workSpacePresent
+
     //fetch current workspace from shared prefs
     fun getCurrentWorkspace() {
         viewModelScope.launch {
@@ -38,9 +41,11 @@ class HomeViewModel @Inject constructor(
             sharedPrefs.getCurrentWorkSpace().first().let {schoolWorkspace ->
                 Log.d("HomeViewModel", "Current workspace: $schoolWorkspace")
                 if (schoolWorkspace != null) {
+                    _workSpacePresent.value = true
                     getCurrentWorkspaceName(schoolWorkspace.trim())
                 } else {
                     Log.d("HomeViewModel", "No current workspace found")
+                    _workSpacePresent.value = false
                     isLoading.value = false
                 }
             }

@@ -48,4 +48,6 @@
     <string name="pending">PENDING</string>
     <string name="subject_required">Please enter subject</string>
     <string name="description_required">Please enter a longer description</string>
+    <string name="view_requests">View all requests</string>
+    <string name="submit_new_request">Submit new request</string>
 </resources>

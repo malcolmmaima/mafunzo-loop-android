@@ -20,7 +20,7 @@
     </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
-        android:id="@+id/ll_request_form"
+        android:id="@+id/ll_request"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="80dp"
@@ -31,79 +31,130 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-
-        <Spinner
-            android:id="@+id/requestTypeSpinner"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="20dp"
-            android:textColorHint="@android:color/black"
-            android:textSize="20sp"
-            android:ems="10" />
-
-        <View
-            android:id="@+id/spinnerView"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="0dp"
-            android:layout_marginRight="25dp"
-            android:background="@color/black" />
-
-        <EditText
-            android:id="@+id/editTextRequestSubject"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginRight="20dp"
-            android:ems="10"
-            android:hint="@string/request_subject"
-            android:importantForAutofill="no"
-            android:inputType="textEmailSubject"
-            android:textColorHint="@android:color/black"
-            android:fontFamily="monospace"
-            android:textSize="18sp" />
-
-        <EditText
-            android:id="@+id/editTextRequestDescription"
+        <LinearLayout
+            android:id="@+id/ll_request_form"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginRight="20dp"
-            android:ems="10"
-            android:hint="@string/request_description"
-            android:importantForAutofill="no"
-            android:inputType="textMultiLine"
-            android:textColorHint="@android:color/black"
-            android:fontFamily="monospace"
-            android:textSize="18sp" />
+            android:orientation="vertical">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/submitRequestBtn"
+            <Spinner
+                android:id="@+id/requestTypeSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="20dp"
+                android:contentDescription="@string/subject_required"
+                android:ems="10"
+                android:textColorHint="@android:color/black"
+                android:textSize="20sp" />
+
+            <View
+                android:id="@+id/spinnerView"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginRight="25dp"
+                android:background="@color/black" />
+
+            <EditText
+                android:id="@+id/editTextRequestSubject"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="20dp"
+                android:ems="10"
+                android:hint="@string/request_subject"
+                android:importantForAutofill="no"
+                android:inputType="textEmailSubject"
+                android:textColorHint="@android:color/black"
+                android:fontFamily="monospace"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/editTextRequestDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="20dp"
+                android:ems="10"
+                android:background="@color/white"
+                android:fontFamily="monospace"
+                android:hint="@string/request_description"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine"
+                android:minHeight="48dp"
+                android:textColorHint="@android:color/black"
+                android:textSize="18sp" />
+
+            <View
+                android:id="@+id/descriptionViewSeparator"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/black" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/submitRequestBtn"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="20dp"
+                android:backgroundTint="@color/colorSecondary"
+                android:text="@string/submit"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/accountTypeSpinner" />
+        </LinearLayout>
+
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginEnd="20dp"
-            android:backgroundTint="@color/colorSecondary"
-            android:text="@string/submit"
-            android:textColor="@color/white"
+            android:layout_height="40dp"
+            android:id="@+id/tv_view_all"
+            android:text="@string/view_requests"
+            android:gravity="center"
+            android:textColor="@color/colorSecondary"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/accountTypeSpinner" />
+            android:fontFamily="monospace"
+            android:textSize="14sp"
+            />
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            >
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_requests"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                tools:listitem="@layout/request_item"
+                android:layout_marginEnd="4dp"
+                android:paddingBottom="10dp"
+                />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:translationZ="-1dp"
+            android:layout_marginTop="-120dp"
+            android:background="@drawable/bottom_pattern"
+            />
 
     </LinearLayout>
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bottom_pattern"
-        app:layout_constraintBottom_toBottomOf="@id/ll_request_form"
-        android:translationZ="1dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
