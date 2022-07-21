@@ -42,6 +42,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        disableAllModules(true)
         getUserDetails()
         getCurrentSchoolWorkSpace()
         initializeHomeWidgets()
@@ -84,7 +85,7 @@ class HomeFragment : Fragment() {
                 } else {
                     binding.currentWorkspaceText.text = "No school selected - Refresh"
                     //fetch user details again which saves new workspace id to local storage
-                    authViewModel.userPhoneNumber?.let { authViewModel.fetchUser(it) }
+                    authViewModel.userPhoneNumber?.let {phonenumber -> authViewModel.fetchUser(phonenumber) }
                     disableAllModules(true)
                 }
             }
@@ -171,6 +172,7 @@ class HomeFragment : Fragment() {
         }
 
         binding.currentWorkspace.setOnClickListener {
+            binding.progressBar.visible()
             homeViewModel.getCurrentWorkspace()
         }
     }
@@ -181,6 +183,7 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        disableAllModules(true)
         homeViewModel.getCurrentWorkspace()
     }
 }
