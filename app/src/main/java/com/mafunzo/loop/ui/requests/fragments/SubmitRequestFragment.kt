@@ -34,7 +34,7 @@ class SubmitRequestFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var binding: FragmentSubmitRequestBinding
     private val submitRequestViewModel: SubmitRequestViewModel by viewModels()
     private lateinit var requestsAdapter: RequestsAdapter
-    private var submitFormVisible = false
+    private var submitFormVisible = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,13 +73,12 @@ class SubmitRequestFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 if(llRequestForm.isVisible){
                     llRequestForm.gone()
                     tvViewAll.text = getString(R.string.submit_new_request)
-                    submitFormVisible = false
                 } else {
                     llRequestForm.visible()
                     tvViewAll.text = getString(R.string.view_requests)
-                    submitFormVisible = true
                 }
 
+                submitFormVisible = llRequestForm.isVisible
                 submitRequestViewModel.getRequests(null)
             }
         }
@@ -261,8 +260,11 @@ class SubmitRequestFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     override fun onResume() {
         super.onResume()
         if(submitFormVisible) {
+            binding.llRequestForm.visible()
             submitRequestViewModel.getRequests(5)
         } else {
+            binding.llRequestForm.gone()
+            binding.tvViewAll.text = getString(R.string.submit_new_request)
             submitRequestViewModel.getRequests(null)
         }
     }
