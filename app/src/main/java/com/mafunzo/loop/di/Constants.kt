@@ -14,5 +14,9 @@ object Constants {
     const val REQUEST_STRING_KEY = "request"
 
     //request statuses
-    const val  REQUEST_STATUS_PENDING = "PENDING"
+    const val REQUEST_STATUS_PENDING = "PENDING"
+    const val REQUEST_STATUS_PROCESSING = "PROCESSING"
+    const val REQUEST_STATUS_CANCELLED = "CANCELLED"
+    const val REQUEST_STATUS_REJECTED = "REJECTED"
+    const val REQUEST_STATUS_APPROVED = "APPROVED"
 }

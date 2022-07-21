@@ -34,6 +34,7 @@ class SubmitRequestFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var binding: FragmentSubmitRequestBinding
     private val submitRequestViewModel: SubmitRequestViewModel by viewModels()
     private lateinit var requestsAdapter: RequestsAdapter
+    private var submitFormVisible = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,9 +73,11 @@ class SubmitRequestFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 if(llRequestForm.isVisible){
                     llRequestForm.gone()
                     tvViewAll.text = getString(R.string.submit_new_request)
+                    submitFormVisible = false
                 } else {
                     llRequestForm.visible()
                     tvViewAll.text = getString(R.string.view_requests)
+                    submitFormVisible = true
                 }
 
                 submitRequestViewModel.getRequests(null)
@@ -111,6 +114,12 @@ class SubmitRequestFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                             requireContext(),
                             R.layout.drop_down_spinner_layout,
                             reqTypes
+                        )
+                    } else {
+                        binding.requestTypeSpinner.adapter = ArrayAdapter(
+                            requireContext(),
+                            R.layout.drop_down_spinner_layout,
+                            arrayListOf("No request types available")
                         )
                     }
                 }
@@ -242,7 +251,7 @@ class SubmitRequestFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
     override fun onRefresh() {
-        if(binding.llRequestForm.isVisible) {
+        if(submitFormVisible) {
             submitRequestViewModel.getRequests(5)
         } else {
             submitRequestViewModel.getRequests(null)
@@ -251,7 +260,7 @@ class SubmitRequestFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onResume() {
         super.onResume()
-        if(binding.llRequestForm.isVisible) {
+        if(submitFormVisible) {
             submitRequestViewModel.getRequests(5)
         } else {
             submitRequestViewModel.getRequests(null)

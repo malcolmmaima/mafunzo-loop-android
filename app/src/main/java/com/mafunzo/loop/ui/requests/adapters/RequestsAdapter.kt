@@ -5,10 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.mafunzo.loop.R
 import com.mafunzo.loop.data.models.responses.UserRequestResponse
 import com.mafunzo.loop.databinding.RequestItemBinding
+import com.mafunzo.loop.di.Constants
 import com.mafunzo.loop.utils.formatDateTime
-
 
 class RequestsAdapter : RecyclerView.Adapter<RequestsAdapter.RequestViewHolder>() {
     private var viewRequestCallback: ((UserRequestResponse) -> Unit)? = null
@@ -51,10 +52,35 @@ class RequestsAdapter : RecyclerView.Adapter<RequestsAdapter.RequestViewHolder>(
 
     override fun onBindViewHolder(holder: RequestViewHolder, position: Int) {
         val requestData = asyncListDiffer.currentList[position]
+        val context = holder.binding.root.context
         holder.binding.apply {
 
             requestSubjectTv.text = requestData.subject
             requestTimeTV.text = requestData.createdAt?.formatDateTime()
+
+            //if status is pending color is grey, if status is processing then set color to blue
+            //if status is approved the color is green and if status is cancelled then color is red
+            when (requestData.status) {
+                Constants.REQUEST_STATUS_PENDING -> {
+                    statusIV.setBackgroundColor(context.getColor(R.color.grey))
+                }
+                Constants.REQUEST_STATUS_PROCESSING -> {
+                    statusIV.setBackgroundColor(context.getColor(R.color.colorSecondary))
+                }
+                Constants.REQUEST_STATUS_APPROVED -> {
+                    statusIV.setBackgroundColor(context.getColor(R.color.green))
+                }
+                Constants.REQUEST_STATUS_CANCELLED -> {
+                    statusIV.setBackgroundColor(context.getColor(R.color.red))
+                }
+                Constants.REQUEST_STATUS_REJECTED -> {
+                    statusIV.setBackgroundColor(context.getColor(R.color.red))
+                }
+                else -> {
+                    statusIV.setBackgroundColor(context.getColor(R.color.grey))
+                }
+            }
+
         }
 
         holder.binding.requestCard.setOnClickListener {

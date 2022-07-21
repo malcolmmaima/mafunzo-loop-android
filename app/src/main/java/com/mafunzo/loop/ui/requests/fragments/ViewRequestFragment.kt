@@ -101,6 +101,28 @@ class ViewRequestFragment : Fragment() {
         binding.requestStatusTv.text = request?.status
         binding.requestBodyTV.text = request?.message
 
+        //change binding.requestStatusTv text color
+        when (request?.status) {
+            Constants.REQUEST_STATUS_PENDING -> {
+                binding.requestStatusTv.setTextColor(binding.root.context.getColor(R.color.grey))
+            }
+            Constants.REQUEST_STATUS_PROCESSING -> {
+                binding.requestStatusTv.setTextColor(binding.root.context.getColor(R.color.colorSecondary))
+            }
+            Constants.REQUEST_STATUS_APPROVED -> {
+                binding.requestStatusTv.setTextColor(binding.root.context.getColor(R.color.green))
+            }
+            Constants.REQUEST_STATUS_CANCELLED -> {
+                binding.requestStatusTv.setTextColor(binding.root.context.getColor(R.color.red))
+            }
+            Constants.REQUEST_STATUS_REJECTED -> {
+                binding.requestStatusTv.setTextColor(binding.root.context.getColor(R.color.red))
+            }
+            else -> {
+                binding.requestStatusTv.setTextColor(binding.root.context.getColor(R.color.grey))
+            }
+        }
+
         if(request?.status == Constants.REQUEST_STATUS_PENDING) {
             binding.withdrawRequestBtn.visible()
             binding.withdrawRequestBtn.setOnClickListener {
