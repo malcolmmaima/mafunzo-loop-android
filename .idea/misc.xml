@@ -10,6 +10,7 @@
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/drawable/ic_person.xml" value="0.213" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/drawable/one_rounded_corner_rectangle.xml" value="0.1995" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/drawable/progress_bg.xml" value="0.1995" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/drawable/round_shape_active_btn.xml" value="0.176" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/drawable/rounded_corner_rectangle.xml" value="0.148" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/font/open_sans.xml" value="0.2791666666666667" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/activity_auth.xml" value="0.1390625" />
@@ -27,12 +28,14 @@
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_requests.xml" value="0.22780797101449277" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_submit_request.xml" value="0.22780797101449277" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_teachers.xml" value="0.1390625" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_time_table.xml" value="0.264" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_view_announcement.xml" value="0.25" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_view_event.xml" value="0.22780797101449277" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_view_request.xml" value="0.22780797101449277" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_view_teacher.xml" value="0.264" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/request_item.xml" value="0.22780797101449277" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/teacher_item.xml" value="0.25" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/timetable_item.xml" value="0.25" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/menu/activity_main_menu.xml" value="0.24895833333333334" />
       </map>
     </option>

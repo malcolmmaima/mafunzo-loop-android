@@ -1,12 +1,10 @@
 package com.mafunzo.loop.ui.home
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -59,8 +57,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun initializeObservers() {
-        Log.d("HomeFragment", "initializeObservers")
-
         //observe current workspace / school name fetched from firestore
         viewLifecycleOwner.lifecycleScope.launch {
             homeViewModel.schoolDetails.collectLatest {schoolDetails ->
@@ -110,6 +106,7 @@ class HomeFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 homeViewModel.isLoading.observe(viewLifecycleOwner) { loading ->
                     if(loading) {
+                        disableAllModules(true)
                         binding.progressBar.visible()
                     } else {
                         binding.progressBar.gone()
@@ -155,11 +152,11 @@ class HomeFragment : Fragment() {
         }
 
         binding.cvSchoolBus.setOnClickListener {
-            Toast.makeText(context, "School Bus", Toast.LENGTH_SHORT).show()
+            binding.root.snackbar("In development")
         }
 
         binding.cvTimetable.setOnClickListener {
-            Toast.makeText(context, "Time Table", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToTimeTableFragment())
         }
 
         binding.currentWorkspace.setOnClickListener {

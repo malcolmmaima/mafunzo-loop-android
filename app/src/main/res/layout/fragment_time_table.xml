@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"
+        android:fontFamily="monospace"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <LinearLayout
+        android:id="@+id/ll_announcements"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="80dp"
+        android:orientation="vertical"
+        android:background="@drawable/rounded_corner_rectangle"
+        android:paddingBottom="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/tv_no_announcements"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:visibility="gone"
+            android:fontFamily="monospace"
+            android:text="@string/no_announcements"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <HorizontalScrollView
+            android:id="@+id/categories_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            >
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/monday_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="@string/moday"
+                    android:textColor="@color/white"
+                    android:padding="10dp"
+                    android:gravity="center"
+                    android:background="@drawable/round_shape_active_btn"
+                    />
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/tuesday_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="@string/tuesday"
+                    android:textColor="@color/black"
+                    android:padding="10dp"
+                    android:gravity="center"
+                    android:background="@color/white"
+                    />
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/wednesday_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="@string/wednesday"
+                    android:textColor="@color/black"
+                    android:padding="10dp"
+                    android:gravity="center"
+                    android:background="@color/white"
+                    />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/thursday_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="@string/thursday"
+                    android:textColor="@color/black"
+                    android:padding="10dp"
+                    android:gravity="center"
+                    android:background="@color/white"
+                    />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/friday_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="@string/friday"
+                    android:textColor="@color/black"
+                    android:padding="10dp"
+                    android:gravity="center"
+                    android:background="@color/white"
+                    />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/saturday_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="@string/saturday"
+                    android:textColor="@color/black"
+                    android:padding="10dp"
+                    android:gravity="center"
+                    android:background="@color/white"
+                    />
+
+            </LinearLayout>
+        </HorizontalScrollView>
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            >
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_time_table"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                tools:listitem="@layout/timetable_item"
+                android:layout_marginEnd="4dp"
+                android:paddingBottom="10dp"
+                />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:translationZ="-1dp"
+            android:layout_marginTop="-120dp"
+            android:background="@drawable/bottom_pattern"
+            />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

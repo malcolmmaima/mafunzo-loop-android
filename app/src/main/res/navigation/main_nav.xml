@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_homeFragment_to_teachersFragment"
             app:destination="@id/teachersFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_timeTableFragment"
+            app:destination="@id/timeTableFragment" />
     </fragment>
 
     <fragment
@@ -83,4 +86,9 @@
         android:id="@+id/viewTeacherFragment"
         android:name="com.mafunzo.loop.ui.teachers.fragments.ViewTeacherFragment"
         android:label="ViewTeacherFragment" />
+    <fragment
+        android:id="@+id/timeTableFragment"
+        android:name="com.mafunzo.loop.ui.timetable.fragments.TimeTableFragment"
+        android:label="fragment_time_table"
+        tools:layout="@layout/fragment_time_table" />
 </navigation>
