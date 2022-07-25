@@ -54,4 +54,5 @@
     <string name="cancel">CANCEL</string>
     <string name="withdraw_request">WITHDRAW</string>
     <string name="no_teachers">No teachers found</string>
+    <string name="no_teacher">No teacher found</string>
 </resources>

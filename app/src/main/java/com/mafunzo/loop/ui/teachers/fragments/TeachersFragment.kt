@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.mafunzo.loop.R
 import com.mafunzo.loop.databinding.FragmentTeachersBinding
+import com.mafunzo.loop.di.Constants
 import com.mafunzo.loop.ui.main.MainActivity
 import com.mafunzo.loop.ui.teachers.adapter.TeacherAdapter
 import com.mafunzo.loop.ui.teachers.viewmodel.TeachersViewModel
@@ -61,7 +62,9 @@ class TeachersFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
     private fun setupTeachersAdapter() {
         teacherAdapter = TeacherAdapter()
         teacherAdapter.onItemClick { teacherResponse ->
-            //Do something
+            findNavController().navigate(R.id.action_teachersFragment_to_viewTeacherFragment, Bundle().apply {
+                putParcelable(Constants.TEACHER_STRING_KEY, teacherResponse)
+            })
         }
 
         binding.rvTeachers.apply {

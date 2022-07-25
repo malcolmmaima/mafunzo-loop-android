@@ -11,9 +11,12 @@ object Constants {
     const val FIREBASE_REQUESTS = "requests"
     const val FIREBASE_TEACHERS = "teachers"
     const val FIREBASE_TEACHERS_COLLECTION = "collection"
+
+    //Parcelable keys
     const val ANNOUNCEMENT_STRING_KEY = "announcement"
     const val EVENT_STRING_KEY = "event"
     const val REQUEST_STRING_KEY = "request"
+    const val TEACHER_STRING_KEY = "teacher"
 
     //request statuses
     const val REQUEST_STATUS_PENDING = "PENDING"

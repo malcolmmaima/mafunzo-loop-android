@@ -74,5 +74,13 @@
     <fragment
         android:id="@+id/teachersFragment"
         android:name="com.mafunzo.loop.ui.teachers.fragments.TeachersFragment"
-        android:label="TeachersFragment" />
+        android:label="TeachersFragment" >
+        <action
+            android:id="@+id/action_teachersFragment_to_viewTeacherFragment"
+            app:destination="@id/viewTeacherFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewTeacherFragment"
+        android:name="com.mafunzo.loop.ui.teachers.fragments.ViewTeacherFragment"
+        android:label="ViewTeacherFragment" />
 </navigation>

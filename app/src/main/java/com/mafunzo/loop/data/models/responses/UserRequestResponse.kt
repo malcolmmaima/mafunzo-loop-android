@@ -4,6 +4,9 @@ import android.os.Parcelable
 import androidx.annotation.Keep
 import kotlinx.parcelize.Parcelize
 
+/**
+ * UserRequest is used in the context of sending custom requests under requests module.
+ */
 @Parcelize
 @Keep
 data class UserRequestResponse(
