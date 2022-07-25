@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_homeFragment_to_requestsFragment"
             app:destination="@id/requestsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_teachersFragment"
+            app:destination="@id/teachersFragment" />
     </fragment>
 
     <fragment
@@ -68,4 +71,8 @@
         android:id="@+id/viewRequestFragment"
         android:name="com.mafunzo.loop.ui.requests.fragments.ViewRequestFragment"
         android:label="ViewRequestFragment" />
+    <fragment
+        android:id="@+id/teachersFragment"
+        android:name="com.mafunzo.loop.ui.teachers.fragments.TeachersFragment"
+        android:label="TeachersFragment" />
 </navigation>

@@ -151,7 +151,7 @@ class HomeFragment : Fragment() {
         }
 
         binding.cvTeachers.setOnClickListener {
-            Toast.makeText(context, "Teachers", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToTeachersFragment())
         }
 
         binding.cvSchoolBus.setOnClickListener {

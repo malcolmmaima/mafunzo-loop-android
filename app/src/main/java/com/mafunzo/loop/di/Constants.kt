@@ -9,6 +9,8 @@ object Constants {
     const val FIREBASE_SCHOOL_ANNOUNCEMENTS = "announcements"
     const val FIREBASE_CALENDAR_EVENTS = "calendar_events"
     const val FIREBASE_REQUESTS = "requests"
+    const val FIREBASE_TEACHERS = "teachers"
+    const val FIREBASE_TEACHERS_COLLECTION = "collection"
     const val ANNOUNCEMENT_STRING_KEY = "announcement"
     const val EVENT_STRING_KEY = "event"
     const val REQUEST_STRING_KEY = "request"
