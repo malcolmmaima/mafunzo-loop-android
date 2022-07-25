@@ -180,8 +180,9 @@
                     android:layout_gravity="center_horizontal"
                     />
             </androidx.cardview.widget.CardView>
+
             <androidx.cardview.widget.CardView
-                android:id="@+id/cv_school_bus"
+                android:id="@+id/cv_timetable"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_margin="10dp"
@@ -195,13 +196,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
                     android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_school_bus"
+                    android:src="@drawable/ic_timetable"
                     />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/school_bus"
+                    android:text="@string/timetable"
                     android:fontFamily="monospace"
                     android:textColor="@color/black"
                     android:textSize="15sp"
@@ -209,6 +210,7 @@
                     android:layout_gravity="center_horizontal"
                     />
             </androidx.cardview.widget.CardView>
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/cv_teachers"
                 android:layout_width="150dp"
@@ -238,8 +240,9 @@
                     android:layout_gravity="center_horizontal"
                     />
             </androidx.cardview.widget.CardView>
+
             <androidx.cardview.widget.CardView
-                android:id="@+id/cv_contact"
+                android:id="@+id/cv_school_bus"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_margin="10dp"
@@ -253,13 +256,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
                     android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_contacts"
+                    android:src="@drawable/ic_school_bus"
                     />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/contacts"
+                    android:text="@string/school_bus"
                     android:fontFamily="monospace"
                     android:textColor="@color/black"
                     android:textSize="15sp"

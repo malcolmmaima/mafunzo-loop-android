@@ -125,7 +125,7 @@ class HomeFragment : Fragment() {
         binding.cvRequests.isEnabled = !disable
         binding.cvTeachers.isEnabled = !disable
         binding.cvSchoolBus.isEnabled = !disable
-        binding.cvContact.isEnabled = !disable
+        binding.cvTimetable.isEnabled = !disable
     }
 
     private fun getUserDetails() {
@@ -158,8 +158,8 @@ class HomeFragment : Fragment() {
             Toast.makeText(context, "School Bus", Toast.LENGTH_SHORT).show()
         }
 
-        binding.cvContact.setOnClickListener {
-            Toast.makeText(context, "Contact", Toast.LENGTH_SHORT).show()
+        binding.cvTimetable.setOnClickListener {
+            Toast.makeText(context, "Time Table", Toast.LENGTH_SHORT).show()
         }
 
         binding.currentWorkspace.setOnClickListener {
