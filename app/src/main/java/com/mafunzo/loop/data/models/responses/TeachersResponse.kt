@@ -11,6 +11,7 @@ data class TeachersResponse(
     val firstName: String? = "",
     val lastName: String? = "",
     val phoneNumber: String? = "",
+    val emailAddress: String? = "",
     val bio: String? = "",
     val dateCreated: Long? = 0,
     val profilePic: String? = "",
