@@ -19,6 +19,7 @@ import com.mafunzo.loop.utils.gone
 import com.mafunzo.loop.utils.snackbar
 import com.mafunzo.loop.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -71,6 +72,11 @@ class HomeFragment : Fragment() {
                     disableAllModules(false)
                 } else {
                     binding.currentWorkspaceText.text = "No school selected - Refresh"
+                    lifecycleScope.launch {
+                        delay(2000)
+                        homeViewModel.getCurrentWorkspace()
+                    }
+
                     //fetch user details again which saves new workspace id to local storage
                     authViewModel.userPhoneNumber?.let {phonenumber -> authViewModel.fetchUser(phonenumber) }
                     disableAllModules(true)
