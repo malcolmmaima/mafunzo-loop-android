@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/PersonalDetailsFragment">
+
+    <fragment
+        android:id="@+id/PersonalDetailsFragment"
+        android:name="com.mafunzo.loop.ui.settings.fragments.PersonalDetailsFragment"
+        android:label="@string/personal_details"
+        tools:layout="@layout/fragment_personal_details">
+
+        <action
+            android:id="@+id/action_PersonalSettings_to_AppSettings"
+            app:destination="@id/AppSettingsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/AppSettingsFragment"
+        android:name="com.mafunzo.loop.ui.settings.fragments.AppSettingsFragment"
+        android:label="@string/app_settings"
+        tools:layout="@layout/fragment_app_settings">
+
+        <action
+            android:id="@+id/action_appSettings_to_PersonalSettings"
+            app:destination="@id/PersonalDetailsFragment" />
+    </fragment>
+</navigation>

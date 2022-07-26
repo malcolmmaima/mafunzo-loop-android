@@ -63,4 +63,10 @@
     <string name="friday">Friday</string>
     <string name="saturday">Saturday</string>
     <string name="no_subjects">No subjects found</string>
+    <string name="menu_settings">Settings</string>
+
+    <!-- Settings -->
+    <string name="personal_details">Personal Details</string>
+    <string name="save_details">SAVE</string>
+    <string name="app_settings">App Settings</string>
 </resources>

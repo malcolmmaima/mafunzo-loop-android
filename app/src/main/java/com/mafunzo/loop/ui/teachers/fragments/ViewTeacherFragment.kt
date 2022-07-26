@@ -59,13 +59,13 @@ class ViewTeacherFragment : Fragment() {
 
         when(teacher?.status) {
             "ACTIVE" -> {
-                binding.teacherStatusTV.setTextColor(resources.getColor(R.color.green))
+                binding.teacherStatusTV.setTextColor(resources.getColor(R.color.green, null))
             }
             "INACTIVE" -> {
-                binding.teacherStatusTV.setTextColor(resources.getColor(R.color.red))
+                binding.teacherStatusTV.setTextColor(resources.getColor(R.color.red, null))
             }
              else -> {
-                 binding.teacherStatusTV.setTextColor(resources.getColor(R.color.grey))
+                 binding.teacherStatusTV.setTextColor(resources.getColor(R.color.grey, null))
              }
         }
 

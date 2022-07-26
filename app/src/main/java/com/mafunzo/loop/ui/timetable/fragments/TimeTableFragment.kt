@@ -67,7 +67,7 @@ class TimeTableFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private fun setupSubjectssAdapter() {
         subjectAdapter = SubjectAdapter()
-        subjectAdapter.onItemClick { subjectResponse ->
+        subjectAdapter.onItemClick {
             // do something
         }
 

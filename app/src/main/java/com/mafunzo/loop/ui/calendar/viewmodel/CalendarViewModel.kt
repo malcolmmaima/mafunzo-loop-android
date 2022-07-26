@@ -50,7 +50,7 @@ class CalendarViewModel@Inject constructor(
                     .addOnFailureListener { exception ->
                         viewModelScope.launch {
                             _isLoading.value = false
-                            _errorMessage.emit(exception.localizedMessage)
+                            exception.localizedMessage?.let { _errorMessage.emit(it) }
                         }
                     }
             } else {
@@ -79,7 +79,7 @@ class CalendarViewModel@Inject constructor(
                     .addOnFailureListener { exception ->
                         viewModelScope.launch {
                             _isLoading.value = false
-                            _errorMessage.emit(exception.localizedMessage)
+                            exception.localizedMessage?.let { _errorMessage.emit(it) }
                         }
                     }
             } else {

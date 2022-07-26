@@ -56,7 +56,7 @@ class RequestsAdapter : RecyclerView.Adapter<RequestsAdapter.RequestViewHolder>(
         holder.binding.apply {
 
             requestSubjectTv.text = requestData.subject
-            requestTimeTV.text = requestData.createdAt?.formatDateTime()
+            requestTimeTV.text = requestData.createdAt.formatDateTime()
 
             //if status is pending color is grey, if status is processing then set color to blue
             //if status is approved the color is green and if status is cancelled then color is red
