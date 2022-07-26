@@ -31,25 +31,34 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <TextView
-            android:id="@+id/tv_no_announcements"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+        <Spinner
+            android:id="@+id/selectGradeSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginTop="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:visibility="gone"
-            android:fontFamily="monospace"
-            android:text="@string/no_announcements"
-            android:textColor="@color/black"
-            android:textSize="20sp" />
+            android:gravity="center"
+            android:padding="10dp"
+            android:textColorHint="@android:color/black"
+            android:textSize="20sp"
+            android:ems="10"
+            />
+
+        <View
+            android:id="@+id/spinnerView"
+            android:layout_width="match_parent"
+            android:layout_height=".1dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="0dp"
+            android:background="@color/grey" />
 
         <HorizontalScrollView
             android:id="@+id/categories_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="5dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             >
@@ -57,6 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:padding="10dp"
                 >
 
                 <androidx.appcompat.widget.AppCompatButton
@@ -65,7 +75,6 @@
                     android:layout_height="40dp"
                     android:text="@string/moday"
                     android:textColor="@color/white"
-                    android:padding="10dp"
                     android:gravity="center"
                     android:background="@drawable/round_shape_active_btn"
                     />
@@ -75,7 +84,6 @@
                     android:layout_height="40dp"
                     android:text="@string/tuesday"
                     android:textColor="@color/black"
-                    android:padding="10dp"
                     android:gravity="center"
                     android:background="@color/white"
                     />
@@ -83,9 +91,10 @@
                     android:id="@+id/wednesday_button"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
                     android:text="@string/wednesday"
                     android:textColor="@color/black"
-                    android:padding="10dp"
                     android:gravity="center"
                     android:background="@color/white"
                     />
@@ -96,7 +105,6 @@
                     android:layout_height="40dp"
                     android:text="@string/thursday"
                     android:textColor="@color/black"
-                    android:padding="10dp"
                     android:gravity="center"
                     android:background="@color/white"
                     />
@@ -107,7 +115,6 @@
                     android:layout_height="40dp"
                     android:text="@string/friday"
                     android:textColor="@color/black"
-                    android:padding="10dp"
                     android:gravity="center"
                     android:background="@color/white"
                     />
@@ -118,13 +125,25 @@
                     android:layout_height="40dp"
                     android:text="@string/saturday"
                     android:textColor="@color/black"
-                    android:padding="10dp"
                     android:gravity="center"
                     android:background="@color/white"
                     />
 
             </LinearLayout>
         </HorizontalScrollView>
+        <TextView
+            android:id="@+id/tv_no_subjects"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:visibility="gone"
+            android:fontFamily="monospace"
+            android:text="@string/no_subjects"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_container"
             android:layout_width="match_parent"

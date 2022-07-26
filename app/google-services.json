@@ -1,41 +1,33 @@
 {
   "project_info": {
-    "project_number": "217655535832",
-    "project_id": "mafunzo-loop",
-    "storage_bucket": "mafunzo-loop.appspot.com"
+    "project_number": "168281819850",
+    "project_id": "mafunzo-africa",
+    "storage_bucket": "mafunzo-africa.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:217655535832:android:4ccf9410c9b17714bdcfad",
+        "mobilesdk_app_id": "1:168281819850:android:f2116e864f4dbb1eba8233",
         "android_client_info": {
           "package_name": "com.mafunzo.loop"
         }
       },
       "oauth_client": [
         {
-          "client_id": "217655535832-r8qf8hqi4hvo7mql8jrj88rmbseq5pnt.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.mafunzo.loop",
-            "certificate_hash": "d9f318e89aa64f90af1e28a1ca86f98c0f40bb4e"
-          }
-        },
-        {
-          "client_id": "217655535832-j7udbeqvjci0bhtngpsfvil1birri2r3.apps.googleusercontent.com",
+          "client_id": "168281819850-4dhambqdpej7gb6d6ara3rlvuq5d97bn.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDnNxtz4soURd33rkg9i8jR1RaG1erOELw"
+          "current_key": "AIzaSyCoYUvxxpQgnTFdq_3anfq6sZTOHCDPU3k"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "217655535832-j7udbeqvjci0bhtngpsfvil1birri2r3.apps.googleusercontent.com",
+              "client_id": "168281819850-4dhambqdpej7gb6d6ara3rlvuq5d97bn.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
