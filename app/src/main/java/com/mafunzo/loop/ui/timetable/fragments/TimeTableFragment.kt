@@ -31,7 +31,7 @@ class TimeTableFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private lateinit var binding: FragmentTimeTableBinding
     private val timeTableViewModel: TimeTableViewModel by viewModels()
-    private var selectedGrade = ""
+    private var selectedGrade = "grade_1" //default
     private var selectedDay = 0
     private lateinit var subjectAdapter: SubjectAdapter
 
@@ -113,6 +113,8 @@ class TimeTableFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
 
     private fun initListeners() {
+        timeTableViewModel.getTimeTable(selectedGrade, selectedDay) //initialize
+
         binding.mondayButton.setOnClickListener {
             selectedDay = 0
             setButtonBackground(binding.mondayButton)
