@@ -220,7 +220,9 @@ class OtpVerificationFragment : Fragment() {
                     }
                 } else {
                     activity?.runOnUiThread {
-                        binding.timertv.text = "00:" + second--
+                        var seconds = second--
+                        var formattedSeconds = if(seconds < 10) "0$seconds" else seconds.toString()
+                        binding.timertv.text = "00:$formattedSeconds"
                     }
                 }
             }

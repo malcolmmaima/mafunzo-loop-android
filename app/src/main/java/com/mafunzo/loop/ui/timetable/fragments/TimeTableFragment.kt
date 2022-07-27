@@ -164,7 +164,7 @@ class TimeTableFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         binding.selectGradeSpinner.onItemSelectedListener = object : OnItemClickListener,
             AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                selectedGrade = gradesList[position].replace(" ", "_")
+                selectedGrade = gradesList[position].replace(" ", "_").lowercase()
                 timeTableViewModel.getTimeTable(selectedGrade, selectedDay)
             }
 
