@@ -1,12 +1,11 @@
 package com.mafunzo.loop.ui.teachers.adapter
 
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import com.bumptech.glide.Glide.with
 import com.mafunzo.loop.R
 import com.mafunzo.loop.data.models.responses.TeachersResponse
 import com.mafunzo.loop.databinding.TeacherItemBinding
@@ -61,14 +60,10 @@ class TeacherAdapter : RecyclerView.Adapter<TeacherAdapter.TeacherViewHolder>() 
             teacherBioTV.text = teacherData.bio ?: "..."
 
             teacherData.profilePic.let {
-                Glide.with(root)
-                    .load(teacherData.profilePic)
+                with(root)
+                    .load(it).placeholder(R.drawable.ic_teachers)
+                    .error(android.R.drawable.stat_notify_error)
                     .into(profilePicIV)
-                    .onLoadFailed(
-                        Drawable.createFromPath(
-                            root.context.getDrawable(R.drawable.ic_teachers).toString()
-                        )
-                    )
 
             }
         }

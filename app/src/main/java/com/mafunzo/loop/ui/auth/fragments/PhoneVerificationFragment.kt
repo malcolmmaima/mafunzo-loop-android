@@ -60,10 +60,12 @@ class PhoneVerificationFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 authViewModel.verificationId.collectLatest { verificationId ->
-                    findNavController().navigate(R.id.action_phoneVerificationFragment2_to_passwordVerificationFragment2, Bundle().apply {
-                        putString("storedVerificationId", verificationId)
-                        putString("storedPhoneNumber", "+${countryCodePicker.fullNumber}")
-                    }, NavOptions.Builder().setPopUpTo(R.id.phoneVerificationFragment2, true).build())
+                    if(verificationId.isNotEmpty()){
+                        findNavController().navigate(R.id.action_phoneVerificationFragment2_to_passwordVerificationFragment2, Bundle().apply {
+                            putString("storedVerificationId", verificationId)
+                            putString("storedPhoneNumber", "+${countryCodePicker.fullNumber}")
+                        }, NavOptions.Builder().setPopUpTo(R.id.phoneVerificationFragment2, true).build())
+                    }
                 }
             }
         }
@@ -121,6 +123,11 @@ class PhoneVerificationFragment : Fragment() {
                 authViewModel.sendVerificationCode("+${countryCodePicker.fullNumber}", requireActivity())
             }
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.etPhoneNumber.hideKeyboard()
     }
 
     override fun onResume() {

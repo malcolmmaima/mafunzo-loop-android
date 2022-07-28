@@ -88,6 +88,7 @@ class AuthViewModel @Inject constructor(
 
             override fun onVerificationFailed(e: FirebaseException) {
                 viewModelScope.launch {
+                    _codeSent.emit(false)
                     _isLoading.emit(false)
                     _errorMessage.emit(e.message.toString())
                     Log.d(TAG , "onVerificationFailed Error: ${e.message}")
@@ -96,6 +97,7 @@ class AuthViewModel @Inject constructor(
 
             override fun onCodeAutoRetrievalTimeOut(verificationId: String) {
                 viewModelScope.launch {
+                    _codeSent.emit(false)
                     _isLoading.emit(false)
                     _errorMessage.emit("OTP Timeout")
                     Log.d(TAG , "onCodeAutoRetrievalTimeOut")

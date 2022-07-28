@@ -95,6 +95,10 @@ dependencies {
 
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.11.0'
+    kapt 'com.github.bumptech.glide:compiler:4.11.0'
+    implementation ("com.github.bumptech.glide:glide:4.11.0@aar") {
+        transitive = true
+    }
 
     //progress button
     implementation 'com.github.razir.progressbutton:progressbutton:2.1.0'
@@ -110,4 +114,6 @@ dependencies {
 
     //Kotlin Extensions and Coroutines support for Room
     implementation("androidx.room:room-ktx:$room_version")
+
+    annotationProcessor 'androidx.annotation:annotation:1.4.0'
 }

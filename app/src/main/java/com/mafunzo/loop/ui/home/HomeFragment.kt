@@ -11,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.mafunzo.loop.R
 import com.mafunzo.loop.data.models.responses.UserResponse
 import com.mafunzo.loop.databinding.FragmentHomeBinding
 import com.mafunzo.loop.ui.auth.viewmodels.AuthViewModel
@@ -174,7 +175,7 @@ class HomeFragment : Fragment() {
         }
 
         binding.cvSchoolBus.setOnClickListener {
-            binding.root.snackbar("In development")
+            binding.root.snackbar(getString(R.string.coming_soon))
         }
 
         binding.cvTimetable.setOnClickListener {

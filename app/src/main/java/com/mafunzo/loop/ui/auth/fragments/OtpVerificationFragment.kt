@@ -145,12 +145,6 @@ class OtpVerificationFragment : Fragment() {
                         startActivity(intent)
                         requireActivity().finish()
                     }
-                    else if (!userEnabled){
-                        val intent = Intent(requireActivity(), AccountDisabledActivity::class.java)
-                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                        startActivity(intent)
-                        requireActivity().finish()
-                    }
                     else {
                         Log.d(TAG, "User does not exist")
                         findNavController().navigate(

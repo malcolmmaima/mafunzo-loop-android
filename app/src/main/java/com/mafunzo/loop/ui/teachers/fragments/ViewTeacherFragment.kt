@@ -1,16 +1,16 @@
 package com.mafunzo.loop.ui.teachers.fragments
 
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
+import com.bumptech.glide.Glide.with
 import com.mafunzo.loop.R
 import com.mafunzo.loop.data.models.responses.TeachersResponse
 import com.mafunzo.loop.databinding.FragmentViewTeacherBinding
@@ -70,15 +70,11 @@ class ViewTeacherFragment : Fragment() {
         }
 
         teacher?.profilePic.let {
-            Glide.with(this)
-                .load(teacher?.profilePic)
+            Log.d("ViewTeacherFragment", "profilePic: $it")
+            with(this)
+                .load(it).placeholder(R.drawable.ic_teachers)
+                .error(android.R.drawable.stat_notify_error)
                 .into(binding.profilePicIV)
-                .onLoadFailed(
-                    Drawable.createFromPath(
-                        context?.getDrawable(R.drawable.ic_teachers).toString()
-                    )
-                )
-
         }
 
         binding.phoneNumberTV.setOnClickListener {
