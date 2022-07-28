@@ -92,6 +92,15 @@ class HomeFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 authViewModel.userDetails.collectLatest {user ->
                     setWidgetValues(user)
+
+                    when(user.accountType) {
+                        "BUS_DRIVER" -> {
+                            binding.cvTimetable.gone()
+                        }
+                        "TEACHER" -> {
+                            binding.cvRequests.gone()
+                        }
+                    }
                 }
             }
         }

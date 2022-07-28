@@ -33,8 +33,8 @@ class SettingsViewModel @Inject constructor(
     private val _submittedSuccessfully = MutableSharedFlow<Boolean>()
     val submittedSuccessfully = _submittedSuccessfully.asSharedFlow()
 
-    private val _userDetails = MutableLiveData<UserResponse>()
-    val userDetails: LiveData<UserResponse> = _userDetails
+    private val _userDetails = MutableSharedFlow<UserResponse>()
+    val userDetails = _userDetails.asSharedFlow()
 
     fun fetchUserData(){
         val phoneNumber = firebaseAuth.currentUser?.phoneNumber
@@ -50,7 +50,7 @@ class SettingsViewModel @Inject constructor(
 
                             viewModelScope.launch {
                                 _isLoading.value = false
-                                _userDetails.value = user
+                                _userDetails.emit(user)
                                 //save current workspace(school id) in shared pref
                                 user.schools?.let {
                                     userPrefs.saveCurrentWorkspace(it.entries.first().key.trim(), it.entries.first().value)

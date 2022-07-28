@@ -125,21 +125,13 @@ class PersonalDetailsFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                settingsViewModel.userDetails.observe(viewLifecycleOwner) { user ->
-                    if(user != null) {
-                        binding.editTextTextFirstName.setText(user.firstName)
-                        binding.editTextTextSecondName.setText(user.lastName)
-                        binding.editTextEmailAddress.setText(user.email)
-                        accountType = user.accountType.toString()
+                settingsViewModel.userDetails.collectLatest { user ->
+                    binding.editTextTextFirstName.setText(user.firstName)
+                    binding.editTextTextSecondName.setText(user.lastName)
+                    binding.editTextEmailAddress.setText(user.email)
+                    accountType = user.accountType.toString()
 
-                        mainViewModel.getAccountTypes()
-                    } else {
-                        binding.root.snackbar("User details not found")
-                        viewLifecycleOwner.lifecycleScope.launch {
-                            authViewModel.signOutUser()
-                        }
-                    }
-
+                    mainViewModel.getAccountTypes()
                 }
             }
         }
