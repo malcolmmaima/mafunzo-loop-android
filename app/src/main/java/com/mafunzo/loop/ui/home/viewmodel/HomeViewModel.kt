@@ -35,6 +35,9 @@ class HomeViewModel @Inject constructor(
     private val _workSpacePresent = MutableSharedFlow<Boolean>()
     val workSpacePresent = _workSpacePresent
 
+    private val _workSpaceEnabled = MutableSharedFlow<Boolean>()
+    val workSpaceEnabled = _workSpaceEnabled
+
     //fetch current workspace from shared prefs
     fun getCurrentWorkspace() {
         viewModelScope.launch {
@@ -45,6 +48,15 @@ class HomeViewModel @Inject constructor(
                     viewModelScope.launch {
                         _workSpacePresent.emit(true)
                         getCurrentWorkspaceName(schoolWorkspace.trim())
+
+                        // now check status of that workspace (if enabled or not)
+                        if(sharedPrefs.getCurrentWorkSpaceEnabled().first() == true) {
+                            Log.d("HomeViewModel", "Workspace is enabled")
+                            _workSpaceEnabled.emit(true)
+                        } else {
+                            Log.d("HomeViewModel", "Workspace is disabled")
+                            _workSpaceEnabled.emit(false)
+                        }
                     }
                 } else {
                     Log.d("HomeViewModel", "No current workspace found")

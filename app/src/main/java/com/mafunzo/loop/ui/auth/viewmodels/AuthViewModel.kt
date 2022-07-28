@@ -215,10 +215,10 @@ class AuthViewModel @Inject constructor(
                                 _userDetails.emit(user)
                                 userRepository.insertUsertoRoom(user.toUserEntity(phoneNumber))
                                 //save current workspace(school id) in shared pref
-                                user.schools?.first()?.let { school ->
-                                    userPrefs.saveCurrentWorkspace(school)
+                                user.schools?.let {
+                                    userPrefs.saveCurrentWorkspace(it.entries.first().key.trim(), it.entries.first().value)
                                     userPrefs.saveAccountType(user.accountType)
-                                    Log.d(TAG, "Save current workspace: $school")
+                                    Log.d(TAG, "Save current workspace: ${it.entries.first().key.trim()}")
                                 }
                             }
                         } else {

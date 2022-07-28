@@ -1,6 +1,7 @@
 package com.mafunzo.loop.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -28,6 +29,7 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private val authViewModel: AuthViewModel by viewModels()
     private val homeViewModel: HomeViewModel by viewModels()
+    private var currentSchoolName = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,10 +61,11 @@ class HomeFragment : Fragment() {
 
     private fun initializeObservers() {
         //observe current workspace / school name fetched from firestore
+        binding.currentWorkspaceStatus.gone()
         viewLifecycleOwner.lifecycleScope.launch {
             homeViewModel.schoolDetails.collectLatest {schoolDetails ->
-                binding.currentWorkspaceText.text = schoolDetails.schoolName
-                disableAllModules(false)
+                currentSchoolName = schoolDetails.schoolName.toString()
+                binding.currentWorkspaceText.text = currentSchoolName
             }
         }
 
@@ -116,10 +119,23 @@ class HomeFragment : Fragment() {
                         binding.progressBar.visible()
                     } else {
                         binding.progressBar.gone()
+
+                        lifecycleScope.launch {
+                            homeViewModel.workSpaceEnabled.collectLatest { enabled ->
+                                Log.d("HomeFragment", "workSpaceEnabled: $enabled")
+                                disableAllModules(!enabled)
+                                if(!enabled) {
+                                    binding.currentWorkspaceStatus.visible()
+                                } else {
+                                    binding.currentWorkspaceStatus.gone()
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
+
     }
 
     private fun disableAllModules(disable: Boolean) {

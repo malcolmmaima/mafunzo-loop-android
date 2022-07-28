@@ -18,17 +18,23 @@ class AppDatasource @Inject constructor(@ApplicationContext context: Context) {
 
     companion object {
         val CURRENT_WORKSPACE = stringPreferencesKey("current_workspace")
+        val CURRENT_WORSPACE_ENABLED = stringPreferencesKey("current_workspace_enabled")
         val ACCOUNT_TYPE = stringPreferencesKey("account_type")
     }
 
-    suspend fun saveCurrentWorkspace(workspace: String) {
+    suspend fun saveCurrentWorkspace(workspace: String, workspaceEnable: Boolean) {
         applicationContext.dataStore.edit { preferences ->
             preferences[CURRENT_WORKSPACE] = workspace
+            preferences[CURRENT_WORSPACE_ENABLED] = workspaceEnable.toString()
         }
     }
 
     fun getCurrentWorkSpace(): Flow<String?> = applicationContext.dataStore.data.map { preferences ->
         preferences[CURRENT_WORKSPACE]
+    }
+
+    fun getCurrentWorkSpaceEnabled(): Flow<Boolean?> = applicationContext.dataStore.data.map { preferences ->
+        preferences[CURRENT_WORSPACE_ENABLED].toBoolean()
     }
 
     suspend fun clear() {

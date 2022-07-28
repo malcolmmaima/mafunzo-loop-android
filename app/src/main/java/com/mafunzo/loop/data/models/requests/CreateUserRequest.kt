@@ -11,5 +11,5 @@ data class CreateUserRequest(
     val dateCreated: Long,
     val accountType: String,
     val enabled: Boolean,
-    val schools: List<String?>
+    val schools: HashMap<String, Boolean>
 )

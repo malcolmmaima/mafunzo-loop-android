@@ -143,7 +143,9 @@ class AccountSetupFragment : Fragment() {
                     dateCreated = getCurrentTimeInMillis(),
                     accountType = accountType,
                     enabled = false,
-                    schools = listOf(school.id)
+                    schools = HashMap<String, Boolean>().apply {
+                        school.id?.let { schoolId -> put(schoolId, false) }
+                    }
                 )
                 registerUser(createUserRequest = userDetails)
             }

@@ -127,7 +127,7 @@ class OtpVerificationFragment : Fragment() {
             Log.d(TAG, "checkUser: $phoneNumber")
             authViewModel.fetchUser(phoneNumber)
         }
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 authViewModel.userEnabled.collectLatest { enabled ->
                     Log.d("SplashActivity", "User enabled: $userEnabled")

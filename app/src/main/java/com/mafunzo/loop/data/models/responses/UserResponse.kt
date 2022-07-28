@@ -12,7 +12,7 @@ data class UserResponse(
     val profilePic: String? = null,
     val accountType: String? = null,
     val enabled: Boolean? = false,
-    val schools: List<String?>? = null,
+    val schools: HashMap<String, Boolean>? = null,
 ) {
     fun toUserEntity(phoneNumber: String): UserEntity {
         return UserEntity(
