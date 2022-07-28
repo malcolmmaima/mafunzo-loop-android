@@ -17,6 +17,7 @@ import com.mafunzo.loop.databinding.FragmentHomeBinding
 import com.mafunzo.loop.ui.auth.viewmodels.AuthViewModel
 import com.mafunzo.loop.ui.home.viewmodel.HomeViewModel
 import com.mafunzo.loop.ui.main.MainActivity
+import com.mafunzo.loop.utils.enable
 import com.mafunzo.loop.utils.gone
 import com.mafunzo.loop.utils.snackbar
 import com.mafunzo.loop.utils.visible
@@ -92,13 +93,12 @@ class HomeFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 authViewModel.userDetails.collectLatest {user ->
                     setWidgetValues(user)
-
                     when(user.accountType) {
                         "BUS_DRIVER" -> {
-                            binding.cvTimetable.gone()
+                            binding.cvTimetable.enable(false)
                         }
                         "TEACHER" -> {
-                            binding.cvRequests.gone()
+                            binding.cvRequests.enable(false)
                         }
                     }
                 }
@@ -135,8 +135,10 @@ class HomeFragment : Fragment() {
                                 Log.d("HomeFragment", "workSpaceEnabled: $enabled")
                                 disableAllModules(!enabled)
                                 if(!enabled) {
+                                    hideCards(true)
                                     binding.currentWorkspaceStatus.visible()
                                 } else {
+                                    hideCards(false)
                                     binding.currentWorkspaceStatus.gone()
                                 }
                             }
@@ -158,11 +160,27 @@ class HomeFragment : Fragment() {
     }
 
     private fun getUserDetails() {
+        //hide gridlayout items until user details are fetched
+        hideCards(true)
         //fetch user details from firebase
         authViewModel.userPhoneNumber.let { phoneNumber ->
             if (phoneNumber != null) {
                 authViewModel.fetchUser(phoneNumber)
             }
+        }
+    }
+
+    private fun hideCards(hide: Boolean) {
+        if(hide) {
+            binding.cvRequests.gone()
+            binding.cvTeachers.gone()
+            binding.cvSchoolBus.gone()
+            binding.cvTimetable.gone()
+        } else {
+            binding.cvRequests.visible()
+            binding.cvTeachers.visible()
+            binding.cvSchoolBus.visible()
+            binding.cvTimetable.visible()
         }
     }
 

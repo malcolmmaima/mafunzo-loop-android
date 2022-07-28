@@ -144,6 +144,7 @@
             android:columnCount="2"
             android:rowCount="2"
             android:layout_gravity="center"
+            android:animateLayoutChanges="true"
             android:orientation="vertical"
             android:paddingBottom="20dp"
             android:layout_marginTop="120dp"
