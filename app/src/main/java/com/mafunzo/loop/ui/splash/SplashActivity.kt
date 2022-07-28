@@ -25,7 +25,6 @@ class SplashActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySplashBinding
     private val splashViewModel: SplashViewModel by viewModels()
     private val authViewModel: AuthViewModel by viewModels()
-    private var userExists = false
     private var userEnabled = false
 
     override fun onCreate(savedInstanceState: Bundle?) {

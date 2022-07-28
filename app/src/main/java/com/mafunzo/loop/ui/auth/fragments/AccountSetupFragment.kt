@@ -23,6 +23,7 @@ import android.content.res.Resources
 import androidx.core.os.ConfigurationCompat
 import com.mafunzo.loop.R
 import com.mafunzo.loop.data.models.responses.SchoolResponse
+import com.mafunzo.loop.ui.auth.AccountDisabledActivity
 import com.mafunzo.loop.ui.auth.AuthActivity
 import com.mafunzo.loop.ui.main.MainActivity
 import com.mafunzo.loop.ui.main.viewmodel.MainViewModel
@@ -163,7 +164,7 @@ class AccountSetupFragment : Fragment() {
                 authViewModel.userCreated.collectLatest { isCreated ->
                     if (isCreated) {
                         // load MainActivity and clear backstack
-                        val intent = Intent(requireActivity(), MainActivity::class.java)
+                        val intent = Intent(requireActivity(), AccountDisabledActivity::class.java)
                         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                         startActivity(intent)
                         requireActivity().finish()

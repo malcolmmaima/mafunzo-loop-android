@@ -19,6 +19,7 @@ import com.mafunzo.loop.utils.showProgress
 import com.google.firebase.auth.*
 import com.mafunzo.loop.R
 import com.mafunzo.loop.databinding.FragmentOtpVerificationBinding
+import com.mafunzo.loop.ui.auth.AccountDisabledActivity
 import com.mafunzo.loop.ui.auth.viewmodels.AuthViewModel
 import com.mafunzo.loop.ui.main.MainActivity
 import com.mafunzo.loop.utils.*
@@ -33,6 +34,7 @@ class OtpVerificationFragment : Fragment() {
     private lateinit var binding: FragmentOtpVerificationBinding
     private val authViewModel: AuthViewModel by viewModels()
     private var tt: TimerTask? = null
+    private var userEnabled = false
 
     // get storedVerificationId from the previous screen
     private val verificationId: String? by lazy {
@@ -125,16 +127,31 @@ class OtpVerificationFragment : Fragment() {
             Log.d(TAG, "checkUser: $phoneNumber")
             authViewModel.fetchUser(phoneNumber)
         }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                authViewModel.userEnabled.collectLatest { enabled ->
+                    Log.d("SplashActivity", "User enabled: $userEnabled")
+                    userEnabled = enabled
+                }
+            }
+        }
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
                 authViewModel.userExists.collectLatest { exists ->
-                    if (exists) {
-                        Log.d(TAG, "User exists")
+                    if (exists && userEnabled) {
+                        Log.d(TAG, "User exists and is enabled")
                         val intent = Intent(requireActivity(), MainActivity::class.java)
                         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                         startActivity(intent)
                         requireActivity().finish()
-                    } else {
+                    }
+                    else if (!userEnabled){
+                        val intent = Intent(requireActivity(), AccountDisabledActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(intent)
+                        requireActivity().finish()
+                    }
+                    else {
                         Log.d(TAG, "User does not exist")
                         findNavController().navigate(
                             R.id.action_otpVerificationFragment2_to_accountSetupFragment2,
