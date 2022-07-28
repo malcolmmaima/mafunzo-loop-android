@@ -10,5 +10,6 @@ data class CreateUserRequest(
     val profilePic: String,
     val dateCreated: Long,
     val accountType: String,
+    val enabled: Boolean,
     val schools: List<String?>
 )

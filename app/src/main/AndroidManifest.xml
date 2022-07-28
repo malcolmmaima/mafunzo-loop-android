@@ -18,6 +18,10 @@
         android:theme="@style/Theme.MafunzoLoop"
         tools:targetApi="31">
         <activity
+            android:name=".ui.auth.AccountDisabledActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MafunzoLoop.NoActionBar" />
+        <activity
             android:name=".ui.splash.SplashActivity"
             android:exported="true">
             <intent-filter>
@@ -26,18 +30,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="false" />
-
         <activity
             android:name=".ui.auth.AuthActivity"
             android:exported="false" />
-
         <activity
             android:name=".ui.settings.SettingsActivity"
-            android:exported="false"/>
+            android:exported="false" />
     </application>
 
 </manifest>

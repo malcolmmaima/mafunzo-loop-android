@@ -14,7 +14,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mafunzo.loop.R
 import com.mafunzo.loop.databinding.ActivityMainBinding
-import com.mafunzo.loop.ui.auth.viewmodel.AuthViewModel
+import com.mafunzo.loop.ui.auth.viewmodels.AuthViewModel
 import com.mafunzo.loop.ui.settings.SettingsActivity
 import com.mafunzo.loop.ui.splash.SplashActivity
 import dagger.hilt.android.AndroidEntryPoint

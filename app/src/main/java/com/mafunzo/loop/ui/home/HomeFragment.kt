@@ -12,7 +12,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.mafunzo.loop.data.models.responses.UserResponse
 import com.mafunzo.loop.databinding.FragmentHomeBinding
-import com.mafunzo.loop.ui.auth.viewmodel.AuthViewModel
+import com.mafunzo.loop.ui.auth.viewmodels.AuthViewModel
 import com.mafunzo.loop.ui.home.viewmodel.HomeViewModel
 import com.mafunzo.loop.ui.main.MainActivity
 import com.mafunzo.loop.utils.gone

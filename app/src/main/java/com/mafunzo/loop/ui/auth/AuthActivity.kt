@@ -8,7 +8,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.mafunzo.loop.databinding.ActivityAuthBinding
-import com.mafunzo.loop.ui.auth.viewmodel.AuthViewModel
+import com.mafunzo.loop.ui.auth.viewmodels.AuthViewModel
 import com.mafunzo.loop.ui.main.MainActivity
 import com.mafunzo.loop.ui.splash.viewmodel.SplashViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,7 +34,13 @@ class AuthActivity : AppCompatActivity() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 authViewModel.userExists.collectLatest { exists ->
                     if (exists) {
-                        loadMainActivity()
+                        authViewModel.userEnabled.collectLatest { enabled ->
+                            if (enabled) {
+                                loadMainActivity()
+                            } else {
+                                loadAccountDisabledActivity()
+                            }
+                        }
                     } else {
                         authViewModel.signOutUser()
                     }
@@ -62,6 +68,13 @@ class AuthActivity : AppCompatActivity() {
 
     private fun loadMainActivity() {
         val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        finish()
+    }
+
+    private fun loadAccountDisabledActivity() {
+        val intent = Intent(this, AccountDisabledActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
         finish()

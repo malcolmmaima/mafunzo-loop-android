@@ -69,4 +69,11 @@
     <string name="personal_details">Personal Details</string>
     <string name="save_details">SAVE</string>
     <string name="app_settings">App Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="previous">Previous</string>
+
+    <!-- Account disabled -->
+    <string name="account_disabled">Your account is not activated. Please contact your school.</string>
 </resources>

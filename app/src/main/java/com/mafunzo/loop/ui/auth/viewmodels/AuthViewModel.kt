@@ -1,4 +1,4 @@
-package com.mafunzo.loop.ui.auth.viewmodel
+package com.mafunzo.loop.ui.auth.viewmodels
 
 import android.util.Log
 import androidx.fragment.app.FragmentActivity
@@ -56,6 +56,9 @@ class AuthViewModel @Inject constructor(
 
     private val _userExists = MutableSharedFlow<Boolean>()
     val userExists = _userExists.asSharedFlow()
+
+    private val _userEnabled = MutableSharedFlow<Boolean>()
+    val userEnabled = _userEnabled.asSharedFlow()
 
     private val _userDetails = MutableSharedFlow<UserResponse>()
     val userDetails = _userDetails.asSharedFlow()
@@ -206,6 +209,7 @@ class AuthViewModel @Inject constructor(
                         if(user != null && user.accountType?.isNotEmpty() == true) {
 
                             viewModelScope.launch {
+                                user.enabled?.let { _userEnabled.emit(it) }
                                 _isLoading.emit(false)
                                 _userExists.emit(true)
                                 _userDetails.emit(user)

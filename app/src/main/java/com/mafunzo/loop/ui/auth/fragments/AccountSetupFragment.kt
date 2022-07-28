@@ -14,7 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.mafunzo.loop.data.models.requests.CreateUserRequest
 import com.mafunzo.loop.databinding.FragmentAccountSetupBinding
-import com.mafunzo.loop.ui.auth.viewmodel.AuthViewModel
+import com.mafunzo.loop.ui.auth.viewmodels.AuthViewModel
 import com.mafunzo.loop.utils.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -141,6 +141,7 @@ class AccountSetupFragment : Fragment() {
                     profilePic = "",
                     dateCreated = getCurrentTimeInMillis(),
                     accountType = accountType,
+                    enabled = false,
                     schools = listOf(school.id)
                 )
                 registerUser(createUserRequest = userDetails)

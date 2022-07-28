@@ -19,7 +19,7 @@ import com.mafunzo.loop.utils.showProgress
 import com.google.firebase.auth.*
 import com.mafunzo.loop.R
 import com.mafunzo.loop.databinding.FragmentOtpVerificationBinding
-import com.mafunzo.loop.ui.auth.viewmodel.AuthViewModel
+import com.mafunzo.loop.ui.auth.viewmodels.AuthViewModel
 import com.mafunzo.loop.ui.main.MainActivity
 import com.mafunzo.loop.utils.*
 import dagger.hilt.android.AndroidEntryPoint

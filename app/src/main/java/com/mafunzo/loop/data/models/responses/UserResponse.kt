@@ -11,6 +11,7 @@ data class UserResponse(
     val dateCreated: Long? = null,
     val profilePic: String? = null,
     val accountType: String? = null,
+    val enabled: Boolean? = false,
     val schools: List<String?>? = null,
 ) {
     fun toUserEntity(phoneNumber: String): UserEntity {
