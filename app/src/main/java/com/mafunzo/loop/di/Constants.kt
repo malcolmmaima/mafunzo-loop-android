@@ -1,6 +1,9 @@
 package com.mafunzo.loop.di
 
 object Constants {
+    //Support constants
+    const val SUPPORT_EMAIL = "mafunzoloop@gmail.com"
+
     const val FIREBASE_APP_SETTINGS = "app_settings"
     const val FIREBASE_APP_ACCOUNT_TYPES = "account_types"
     const val FIREBASE_APP_REQUEST_TYPES = "request_types"

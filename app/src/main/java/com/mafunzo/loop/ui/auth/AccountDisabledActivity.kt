@@ -1,6 +1,7 @@
 package com.mafunzo.loop.ui.auth
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +9,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.mafunzo.loop.databinding.ActivityAccountDisabledBinding
+import com.mafunzo.loop.di.Constants
 import com.mafunzo.loop.ui.auth.viewmodels.AuthViewModel
 import com.mafunzo.loop.ui.splash.SplashActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,6 +53,12 @@ class AccountDisabledActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 authViewModel.signOutUser()
             }
+        }
+
+        binding.disabledMessageTV.setOnClickListener {
+            val intent = Intent(Intent.ACTION_SENDTO)
+            intent.data = Uri.parse("mailto:${Constants.SUPPORT_EMAIL}")
+            startActivity(intent)
         }
     }
 }

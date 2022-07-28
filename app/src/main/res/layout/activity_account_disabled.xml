@@ -13,6 +13,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
+        android:id="@+id/disabledMessageTV"
         android:layout_margin="15dp"
         android:layout_below="@id/icon"
         android:layout_centerHorizontal="true"

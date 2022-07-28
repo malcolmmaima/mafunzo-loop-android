@@ -75,5 +75,5 @@
     <string name="previous">Previous</string>
 
     <!-- Account disabled -->
-    <string name="account_disabled">Your account is not activated. Please contact your school.</string>
+    <string name="account_disabled">Your account has been disabled. Please contact support mafunzoloop@gmail.com</string>
 </resources>
