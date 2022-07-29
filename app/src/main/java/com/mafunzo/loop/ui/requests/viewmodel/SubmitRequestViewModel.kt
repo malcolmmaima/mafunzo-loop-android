@@ -93,10 +93,9 @@ class SubmitRequestViewModel @Inject constructor(
                     viewModelScope.launch {
                         _loading.value = false
                         if (document != null) {
-                            document.data?.entries?.map { it.value as String }
-                                ?.let { appRequestTypes ->
-                                    _requestTypes.value = appRequestTypes
-                                }
+                            document.data?.get("types")?.let {
+                                _requestTypes.value = it as List<String>
+                            }
                         } else {
                            _requestTypes.value = emptyList()
                         }

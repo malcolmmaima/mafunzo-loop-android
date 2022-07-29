@@ -42,11 +42,10 @@ class MainViewModel @Inject constructor(
                     viewModelScope.launch {
                         _isLoading.emit(false)
                         if (document != null) {
-                            Log.d(TAG, "DocumentSnapshot data: ${document.data}")
-                            document.data?.entries?.map { it.value as String }
-                                ?.let { accounttypes ->
-                                    _accountTypes.emit(accounttypes)
-                                }
+                            Log.d(TAG, "DocumentSnapshot data: ${document.data?.get("users")}")
+                            document.data?.get("users")?.let {
+                                _accountTypes.emit(it as List<String>)
+                            }
                         } else {
                             Log.d(TAG, "No such document")
                             _accountTypes.emit(listOf())
