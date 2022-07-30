@@ -1,0 +1,50 @@
+name: Deploy Mafunzo
+
+on:
+  push:
+    branches: [ "UAT" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Set Up JDK
+        uses: actions/setup-java@v1
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Run Tests
+        run: ./gradlew test
+
+      - name: Build Mafunzo
+        run: ./gradlew build
+
+      - name: Build UAT AAB
+        run: ./gradlew bundleUat
+
+      - name: Sign AAB
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: app/build/outputs/bundle/uat
+          signingKeyBase64: ${{ secrets.SIGN_KEY }}
+          alias: ${{ secrets.ALIAS }}
+          keyStorePassword: ${{ secrets.STORE_KEY_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+
+
+      - name: Deploy to Internal Testing
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{secrets.SERVICE_ACCOUNT}}
+          packageName: com.mafunzo.loop
+          releaseFiles: app/build/outputs/bundle/uat/app-uat.aab
+          track: internal
+          whatsNewDirectory: whatsnew/
