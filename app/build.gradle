@@ -121,4 +121,6 @@ dependencies {
 
     //Google Play Integrity API
     implementation 'com.google.android.play:integrity:1.0.1'
+
+    implementation 'androidx.browser:browser:1.4.0'
 }
