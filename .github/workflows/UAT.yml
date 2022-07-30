@@ -1,4 +1,4 @@
-name: Deploy Mafunzo
+name: Deploy Mafunzo to UAT
 
 on:
   push:
