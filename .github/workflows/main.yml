@@ -15,9 +15,10 @@ jobs:
       - name: Set Up JDK
         uses: actions/setup-java@v1
         with:
-          java-version: 1.8
+          distribution: 'adopt'
+          java-version: '11'
 
-      - name: Change wrapper permissions
+      - name: Make gradlew executable
         run: chmod +x ./gradlew
 
       - name: Run Tests
