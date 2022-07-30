@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "168281819850",
+    "project_id": "mafunzo-africa",
+    "storage_bucket": "mafunzo-africa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:168281819850:android:f2116e864f4dbb1eba8233",
+        "android_client_info": {
+          "package_name": "com.mafunzo.loop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "168281819850-4dhambqdpej7gb6d6ara3rlvuq5d97bn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoYUvxxpQgnTFdq_3anfq6sZTOHCDPU3k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "168281819850-4dhambqdpej7gb6d6ara3rlvuq5d97bn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

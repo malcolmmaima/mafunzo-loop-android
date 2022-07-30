@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/auth_nav"
+    app:startDestination="@id/phoneVerificationFragment2">
+
+    <fragment
+        android:id="@+id/phoneVerificationFragment2"
+        android:name="com.mafunzo.loop.ui.auth.fragments.PhoneVerificationFragment"
+        android:label="PhoneVerificationFragment"
+        tools:layout="@layout/fragment_phone_verification">
+
+        <argument
+            android:name="otpCode"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_phoneVerificationFragment2_to_passwordVerificationFragment2"
+            app:destination="@id/otpVerificationFragment2" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/otpVerificationFragment2"
+        android:name="com.mafunzo.loop.ui.auth.fragments.OtpVerificationFragment"
+        android:label="OtpVerificationFragment"
+        tools:layout="@layout/fragment_otp_verification">
+        <argument
+            android:name="otpCode"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_otpVerificationFragment2_to_mainActivity"
+            app:destination="@id/mainActivity" />
+        <action
+            android:id="@+id/action_otpVerificationFragment2_to_accountSetupFragment2"
+            app:destination="@id/accountSetupFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/accountSetupFragment2"
+        android:name="com.mafunzo.loop.ui.auth.fragments.AccountSetupFragment"
+        android:label="AccountSetupFragment"
+        tools:layout="@layout/fragment_account_setup">
+
+        <action
+            android:id="@+id/action_accountSetupFragment2_to_mainActivity"
+            app:destination="@id/mainActivity" />
+    </fragment>
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.mafunzo.loop.ui.main.MainActivity"
+        android:label="app_bar_home"
+        tools:layout="@layout/activity_main" />
+</navigation>

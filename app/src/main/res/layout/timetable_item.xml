@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginTop="15dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginStart="20dp">
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/subjectCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:longClickable="true"
+        android:focusable="true"
+        android:padding="10dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="1dp"
+        app:cardBackgroundColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeColor="#1B808080"
+        app:strokeWidth="1dp">
+
+        <LinearLayout
+            android:id="@+id/ll_subject_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <ImageView
+                android:id="@+id/subjectImage"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:visibility="gone"
+                android:layout_marginBottom="5dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_announcement"
+                />
+
+            <TextView
+                android:id="@+id/subjectTitleTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="monospace"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                tools:text="Subject Title" />
+
+            <TextView
+                android:id="@+id/subjectTimeTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorSecondary"
+                android:fontFamily="monospace"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                tools:text="8:30 AM - 10:30 AM"
+                />
+
+            <View
+                android:id="@+id/spinnerView"
+                android:layout_width="match_parent"
+                android:layout_height=".1dp"
+                android:layout_marginTop="0dp"
+                android:background="@color/grey" />
+
+            <TextView
+                android:id="@+id/subjectTeacherTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="monospace"
+                android:textColor="@color/grey"
+                android:textSize="14sp"
+                tools:text="Mr John Doe"
+                android:maxLines="5"
+                android:maxLength="200"
+                android:ellipsize="end"
+                />
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
