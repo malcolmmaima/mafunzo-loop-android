@@ -59,12 +59,17 @@ class PhoneVerificationFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                authViewModel.verificationId.collectLatest { verificationId ->
-                    if(verificationId.isNotEmpty()){
-                        findNavController().navigate(R.id.action_phoneVerificationFragment2_to_passwordVerificationFragment2, Bundle().apply {
-                            putString("storedVerificationId", verificationId)
-                            putString("storedPhoneNumber", "+${countryCodePicker.fullNumber}")
-                        }, NavOptions.Builder().setPopUpTo(R.id.phoneVerificationFragment2, true).build())
+                authViewModel.verificationId.observe(viewLifecycleOwner) { verificationId ->
+                    if (verificationId.isNotEmpty()) {
+                        findNavController().navigate(
+                            R.id.action_phoneVerificationFragment2_to_passwordVerificationFragment2,
+                            Bundle().apply {
+                                putString("storedVerificationId", verificationId)
+                                putString("storedPhoneNumber", "+${countryCodePicker.fullNumber}")
+                            },
+                            NavOptions.Builder().setPopUpTo(R.id.phoneVerificationFragment2, true)
+                                .build()
+                        )
                     }
                 }
             }

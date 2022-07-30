@@ -1,8 +1,8 @@
-name: Deploy Mafunzo
+name: Deploy Mafunzo to UAT
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "UAT" ]
 
 jobs:
   build:
@@ -30,22 +30,24 @@ jobs:
       - name: Build Mafunzo
         run: ./gradlew build
 
-      - name: Build Release AAB
-        run: ./gradlew bundleRelease
+      - name: Build UAT AAB
+        run: ./gradlew bundleUat
 
       - name: Sign AAB
         uses: r0adkll/sign-android-release@v1
         with:
-          releaseDirectory: app/build/outputs/bundle/release
+          releaseDirectory: app/build/outputs/bundle/uat
           signingKeyBase64: ${{ secrets.SIGN_KEY }}
           alias: ${{ secrets.ALIAS }}
           keyStorePassword: ${{ secrets.STORE_KEY_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
 
-      - name: Deploy to Play Store
+
+      - name: Deploy to Internal Testing
         uses: r0adkll/upload-google-play@v1.0.15
         with:
           serviceAccountJsonPlainText: ${{secrets.SERVICE_ACCOUNT}}
           packageName: com.mafunzo.loop
-          releaseFiles: app/build/outputs/bundle/release/app-release.aab
-          track: production
+          releaseFiles: app/build/outputs/bundle/uat/app-uat.aab
+          track: internal
+          whatsNewDirectory: whatsnew/

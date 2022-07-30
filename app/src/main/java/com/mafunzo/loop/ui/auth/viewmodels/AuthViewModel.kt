@@ -2,6 +2,7 @@ package com.mafunzo.loop.ui.auth.viewmodels
 
 import android.util.Log
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.FirebaseException
@@ -37,8 +38,8 @@ class AuthViewModel @Inject constructor(
     private val _codeSent = MutableSharedFlow<Boolean>()
     val codeSent = _codeSent.asSharedFlow()
 
-    private val _verificationId = MutableSharedFlow<String>()
-    val verificationId = _verificationId.asSharedFlow()
+    private val _verificationId = MutableLiveData<String>()
+    val verificationId = _verificationId
 
     private val _errorMessage = MutableSharedFlow<String>()
     val errorMessage = _errorMessage.asSharedFlow()
@@ -111,7 +112,7 @@ class AuthViewModel @Inject constructor(
                 token: PhoneAuthProvider.ForceResendingToken
             ) {
                 viewModelScope.launch {
-                    _verificationId.emit(verificationId)
+                    _verificationId.value = verificationId
                     _codeSent.emit(true)
                     _isLoading.emit(false)
                     resendToken = token
