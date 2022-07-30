@@ -38,8 +38,8 @@ class AuthViewModel @Inject constructor(
     private val _codeSent = MutableSharedFlow<Boolean>()
     val codeSent = _codeSent.asSharedFlow()
 
-    private val _verificationId = MutableLiveData<String>()
-    val verificationId = _verificationId
+    private val _verificationId = MutableSharedFlow<String>()
+    val verificationId = _verificationId.asSharedFlow()
 
     private val _errorMessage = MutableSharedFlow<String>()
     val errorMessage = _errorMessage.asSharedFlow()
@@ -112,7 +112,7 @@ class AuthViewModel @Inject constructor(
                 token: PhoneAuthProvider.ForceResendingToken
             ) {
                 viewModelScope.launch {
-                    _verificationId.value = verificationId
+                    _verificationId.emit(verificationId)
                     _codeSent.emit(true)
                     _isLoading.emit(false)
                     resendToken = token
