@@ -59,7 +59,7 @@ class PhoneVerificationFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                authViewModel.verificationId.observe(viewLifecycleOwner) { verificationId ->
+                authViewModel.verificationId.collectLatest { verificationId ->
                     if (verificationId.isNotEmpty()) {
                         findNavController().navigate(
                             R.id.action_phoneVerificationFragment2_to_passwordVerificationFragment2,
