@@ -1,3 +1,81 @@
 <resources>
     <string name="app_name">Mafunzo Loop</string>
+    <string name="welcome_message_1">Welcome to Mafunzo</string>
+    <string name="welcome_message_2">Please enter your number to start</string>
+    <string name="phone">Enter phone number</string>
+    <string name="phone_login">Login</string>
+    <string name="otp_sms">Enter OTP to verify your number</string>
+    <string name="enter_otp_sms">Please enter otp sms sent to your number</string>
+    <string name="did_not_receive_an_otp">Did not receive an otp sms?</string>
+    <string name="resend_otp">Resend</string>
+    <string name="phone_verify">Verify</string>
+    <string name="welcome_to_mafunzo">Welcome to Mafunzo Loop</string>
+    <string name="to_start_using_the_app">"Please setup your account "</string>
+    <string name="first_name">First Name</string>
+    <string name="second_name">Second Name</string>
+    <string name="email_address">Email Address</string>
+    <string name="next">NEXT</string>
+    <string name="announcements">Announcements</string>
+    <string name="calendar_title">Calendar</string>
+    <string name="requests">Requests</string>
+    <string name="teachers">Teachers</string>
+    <string name="school_bus">School bus</string>
+    <string name="contacts">Contacts</string>
+    <string name="profile_welcome">Hi,</string>
+    <string name="setup_account">Setup Account</string>
+    <string name="no_announcements">No Announcements</string>
+    <string name="no_announcement_found">No Announcement found</string>
+    <string name="lorem_ipsum_body_sample">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
+    <string name="first_name_required">Please Enter Name</string>
+    <string name="first_name_too_short">Please enter a name with more than 2 characters</string>
+    <string name="second_name_required">Please enter a name</string>
+    <string name="second_name_too_short">Please enter a name with more than 2 characters</string>
+    <string name="email_required">Please Enter an email address</string>
+    <string name="email_invalid">Please Enter a valid Email</string>
+    <string name="account_type_required">Please Select an account type</string>
+    <string name="school_required">Please Select a school</string>
+    <string name="error_creating_account">User Creation Failed</string>
+    <string name="menu_logout">Logout</string>
+    <string name="current_school">My school</string>
+    <string name="no_events">No available events</string>
+    <string name="view_all_upcoming">View all upcoming</string>
+    <string name="show_calendar">Show Calendar</string>
+    <string name="no_event_found">No Event found</string>
+    <string name="request_subject">Request Subject</string>
+    <string name="request_description">Request Description</string>
+    <string name="submit">Submit</string>
+    <string name="request_type_required">Please Select Request Type</string>
+    <string name="pending">PENDING</string>
+    <string name="subject_required">Please enter subject</string>
+    <string name="description_required">Please enter a longer description</string>
+    <string name="view_requests">View all requests</string>
+    <string name="submit_new_request">Submit new request</string>
+    <string name="no_request_found">No request found</string>
+    <string name="cancel">CANCEL</string>
+    <string name="withdraw_request">WITHDRAW</string>
+    <string name="no_teachers">No teachers found</string>
+    <string name="no_teacher">No teacher found</string>
+    <string name="timetable">Timetable</string>
+    <string name="moday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="no_subjects">No subjects found</string>
+    <string name="menu_settings">Settings</string>
+
+    <!-- Settings -->
+    <string name="personal_details">Personal Details</string>
+    <string name="save_details">SAVE</string>
+    <string name="app_settings">App Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="previous">Previous</string>
+
+    <!-- Account disabled -->
+    <string name="account_disabled">Your account has been disabled. Please contact support mafunzoloop@gmail.com</string>
+    <string name="current_school_status">Contact your school to activate your workspace</string>
+    <string name="coming_soon">Coming soon...</string>
 </resources>

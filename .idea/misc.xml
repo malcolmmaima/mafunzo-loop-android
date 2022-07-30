@@ -1,5 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/malco/AppData/Local/Android/Sdk/platforms/android-32/data/res/layout/simple_spinner_dropdown_item.xml" value="0.10989583333333333" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/drawable/button_gradient.xml" value="0.1995" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/drawable/gradient_background.xml" value="0.148" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/drawable/ic_baseline_access_time_24.xml" value="0.213" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/drawable/ic_person.xml" value="0.213" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/drawable/one_rounded_corner_rectangle.xml" value="0.1995" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/drawable/progress_bg.xml" value="0.1995" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/drawable/round_shape_active_btn.xml" value="0.176" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/drawable/rounded_corner_rectangle.xml" value="0.148" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/font/open_sans.xml" value="0.2791666666666667" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/activity_account_disabled.xml" value="0.264" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/activity_auth.xml" value="0.1390625" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/activity_main.xml" value="0.1390625" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/activity_settings.xml" value="0.25" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/activity_splash.xml" value="0.1598731884057971" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/announcement_item.xml" value="0.2" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/calendar_item.xml" value="0.22780797101449277" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/content_settings.xml" value="0.25" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/drop_down_spinner_layout.xml" value="0.25" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_account_setup.xml" value="0.2" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_announcements.xml" value="0.176" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_app_settings.xml" value="0.25" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_calendar.xml" value="0.264" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_first.xml" value="0.25" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_home.xml" value="0.176" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_otp_verification.xml" value="0.2" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_personal_details.xml" value="0.176" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_phone_verification.xml" value="0.264" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_requests.xml" value="0.22780797101449277" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_submit_request.xml" value="0.22780797101449277" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_teachers.xml" value="0.1390625" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_time_table.xml" value="0.264" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_view_announcement.xml" value="0.25" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_view_event.xml" value="0.22780797101449277" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_view_request.xml" value="0.22780797101449277" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/fragment_view_teacher.xml" value="0.264" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/request_item.xml" value="0.22780797101449277" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/teacher_item.xml" value="0.25" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/layout/timetable_item.xml" value="0.264" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop/app/src/main/res/menu/activity_main_menu.xml" value="0.24895833333333334" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
