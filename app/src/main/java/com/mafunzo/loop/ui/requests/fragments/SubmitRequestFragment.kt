@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.core.view.size
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -155,10 +156,12 @@ class SubmitRequestFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                         requestsAdapter.saveData(requests)
                         binding.rvRequests.scrollToPosition(0)
                         binding.tvViewAll.visible()
+                        binding.footerPatternIV.gone()
                     } else {
                         binding.tvViewAll.gone()
                         binding.llRequestForm.visible()
                         binding.tvViewAll.gone()
+                        binding.footerPatternIV.visible()
                     }
                 }
             }
@@ -197,23 +200,25 @@ class SubmitRequestFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     return@setOnClickListener
                 }
 
-                val message = editTextRequestDescription.text.trim().toString()
-                val subject = editTextRequestSubject.text.trim().toString()
-                val createdAt = System.currentTimeMillis()
-                val status = getString(R.string.pending)
-                val type = requestTypeSpinner.selectedItem.toString().uppercase()
+                if(requestTypeSpinner.size > 0) {
+                    val message = editTextRequestDescription.text.trim().toString()
+                    val subject = editTextRequestSubject.text.trim().toString()
+                    val createdAt = System.currentTimeMillis()
+                    val status = getString(R.string.pending)
+                    val type = requestTypeSpinner.selectedItem.toString().uppercase()
 
-                this.submitRequestBtn.showProgress()
-                this.submitRequestBtn.enable(false)
-                val standardRequest = StandardRequest(
-                    id = "",
-                    message,
-                    subject,
-                    createdAt,
-                    status,
-                    type
-                )
-                submitRequestViewModel.submitRequest(standardRequest)
+                    this.submitRequestBtn.showProgress()
+                    this.submitRequestBtn.enable(false)
+                    val standardRequest = StandardRequest(
+                        id = "",
+                        message,
+                        subject,
+                        createdAt,
+                        status,
+                        type
+                    )
+                    submitRequestViewModel.submitRequest(standardRequest)
+                }
             }
         }
     }
