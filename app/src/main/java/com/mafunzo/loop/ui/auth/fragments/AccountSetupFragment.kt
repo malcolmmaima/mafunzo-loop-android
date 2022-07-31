@@ -27,6 +27,7 @@ import com.mafunzo.loop.ui.auth.AuthActivity
 import com.mafunzo.loop.ui.main.MainActivity
 import com.mafunzo.loop.ui.main.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 class AccountSetupFragment : Fragment() {
@@ -185,8 +186,10 @@ class AccountSetupFragment : Fragment() {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
+            binding.progressBar.visible()
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 mainViewModel.accountTypes.collectLatest { accountTypes ->
+                    binding.progressBar.gone()
                     if (accountTypes.isNotEmpty()) {
                         //add default option to spinner
                         val accounts = arrayListOf<String>()
@@ -200,14 +203,30 @@ class AccountSetupFragment : Fragment() {
                             R.layout.drop_down_spinner_layout,
                             accounts
                         )
+                    } else {
+                        binding.root.snackbar(getString(R.string.error_loading_account_types))
+
+                        //empty spinner with option "No account types available"
+                        val accounts = arrayListOf<String>()
+                        accounts.add("No account types available")
+                        binding.accountTypeSpinner.adapter = ArrayAdapter(
+                            requireContext(),
+                            R.layout.drop_down_spinner_layout,
+                            accounts
+                        )
+                        // wait 3 seconds then mainViewModel.getAccountTypes()
+                        delay(3000)
+                        mainViewModel.getAccountTypes()
                     }
                 }
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
+            binding.progressBar.visible()
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 mainViewModel.schools.collectLatest { mafunzoSchools ->
+                    binding.progressBar.gone()
                     if (mafunzoSchools.isNotEmpty()) {
                         schools.clear()
                         schools.add(SchoolResponse(schoolName = "Select School"))
@@ -219,6 +238,20 @@ class AccountSetupFragment : Fragment() {
                             R.layout.drop_down_spinner_layout,
                             schools.map { it.schoolName }
                         )
+                    } else {
+                        binding.root.snackbar(getString(R.string.error_loading_schools))
+                        //empty spinner with option "No schools available"
+                        val schools = arrayListOf<String>()
+                        schools.add("No schools available")
+                        binding.schoolSpinner.adapter = ArrayAdapter(
+                            requireContext(),
+                            R.layout.drop_down_spinner_layout,
+                            schools
+                        )
+
+                        delay(3000)
+                        val deviceLocale = ConfigurationCompat.getLocales(Resources.getSystem().configuration)[0].country
+                        mainViewModel.getSchools(deviceLocale)
                     }
                 }
             }

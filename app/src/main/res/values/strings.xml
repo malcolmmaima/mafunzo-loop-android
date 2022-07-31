@@ -78,4 +78,6 @@
     <string name="account_disabled">Your account has been disabled. Please contact support mafunzoloop@gmail.com</string>
     <string name="current_school_status">Contact your school to activate your workspace</string>
     <string name="coming_soon">Coming soon...</string>
+    <string name="error_loading_account_types">Error loading account types</string>
+    <string name="error_loading_schools">Error loading schools</string>
 </resources>
