@@ -14,6 +14,7 @@ import com.mafunzo.loop.ui.auth.AuthActivity
 import com.mafunzo.loop.ui.auth.viewmodels.AuthViewModel
 import com.mafunzo.loop.ui.main.MainActivity
 import com.mafunzo.loop.ui.splash.viewmodel.SplashViewModel
+import com.mafunzo.loop.utils.snackbar
 import com.mafunzo.loop.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -48,8 +49,13 @@ class SplashActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                splashViewModel.systemOffline.collectLatest { offline ->
-                    if (offline) {
+                splashViewModel.systemSettings.collectLatest { systemSetts ->
+                    val allowedMaintainer = authViewModel.userPhoneNumber?.let {
+                        systemSetts.maintainers?.contains(
+                            it
+                        ) ?: false
+                    }
+                    if(systemSetts.offline == true && allowedMaintainer == false) {
                         loadOffline()
                     } else {
                         repeatOnLifecycle(Lifecycle.State.STARTED) {

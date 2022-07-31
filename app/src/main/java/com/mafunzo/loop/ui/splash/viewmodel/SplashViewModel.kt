@@ -1,9 +1,11 @@
 package com.mafunzo.loop.ui.splash.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.mafunzo.loop.data.models.responses.SystemSettingsResponse
 import com.mafunzo.loop.di.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -23,8 +25,8 @@ class SplashViewModel @Inject constructor(
     private val _errorMessage = MutableSharedFlow<String>()
     val errorMessage = _errorMessage.asSharedFlow()
 
-    private val _systemOffline = MutableSharedFlow<Boolean>()
-    val systemOffline = _systemOffline.asSharedFlow()
+    private val _systemSettings = MutableSharedFlow<SystemSettingsResponse>()
+    val systemSettings = _systemSettings.asSharedFlow()
 
     fun isUserLoggedIn() = auth.currentUser != null
 
@@ -39,7 +41,15 @@ class SplashViewModel @Inject constructor(
                         if(systemSetts.exists()){
                             viewModelScope.launch {
                                 _isLoading.emit(false)
-                                _systemOffline.emit(systemSetts.data?.get("offline") as Boolean)
+                                systemSetts.toObject(SystemSettingsResponse::class.java)
+                                    ?.let {
+                                        _systemSettings.emit(it)
+                                    }
+                            }
+                        } else {
+                            viewModelScope.launch {
+                                _isLoading.emit(false)
+                                _errorMessage.emit("System settings not found")
                             }
                         }
                     }.addOnFailureListener {
