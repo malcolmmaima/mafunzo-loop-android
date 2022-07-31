@@ -140,6 +140,10 @@ class PersonalDetailsFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 mainViewModel.accountTypes.collectLatest { accountTypes ->
+                    //disabled switching account types for now
+                    binding.accountTypeSpinner.isEnabled = false
+                    binding.accountTypeSpinner.isClickable = false
+
                     if (accountTypes.isNotEmpty()) {
                         //add default option to spinner
                         val accounts = arrayListOf<String>()

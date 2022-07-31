@@ -80,4 +80,9 @@
     <string name="coming_soon">Coming soon...</string>
     <string name="error_loading_account_types">Error loading account types</string>
     <string name="error_loading_schools">Error loading schools</string>
+    <string name="title_activity_system_offline">SystemOfflineActivity</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="system_offline">Mafunzo is currently offline for maintenance. Please try again later.</string>
 </resources>
