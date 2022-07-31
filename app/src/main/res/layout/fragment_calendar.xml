@@ -20,19 +20,30 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="80dp"
+        android:background="@drawable/rounded_corner_rectangle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:elevation="1dp"
+        >
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
     <LinearLayout
         android:id="@+id/ll_calendar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="80dp"
-        android:nestedScrollingEnabled="true"
         android:orientation="vertical"
-        android:background="@drawable/rounded_corner_rectangle"
         android:paddingBottom="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:paddingTop="10dp"
-        app:layout_constraintStart_toStartOf="parent">
+        android:paddingTop="10dp">
 
         <CalendarView
             android:id="@+id/calendarView"
@@ -65,33 +76,34 @@
             android:textColor="@color/black"
             android:textSize="20sp" />
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_container"
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_events"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            >
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
+            android:nestedScrollingEnabled="true"
+            android:paddingBottom="10dp"
+            android:translationZ="1dp"
+            tools:itemCount="3"
+            tools:listitem="@layout/calendar_item" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_events"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="4dp"
-                tools:listitem="@layout/calendar_item"
-                android:layout_marginEnd="4dp"
-                android:paddingBottom="10dp"
-                />
-
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:translationZ="-1dp"
-            android:layout_marginTop="-120dp"
-            android:background="@drawable/bottom_pattern"
-            />
     </LinearLayout>
 
+    </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <ImageView
+        android:id="@+id/footerPatternIV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:translationZ="1dp"
+        android:visibility="gone"
+        android:background="@drawable/bottom_pattern"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>
