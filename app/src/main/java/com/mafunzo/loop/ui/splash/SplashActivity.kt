@@ -14,6 +14,7 @@ import com.mafunzo.loop.ui.auth.AuthActivity
 import com.mafunzo.loop.ui.auth.viewmodels.AuthViewModel
 import com.mafunzo.loop.ui.main.MainActivity
 import com.mafunzo.loop.ui.splash.viewmodel.SplashViewModel
+import com.mafunzo.loop.utils.snackbar
 import com.mafunzo.loop.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -48,24 +49,38 @@ class SplashActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                authViewModel.userExists.collectLatest { userExists ->
-                    if (userExists) {
-                        Log.d("SplashActivity", "User exists")
-                        if (userEnabled) {
-                            Log.d("SplashActivity", "User exists and enabled")
-                            loadMainActivity()
-                        } else {
-                            Log.d("SplashActivity", "User exists but disabled")
-                            loadAccountDisabledActivity()
-                        }
+                splashViewModel.systemSettings.collectLatest { systemSetts ->
+                    val allowedMaintainer = authViewModel.userPhoneNumber?.let {
+                        systemSetts.maintainers?.contains(
+                            it
+                        ) ?: false
+                    }
+                    if(systemSetts.offline == true && allowedMaintainer == false) {
+                        loadOffline()
                     } else {
-                        Log.d("SplashActivity", "User does not exist")
-                        loadAuth()
+                        repeatOnLifecycle(Lifecycle.State.STARTED) {
+                            authViewModel.userExists.collectLatest { userExists ->
+                                if (userExists) {
+                                    Log.d("SplashActivity", "User exists")
+                                    if (userEnabled) {
+                                        Log.d("SplashActivity", "User exists and enabled")
+                                        loadMainActivity()
+                                    } else {
+                                        Log.d("SplashActivity", "User exists but disabled")
+                                        loadAccountDisabledActivity()
+                                    }
+                                } else {
+                                    Log.d("SplashActivity", "User does not exist")
+                                    loadAuth()
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
     }
+
 
     private fun initSplash() {
         binding.progressBar.visible()
@@ -73,12 +88,20 @@ class SplashActivity : AppCompatActivity() {
             if(splashViewModel.isUserLoggedIn()){
                 authViewModel.userPhoneNumber?.let { phoneNumber ->
                     authViewModel.fetchUser(phoneNumber)
+                    splashViewModel.getSystemSettings()
                 }
             } else {
                 delay(3000)
                 loadAuth()
             }
         }
+    }
+
+    private fun loadOffline() {
+        val intent = Intent(this, SystemOfflineActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        finish()
     }
 
     private fun loadAuth(){
