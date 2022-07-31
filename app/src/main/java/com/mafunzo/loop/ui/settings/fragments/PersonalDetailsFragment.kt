@@ -27,6 +27,7 @@ import com.mafunzo.loop.ui.settings.SettingsActivity
 import com.mafunzo.loop.ui.settings.viewmodel.SettingsViewModel
 import com.mafunzo.loop.utils.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -157,6 +158,18 @@ class PersonalDetailsFragment : Fragment() {
                         if(accountType.isNotEmpty()) {
                             binding.accountTypeSpinner.setSelection(accounts.indexOf(accountType.lowercase()))
                         }
+                    } else {
+                        binding.root.snackbar(getString(R.string.error_loading_account_types))
+                        val accounts = arrayListOf<String>()
+                        accounts.add("No account types available")
+                        binding.accountTypeSpinner.adapter = ArrayAdapter(
+                            requireContext(),
+                            R.layout.drop_down_spinner_layout,
+                            accounts
+                        )
+                        // wait 3 seconds then mainViewModel.getAccountTypes()
+                        delay(3000)
+                        mainViewModel.getAccountTypes()
                     }
                 }
             }
