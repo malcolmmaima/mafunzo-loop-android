@@ -1,5 +1,6 @@
 package com.mafunzo.loop.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -17,6 +18,8 @@ import com.mafunzo.loop.databinding.FragmentHomeBinding
 import com.mafunzo.loop.ui.auth.viewmodels.AuthViewModel
 import com.mafunzo.loop.ui.home.viewmodel.HomeViewModel
 import com.mafunzo.loop.ui.main.MainActivity
+import com.mafunzo.loop.ui.splash.SystemOfflineActivity
+import com.mafunzo.loop.ui.splash.viewmodel.SplashViewModel
 import com.mafunzo.loop.utils.enable
 import com.mafunzo.loop.utils.gone
 import com.mafunzo.loop.utils.snackbar
@@ -31,6 +34,7 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private val authViewModel: AuthViewModel by viewModels()
     private val homeViewModel: HomeViewModel by viewModels()
+    private val splashViewModel: SplashViewModel by viewModels()
     private var currentSchoolName = ""
 
     override fun onCreateView(
@@ -44,11 +48,16 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         disableAllModules(true)
+        checkSystemStatus()
         getUserDetails()
         getCurrentSchoolWorkSpace()
         initializeHomeWidgets()
         initializeObservers()
         setUpToolbar()
+    }
+
+    private fun checkSystemStatus() {
+        splashViewModel.getSystemSettings()
     }
 
     private fun getCurrentSchoolWorkSpace() {
@@ -148,6 +157,28 @@ class HomeFragment : Fragment() {
             }
         }
 
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                splashViewModel.systemSettings.collectLatest { systemSetts ->
+                    val allowedMaintainer = authViewModel.userPhoneNumber?.let {
+                        systemSetts.maintainers?.contains(
+                            it
+                        ) ?: false
+                    }
+                    if(systemSetts.offline == true && allowedMaintainer == false) {
+                        loadMaintenance()
+                    }
+                }
+            }
+        }
+
+    }
+
+    private fun loadMaintenance() {
+        val intent = Intent(requireActivity(), SystemOfflineActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        activity?.finish()
     }
 
     private fun disableAllModules(disable: Boolean) {
