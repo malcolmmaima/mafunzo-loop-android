@@ -125,34 +125,40 @@ class AccountSetupFragment : Fragment() {
                 }
 
 
-                val firstName = editTextTextFirstName.text.trim().toString()
-                val secondName = editTextTextSecondName.text.trim().toString()
-                val email = editTextEmailAddress.text.trim().toString()
-                val accountType = accountTypeSpinner.selectedItem.toString().uppercase()
-                val school = getSchoolResponse(schoolSpinner.selectedItemId)
-                Log.d("AccountSetup", "school: $school")
+                if(schools.size > 0) {
+                    val firstName = editTextTextFirstName.text.trim().toString()
+                    val secondName = editTextTextSecondName.text.trim().toString()
+                    val email = editTextEmailAddress.text.trim().toString()
+                    val accountType = accountTypeSpinner.selectedItem.toString().uppercase()
+                    val school = schools[schoolSpinner.selectedItemId.toInt()]
+                    Log.d("AccountSetup", "school: $school")
 
-                this.setUpNextButton.showProgress()
-                this.setUpNextButton.enable(false)
-                val userDetails = CreateUserRequest(
-                    email = email,
-                    firstName = firstName,
-                    lastName = secondName,
-                    profilePic = "",
-                    dateCreated = getCurrentTimeInMillis(),
-                    accountType = accountType,
-                    enabled = true,
-                    schools = HashMap<String, Boolean>().apply {
-                        school.id?.let { schoolId -> put(schoolId, false) }
-                    }
-                )
-                registerUser(createUserRequest = userDetails)
+                    this.setUpNextButton.showProgress()
+                    this.setUpNextButton.enable(false)
+                    val userDetails = CreateUserRequest(
+                        email = email,
+                        firstName = firstName,
+                        lastName = secondName,
+                        profilePic = "",
+                        dateCreated = getCurrentTimeInMillis(),
+                        accountType = accountType,
+                        enabled = true,
+                        schools = HashMap<String, Boolean>().apply {
+                            school.id?.let { schoolId -> put(schoolId, false) }
+                        }
+                    )
+                    registerUser(createUserRequest = userDetails)
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.school_required),
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                    setUpNextButton.isEnabled = true
+                }
             }
         }
-    }
-
-    private fun getSchoolResponse(selectedSchoolId: Long): SchoolResponse {
-        return schools[selectedSchoolId.toInt()]
     }
 
     private fun registerUser(createUserRequest: CreateUserRequest) {
