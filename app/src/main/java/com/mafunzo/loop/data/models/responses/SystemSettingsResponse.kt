@@ -8,5 +8,8 @@ import kotlinx.parcelize.Parcelize
 @Keep
 data class SystemSettingsResponse(
     val offline: Boolean? = null,
-    val maintainers: List<String>? = null
+    val maintainers: List<String>? = null,
+    val currentVersionCode: Int = 0,
+    val currentVersionName: String = "",
+    val forceUpdate: Boolean = false,
 ): Parcelable

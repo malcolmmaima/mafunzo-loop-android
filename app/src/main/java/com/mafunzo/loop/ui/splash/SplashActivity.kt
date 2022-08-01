@@ -40,7 +40,7 @@ class SplashActivity : AppCompatActivity() {
     private fun initializeObservers() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                authViewModel.userEnabled.collectLatest { enabled ->
+                authViewModel.userEnabled.collect { enabled ->
                     Log.d("SplashActivity", "User enabled: $userEnabled")
                     userEnabled = enabled
                 }
@@ -49,7 +49,7 @@ class SplashActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                splashViewModel.systemSettings.collectLatest { systemSetts ->
+                splashViewModel.systemSettings.collect { systemSetts ->
                     val allowedMaintainer = authViewModel.userPhoneNumber?.let {
                         systemSetts.maintainers?.contains(
                             it
