@@ -1,6 +1,8 @@
 package com.mafunzo.loop.ui.home
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,9 +14,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.mafunzo.loop.BuildConfig
 import com.mafunzo.loop.R
 import com.mafunzo.loop.data.models.responses.UserResponse
 import com.mafunzo.loop.databinding.FragmentHomeBinding
+import com.mafunzo.loop.di.Constants
 import com.mafunzo.loop.ui.auth.viewmodels.AuthViewModel
 import com.mafunzo.loop.ui.home.viewmodel.HomeViewModel
 import com.mafunzo.loop.ui.main.MainActivity
@@ -165,13 +170,60 @@ class HomeFragment : Fragment() {
                             it
                         ) ?: false
                     }
-                    if(systemSetts.offline == true && allowedMaintainer == false) {
-                        loadMaintenance()
+                    if(systemSetts.currentVersionCode > BuildConfig.VERSION_CODE) {
+                        forceUpdate(systemSetts.forceUpdate)
+                    } else {
+                        if(systemSetts.offline == true && allowedMaintainer == false) {
+                            loadMaintenance()
+                        }
                     }
                 }
             }
         }
 
+    }
+
+    private fun forceUpdate(forceUpdate: Boolean) {
+        if(forceUpdate) {
+            MaterialAlertDialogBuilder(requireActivity())
+                .setTitle("Update Mafunzo Loop")
+                .setMessage(getString(R.string.update_message))
+                .setPositiveButton("Update") { _, _ ->
+                    loadPlaystore()
+                }
+                .setCancelable(false)
+                .show()
+        } else {
+            MaterialAlertDialogBuilder(requireActivity())
+                .setTitle("Update Mafunzo Loop")
+                .setMessage(getString(R.string.update_message))
+                .setPositiveButton("Update") { _, _ ->
+                    loadPlaystore()
+                }
+                .setNegativeButton("Cancel") { _, _ ->
+                    //do nothing
+                }
+                .setCancelable(true)
+                .show()
+        }
+    }
+
+    private fun loadPlaystore(){
+        try {
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("market://details?id=${BuildConfig.APPLICATION_ID}")
+                )
+            )
+        } catch (nfe: ActivityNotFoundException) {
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}")
+                )
+            )
+        }
     }
 
     private fun loadMaintenance() {
