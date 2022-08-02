@@ -24,6 +24,7 @@ import com.mafunzo.loop.databinding.FragmentHomeBinding
 import com.mafunzo.loop.ui.auth.viewmodels.AuthViewModel
 import com.mafunzo.loop.ui.home.viewmodel.HomeViewModel
 import com.mafunzo.loop.ui.main.MainActivity
+import com.mafunzo.loop.ui.schools.viewmodel.SchoolsViewModel
 import com.mafunzo.loop.ui.splash.SystemOfflineActivity
 import com.mafunzo.loop.ui.splash.viewmodel.SplashViewModel
 import com.mafunzo.loop.utils.enable
@@ -106,20 +107,24 @@ class HomeFragment : Fragment() {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            homeViewModel.schools.collectLatest { schools ->
+            homeViewModel.schools.observe(viewLifecycleOwner) { schools ->
                 schoolsList = schools
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                authViewModel.userDetails.collectLatest {user ->
-                    binding.helloMessageTV.text = "Hi ${user.firstName},"
+                authViewModel.userDetails.collect {user ->
 
                     //update if firestore user details change
-                    if(myUserDetails != user){
+                    if(myUserDetails?.firstName != user.firstName
+                        || myUserDetails?.lastName != user.lastName
+                        || myUserDetails?.schools?.size != user.schools?.size) {
+
                         myUserDetails = user
                     }
+                    binding.helloMessageTV.text = "Hi ${myUserDetails?.firstName ?: user.firstName},"
+
                     getSchoolDetails(user.schools)
                     when(user.accountType) {
                         "BUS_DRIVER" -> {

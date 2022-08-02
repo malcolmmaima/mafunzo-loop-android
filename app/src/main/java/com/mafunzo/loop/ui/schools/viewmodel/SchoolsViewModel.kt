@@ -72,20 +72,27 @@ class SchoolsViewModel@Inject constructor(
                     val currentSchools = user?.schools ?: HashMap()
 
                     //create new hashmap with school added (school.id is the key) and value is false
-                    val newSchools = HashMap<String, Boolean>()
-                    newSchools[school.id.toString()] = false
-                    currentSchools.putAll(newSchools)
+                    val newSchool = HashMap<String, Boolean>()
+                    newSchool[school.id.toString()] = false
 
-                    //update user
-                    firestoreDB.collection(Constants.FIREBASE_APP_USERS).document(phoneNumber).update("schools", currentSchools)
-                        .addOnSuccessListener {
-                            _schoolAdded.value = true
-                            _isLoading.value = false
-                        }.addOnFailureListener {
-                            _schoolAdded.value = false
-                            _errorMessage.value = it.message
-                            _isLoading.value = false
-                        }
+                    //make sure newschools[school.id] doesn't already exist in current schools before adding it
+                    if(!currentSchools.containsKey(school.id.toString())) {
+                        //add new school to current schools
+                        currentSchools.putAll(newSchool)
+                        //update user with new school
+                        firestoreDB.collection(Constants.FIREBASE_APP_USERS).document(phoneNumber).update("schools", currentSchools)
+                            .addOnSuccessListener {
+                                _schoolAdded.value = true
+                                _isLoading.value = false
+                            }.addOnFailureListener {
+                                _schoolAdded.value = false
+                                _errorMessage.value = it.message
+                                _isLoading.value = false
+                            }
+                    } else {
+                        _schoolAdded.value = false
+                        _errorMessage.value = "School already exists in your list"
+                    }
 
 
                 }.addOnFailureListener {

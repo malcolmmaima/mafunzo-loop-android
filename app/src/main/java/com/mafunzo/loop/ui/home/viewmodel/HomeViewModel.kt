@@ -39,8 +39,8 @@ class HomeViewModel @Inject constructor(
     private val _workSpaceEnabled = MutableLiveData<Boolean>()
     val workSpaceEnabled = _workSpaceEnabled
 
-    private val _schools = MutableSharedFlow<List<SchoolResponse>>()
-    val schools = _schools.asSharedFlow()
+    private val _schools = MutableLiveData<List<SchoolResponse>>()
+    val schools = _schools
 
     //fetch current workspace from shared prefs
     fun getCurrentWorkspace() {
@@ -114,9 +114,7 @@ class HomeViewModel @Inject constructor(
                                 ?.let { school ->
                                     schoolsList.add(school)
                                 }
-                            viewModelScope.launch {
-                                _schools.emit(schoolsList)
-                            }
+                            _schools.value = schoolsList
                         }.addOnFailureListener { exception ->
                             Log.e("HomeViewModel", "get failed with ", exception)
                             viewModelScope.launch {
