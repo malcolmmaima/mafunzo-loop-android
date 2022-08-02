@@ -1,7 +1,5 @@
 package com.mafunzo.loop.ui.settings.fragments
 
-import android.content.Intent
-import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,17 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.core.os.ConfigurationCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.mafunzo.loop.R
-import com.mafunzo.loop.data.models.requests.CreateUserRequest
-import com.mafunzo.loop.data.models.responses.SchoolResponse
 import com.mafunzo.loop.databinding.FragmentPersonalDetailsBinding
-import com.mafunzo.loop.ui.auth.viewmodels.AuthViewModel
-import com.mafunzo.loop.ui.main.MainActivity
 import com.mafunzo.loop.ui.main.viewmodel.MainViewModel
 import com.mafunzo.loop.ui.settings.SettingsActivity
 import com.mafunzo.loop.ui.settings.viewmodel.SettingsViewModel
@@ -37,7 +30,6 @@ class PersonalDetailsFragment : Fragment() {
     private var _binding: FragmentPersonalDetailsBinding? = null
     private val settingsViewModel: SettingsViewModel by activityViewModels()
     private val mainViewModel: MainViewModel by activityViewModels()
-    private val authViewModel: AuthViewModel by activityViewModels()
     private var accountType: String = ""
 
     // This property is only valid between onCreateView and
@@ -63,6 +55,7 @@ class PersonalDetailsFragment : Fragment() {
 
     private fun initializeListeners() {
         settingsViewModel.fetchUserData()
+        binding.saveDetailsButton.enable(false)
 
         binding.apply {
             saveDetailsButton.setOnClickListener {
@@ -133,6 +126,7 @@ class PersonalDetailsFragment : Fragment() {
                     accountType = user.accountType.toString()
 
                     mainViewModel.getAccountTypes()
+                    binding.saveDetailsButton.enable(true)
                 }
             }
         }

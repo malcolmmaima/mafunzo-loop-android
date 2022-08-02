@@ -1,17 +1,14 @@
-package com.mafunzo.loop.ui.home
+package com.mafunzo.loop.ui.home.fragments
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -24,7 +21,6 @@ import com.mafunzo.loop.data.local.preferences.AppDatasource
 import com.mafunzo.loop.data.models.responses.SchoolResponse
 import com.mafunzo.loop.data.models.responses.UserResponse
 import com.mafunzo.loop.databinding.FragmentHomeBinding
-import com.mafunzo.loop.di.Constants
 import com.mafunzo.loop.ui.auth.viewmodels.AuthViewModel
 import com.mafunzo.loop.ui.home.viewmodel.HomeViewModel
 import com.mafunzo.loop.ui.main.MainActivity
@@ -118,7 +114,7 @@ class HomeFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 authViewModel.userDetails.collectLatest {user ->
-                    setWidgetValues()
+                    binding.helloMessageTV.text = "Hi ${user.firstName},"
 
                     //update if firestore user details change
                     if(myUserDetails != user){
@@ -341,16 +337,11 @@ class HomeFragment : Fragment() {
                             }
                         }
                     }
+                    .setPositiveButton("Add School") { _, _ ->
+                        findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToAddSchoolFragment())
+                    }
                     .setCancelable(true)
                     .show()
-            }
-        }
-    }
-
-    private fun setWidgetValues() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            myUserDetails?.let {
-                binding.helloMessageTV.text = "Hi ${it.firstName},"
             }
         }
     }
@@ -358,7 +349,6 @@ class HomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         disableAllModules(true)
-        setWidgetValues()
         homeViewModel.getCurrentWorkspace()
     }
 }

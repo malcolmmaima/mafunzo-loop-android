@@ -87,4 +87,7 @@
     <string name="system_offline">Mafunzo is currently offline for maintenance. Please try again later.</string>
     <string name="update_message">There is a new version of Mafunzo Loop available. Please update to the latest version.</string>
     <string name="update_dialog_title">Update Mafunzo Loop</string>
+    <string name="no_schools">No schools</string>
+    <string name="search">Search</string>
+    <string name="search_schools">Search for school</string>
 </resources>
