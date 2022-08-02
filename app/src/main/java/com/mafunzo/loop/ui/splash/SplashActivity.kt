@@ -39,11 +39,13 @@ class SplashActivity : AppCompatActivity() {
 
     private fun initializeObservers() {
         lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                authViewModel.userEnabled.collect { enabled ->
-                    Log.d("SplashActivity", "User enabled: $userEnabled")
-                    userEnabled = enabled
+            authViewModel.userEnabled.collect { enabled ->
+                userEnabled = enabled
+                Log.d("SplashActivity", "User enabled: $userEnabled")
+                if(enabled) {
+                    splashViewModel.getSystemSettings()
                 }
+
             }
         }
 
@@ -58,8 +60,8 @@ class SplashActivity : AppCompatActivity() {
                     if(systemSetts.offline == true && allowedMaintainer == false) {
                         loadOffline()
                     } else {
-                        repeatOnLifecycle(Lifecycle.State.STARTED) {
-                            authViewModel.userExists.collectLatest { userExists ->
+                        lifecycleScope.launch {
+                            authViewModel.userExists.observe(this@SplashActivity) { userExists ->
                                 if (userExists) {
                                     Log.d("SplashActivity", "User exists")
                                     if (userEnabled) {
@@ -86,12 +88,17 @@ class SplashActivity : AppCompatActivity() {
         binding.progressBar.visible()
         lifecycleScope.launch {
             if(splashViewModel.isUserLoggedIn()){
+                Log.d("SplashActivity", "User is logged in")
                 authViewModel.userPhoneNumber?.let { phoneNumber ->
-                    authViewModel.fetchUser(phoneNumber)
-                    splashViewModel.getSystemSettings()
+                    if(phoneNumber.isNotEmpty()){
+                        authViewModel.fetchUser(phoneNumber)
+                    } else {
+                        loadAuth()
+                    }
                 }
             } else {
-                delay(3000)
+                Log.d("SplashActivity", "User is not logged in")
+                delay(2000)
                 loadAuth()
             }
         }

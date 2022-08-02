@@ -1,14 +1,14 @@
-package com.mafunzo.loop.ui.home
+package com.mafunzo.loop.ui.home.fragments
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -17,12 +17,14 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mafunzo.loop.BuildConfig
 import com.mafunzo.loop.R
+import com.mafunzo.loop.data.local.preferences.AppDatasource
+import com.mafunzo.loop.data.models.responses.SchoolResponse
 import com.mafunzo.loop.data.models.responses.UserResponse
 import com.mafunzo.loop.databinding.FragmentHomeBinding
-import com.mafunzo.loop.di.Constants
 import com.mafunzo.loop.ui.auth.viewmodels.AuthViewModel
 import com.mafunzo.loop.ui.home.viewmodel.HomeViewModel
 import com.mafunzo.loop.ui.main.MainActivity
+import com.mafunzo.loop.ui.schools.viewmodel.SchoolsViewModel
 import com.mafunzo.loop.ui.splash.SystemOfflineActivity
 import com.mafunzo.loop.ui.splash.viewmodel.SplashViewModel
 import com.mafunzo.loop.utils.enable
@@ -40,7 +42,10 @@ class HomeFragment : Fragment() {
     private val authViewModel: AuthViewModel by viewModels()
     private val homeViewModel: HomeViewModel by viewModels()
     private val splashViewModel: SplashViewModel by viewModels()
+    private val userPrefs: AppDatasource by lazy { AppDatasource(requireContext()) }
     private var currentSchoolName = ""
+    private var schoolsList: List<SchoolResponse>? = null
+    private var myUserDetails: UserResponse? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -85,28 +90,42 @@ class HomeFragment : Fragment() {
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            homeViewModel.workSpacePresent.collectLatest { workspaceAvailable ->
-                if(workspaceAvailable) {
-                    disableAllModules(false)
-                } else {
-                    binding.currentWorkspaceText.text = "No school selected - Refresh"
-                    lifecycleScope.launch {
-                        delay(2000)
-                        homeViewModel.getCurrentWorkspace()
-                    }
-
-                    //fetch user details again which saves new workspace id to local storage
-                    authViewModel.userPhoneNumber?.let {phonenumber -> authViewModel.fetchUser(phonenumber) }
-                    disableAllModules(true)
+        homeViewModel.workSpacePresent.observe(viewLifecycleOwner) { workspaceAvailable ->
+            if(workspaceAvailable) {
+                disableAllModules(false)
+            } else {
+                binding.currentWorkspaceText.text = "No school selected - Refresh"
+                lifecycleScope.launch {
+                    delay(2000)
+                    homeViewModel.getCurrentWorkspace()
                 }
+
+                //fetch user details again which saves new workspace id to local storage
+                //authViewModel.userPhoneNumber?.let {phonenumber -> authViewModel.fetchUser(phonenumber) }
+                disableAllModules(true)
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+        viewLifecycleOwner.lifecycleScope.launch {
+            homeViewModel.schools.observe(viewLifecycleOwner) { schools ->
+                schoolsList = schools
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                authViewModel.userDetails.collectLatest {user ->
-                    setWidgetValues(user)
+                authViewModel.userDetails.collect {user ->
+
+                    //update if firestore user details change
+                    if(myUserDetails?.firstName != user.firstName
+                        || myUserDetails?.lastName != user.lastName
+                        || myUserDetails?.schools?.size != user.schools?.size) {
+
+                        myUserDetails = user
+                    }
+                    binding.helloMessageTV.text = "Hi ${myUserDetails?.firstName ?: user.firstName},"
+
+                    getSchoolDetails(user.schools)
                     when(user.accountType) {
                         "BUS_DRIVER" -> {
                             binding.cvTimetable.enable(false)
@@ -143,22 +162,19 @@ class HomeFragment : Fragment() {
                         binding.progressBar.visible()
                     } else {
                         binding.progressBar.gone()
-
-                        lifecycleScope.launch {
-                            homeViewModel.workSpaceEnabled.collectLatest { enabled ->
-                                Log.d("HomeFragment", "workSpaceEnabled: $enabled")
-                                disableAllModules(!enabled)
-                                if(!enabled) {
-                                    hideCards(true)
-                                    binding.currentWorkspaceStatus.visible()
-                                } else {
-                                    hideCards(false)
-                                    binding.currentWorkspaceStatus.gone()
-                                }
-                            }
-                        }
                     }
                 }
+            }
+        }
+
+        homeViewModel.workSpaceEnabled.observe(viewLifecycleOwner) { enabled ->
+            disableAllModules(!enabled)
+            if(!enabled) {
+                hideCards(true)
+                binding.currentWorkspaceStatus.visible()
+            } else {
+                hideCards(false)
+                binding.currentWorkspaceStatus.gone()
             }
         }
 
@@ -180,22 +196,28 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+    }
 
+    private fun getSchoolDetails(schools: HashMap<String, Boolean>?) {
+        homeViewModel.mySchools(schools)
     }
 
     private fun forceUpdate(forceUpdate: Boolean) {
         if(forceUpdate) {
             MaterialAlertDialogBuilder(requireActivity())
-                .setTitle("Update Mafunzo Loop")
+                .setTitle(getString(R.string.update_dialog_title))
                 .setMessage(getString(R.string.update_message))
                 .setPositiveButton("Update") { _, _ ->
                     loadPlaystore()
+                    lifecycleScope.launch {
+                        authViewModel.signOutUser()
+                    }
                 }
                 .setCancelable(false)
                 .show()
         } else {
             MaterialAlertDialogBuilder(requireActivity())
-                .setTitle("Update Mafunzo Loop")
+                .setTitle(getString(R.string.update_dialog_title))
                 .setMessage(getString(R.string.update_message))
                 .setPositiveButton("Update") { _, _ ->
                     loadPlaystore()
@@ -247,7 +269,7 @@ class HomeFragment : Fragment() {
         hideCards(true)
         //fetch user details from firebase
         authViewModel.userPhoneNumber.let { phoneNumber ->
-            if (phoneNumber != null) {
+            if (phoneNumber != null && myUserDetails == null) {
                 authViewModel.fetchUser(phoneNumber)
             }
         }
@@ -295,11 +317,38 @@ class HomeFragment : Fragment() {
         binding.currentWorkspace.setOnClickListener {
             binding.progressBar.visible()
             homeViewModel.getCurrentWorkspace()
-        }
-    }
 
-    private fun setWidgetValues(user: UserResponse) {
-        binding.helloMessageTV.text = "Hi ${user.firstName},"
+            schoolsList?.let {
+                val schools =
+                    it.map { school ->
+                        school.schoolName
+                    }.toTypedArray()
+
+                val schoolId = it.map { school ->
+                    school.id
+                }.toTypedArray()
+
+                MaterialAlertDialogBuilder(requireActivity())
+                    .setTitle("Switch Workspace")
+                    .setItems(schools) { _, which ->
+                        lifecycleScope.launch {
+                            myUserDetails?.let { userDetails ->
+                                // get school hashmap of selected schoolId from userDetails.schools and check value is true
+                                val workSpaceEnabled = userDetails.schools?.get(schoolId[which]) ?: false
+                                schoolId[which]?.let { _schoolId -> userPrefs.saveCurrentWorkspace(_schoolId, workSpaceEnabled) }
+
+                                //trigger refresh of home fragment
+                                homeViewModel.getCurrentWorkspace()
+                            }
+                        }
+                    }
+                    .setPositiveButton("Add School") { _, _ ->
+                        findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToAddSchoolFragment())
+                    }
+                    .setCancelable(true)
+                    .show()
+            }
+        }
     }
 
     override fun onResume() {

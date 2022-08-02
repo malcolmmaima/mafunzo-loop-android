@@ -2,6 +2,7 @@ package com.mafunzo.loop.ui.auth.viewmodels
 
 import android.util.Log
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -17,6 +18,8 @@ import com.mafunzo.loop.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -55,8 +58,8 @@ class AuthViewModel @Inject constructor(
     private val _userCreated = MutableSharedFlow<Boolean>()
     val userCreated = _userCreated.asSharedFlow()
 
-    private val _userExists = MutableSharedFlow<Boolean>()
-    val userExists = _userExists.asSharedFlow()
+    private val _userExists = MutableLiveData<Boolean>()
+    val userExists: LiveData<Boolean> = _userExists
 
     private val _userEnabled = MutableSharedFlow<Boolean>()
     val userEnabled = _userEnabled.asSharedFlow()
@@ -214,27 +217,31 @@ class AuthViewModel @Inject constructor(
                             viewModelScope.launch {
                                 user.enabled?.let { _userEnabled.emit(it) }
                                 _isLoading.emit(false)
-                                _userExists.emit(true)
+                                _userExists.value = true
                                 _userDetails.emit(user)
                                 userRepository.insertUsertoRoom(user.toUserEntity(phoneNumber))
                                 //save current workspace(school id) in shared pref
                                 user.schools?.let {
-                                    userPrefs.saveCurrentWorkspace(it.entries.first().key.trim(), it.entries.first().value)
-                                    userPrefs.saveAccountType(user.accountType)
-                                    Log.d(TAG, "Save current workspace: ${it.entries.first().key.trim()}")
+                                    viewModelScope.launch {
+                                        val currentWorkSpace = userPrefs.getCurrentWorkSpace().first()?.trim()
+                                        if(currentWorkSpace == null) {
+                                            userPrefs.saveCurrentWorkspace(it.entries.first().key.trim(), it.entries.first().value)
+                                        }
+                                        userPrefs.saveAccountType(user.accountType)
+                                    }
                                 }
                             }
                         } else {
                             viewModelScope.launch {
                                 _isLoading.emit(false)
-                                _userExists.emit(false)
+                                _userExists.value = false
                                 Log.d(TAG, "fetchUser Error: User is null")
                             }
                         }
                     } else {
                         viewModelScope.launch {
                             _isLoading.emit(false)
-                            _userExists.emit(false)
+                            _userExists.value = false
                             _errorMessage.emit(task.exception?.message.toString())
                             Log.d(TAG, "fetchUser Error: ${task.exception?.message}")
                         }

@@ -3,17 +3,24 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop-android/app/src/main/res/drawable/rounded_corner_rectangle.xml" value="0.193" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop-android/app/src/main/res/layout/activity_account_disabled.xml" value="0.10989583333333333" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop-android/app/src/main/res/layout/activity_splash.xml" value="0.10989583333333333" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop-android/app/src/main/res/layout/activity_system_offline.xml" value="0.264" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop-android/app/src/main/res/layout/announcement_item.xml" value="0.22780797101449277" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop-android/app/src/main/res/layout/fragment_account_setup.xml" value="0.22780797101449277" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop-android/app/src/main/res/layout/fragment_announcements.xml" value="0.1539855072463768" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop-android/app/src/main/res/layout/fragment_calendar.xml" value="0.22780797101449277" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop-android/app/src/main/res/layout/fragment_home.xml" value="0.22780797101449277" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop-android/app/src/main/res/layout/fragment_personal_details.xml" value="0.22780797101449277" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop-android/app/src/main/res/layout/fragment_schools.xml" value="0.22780797101449277" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop-android/app/src/main/res/layout/fragment_submit_request.xml" value="0.2" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop-android/app/src/main/res/layout/fragment_view_event.xml" value="0.22780797101449277" />
         <entry key="..\:/Users/malco/Git/fun/mafunzo-loop-android/app/src/main/res/layout/fragment_view_request.xml" value="0.22780797101449277" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop-android/app/src/main/res/layout/request_item.xml" value="0.22780797101449277" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop-android/app/src/main/res/layout/school_item.xml" value="0.22780797101449277" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop-android/app/src/main/res/layout/teacher_item.xml" value="0.22780797101449277" />
+        <entry key="..\:/Users/malco/Git/fun/mafunzo-loop-android/app/src/main/res/layout/timetable_item.xml" value="0.22780797101449277" />
       </map>
     </option>
   </component>
