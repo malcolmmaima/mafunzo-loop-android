@@ -137,7 +137,7 @@ class OtpVerificationFragment : Fragment() {
         }
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
-                authViewModel.userExists.collectLatest { exists ->
+                authViewModel.userExists.observe(viewLifecycleOwner) { exists ->
                     if (exists && userEnabled) {
                         Log.d(TAG, "User exists and is enabled")
                         val intent = Intent(requireActivity(), MainActivity::class.java)
