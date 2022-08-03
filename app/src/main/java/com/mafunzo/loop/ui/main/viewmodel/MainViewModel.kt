@@ -1,6 +1,7 @@
 package com.mafunzo.loop.ui.main.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
@@ -30,8 +31,8 @@ class MainViewModel @Inject constructor(
     private val _errorMessage = MutableSharedFlow<String>()
     val errorMessage = _errorMessage.asSharedFlow()
 
-    private val _schools = MutableSharedFlow<List<SchoolResponse>>()
-    val schools = _schools.asSharedFlow()
+    private val _schools = MutableLiveData<List<SchoolResponse>>()
+    val schools = _schools
 
     fun getAccountTypes(){
         viewModelScope.launch {
@@ -77,7 +78,7 @@ class MainViewModel @Inject constructor(
                                 //add school to list of schools
                                 school.id = document.id
                                 schools.add(school)
-                                _schools.emit(schools)
+                                _schools.value = schools
                             }
                         }
                     }

@@ -21,6 +21,7 @@ import kotlinx.coroutines.launch
 import android.content.Intent
 import android.content.res.Resources
 import androidx.core.os.ConfigurationCompat
+import androidx.lifecycle.Observer
 import com.mafunzo.loop.R
 import com.mafunzo.loop.data.models.responses.SchoolResponse
 import com.mafunzo.loop.ui.auth.AuthActivity
@@ -225,7 +226,7 @@ class AccountSetupFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             binding.progressBar.visible()
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mainViewModel.schools.collectLatest { mafunzoSchools ->
+                mainViewModel.schools.observe(viewLifecycleOwner) { mafunzoSchools ->
                     binding.progressBar.gone()
                     if (mafunzoSchools.isNotEmpty()) {
                         schools.clear()
@@ -248,10 +249,7 @@ class AccountSetupFragment : Fragment() {
                             R.layout.drop_down_spinner_layout,
                             schools
                         )
-
-                        delay(3000)
                         val deviceLocale = ConfigurationCompat.getLocales(Resources.getSystem().configuration)[0].country
-                        mainViewModel.getSchools(deviceLocale)
                     }
                 }
             }
