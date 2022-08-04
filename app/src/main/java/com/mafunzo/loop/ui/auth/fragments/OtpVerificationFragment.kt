@@ -67,11 +67,7 @@ class OtpVerificationFragment : Fragment() {
         startTimer()
 
         authViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            if (isLoading) {
-                toggleLoading(true)
-            } else {
-                toggleLoading(false)
-            }
+            toggleLoading(isLoading)
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
