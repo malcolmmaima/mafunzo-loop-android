@@ -13,6 +13,19 @@ plugins {
 android {
     compileSdk 32
 
+    /**
+     * uncomment below to build release version on your local environment
+     * reach out to maintainer for password and keystore file
+     */
+//    signingConfigs {
+//        create("release") {
+//            storeFile = file("C:\\Users\\malco\\Dropbox\\Dev\\mafunzo-keystore\\mafunzo-key.jks")
+//            storePassword = "<enter-password>"
+//            keyPassword = "<enter-password>"
+//            keyAlias = "mafunzo"
+//        }
+//    }
+
     defaultConfig {
         applicationId "com.mafunzo.loop"
         minSdk 23
@@ -21,15 +34,19 @@ android {
         versionName "1.0.18"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        /**
+         * uncomment below to build release version on your local environment
+         */
+//        signingConfig = signingConfigs.getByName("release")
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         create("uat") {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
