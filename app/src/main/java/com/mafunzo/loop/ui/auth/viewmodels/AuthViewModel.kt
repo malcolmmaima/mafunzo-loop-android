@@ -143,6 +143,7 @@ class AuthViewModel @Inject constructor(
     }
 
     fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
+        _isLoading.value = true
         auth.signInWithCredential(credential)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
