@@ -6,23 +6,12 @@
         <type value="RUNNING_DEVICE_TARGET" />
         <deviceKey>
           <Key>
-            <type value="VIRTUAL_DEVICE_PATH" />
-            <value value="C:\Users\malco\.android\avd\Galaxy_Nexus_API_33.avd" />
+            <type value="SERIAL_NUMBER" />
+            <value value="QXPNU20408160170" />
           </Key>
         </deviceKey>
       </Target>
     </runningDeviceTargetSelectedWithDropDown>
-    <targetSelectedWithDropDown>
-      <Target>
-        <type value="QUICK_BOOT_TARGET" />
-        <deviceKey>
-          <Key>
-            <type value="VIRTUAL_DEVICE_PATH" />
-            <value value="C:\Users\malco\.android\avd\Galaxy_Nexus_API_33.avd" />
-          </Key>
-        </deviceKey>
-      </Target>
-    </targetSelectedWithDropDown>
-    <timeTargetWasSelectedWithDropDown value="2022-08-04T10:15:02.875177100Z" />
+    <timeTargetWasSelectedWithDropDown value="2022-08-04T10:30:39.348550200Z" />
   </component>
 </project>
