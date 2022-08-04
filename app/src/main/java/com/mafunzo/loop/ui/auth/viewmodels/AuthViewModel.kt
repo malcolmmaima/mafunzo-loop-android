@@ -128,7 +128,7 @@ class AuthViewModel @Inject constructor(
 
     fun sendVerificationCode(number: String, requireActivity: FragmentActivity) {
         viewModelScope.launch {
-            _isLoading.value = false
+            _isLoading.value = true
             _codeSent.emit(false)
 
             val options = PhoneAuthOptions.newBuilder(auth)
