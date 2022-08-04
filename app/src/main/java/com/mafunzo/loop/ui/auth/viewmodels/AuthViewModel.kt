@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -47,8 +48,8 @@ class AuthViewModel @Inject constructor(
     private val _errorMessage = MutableSharedFlow<String>()
     val errorMessage = _errorMessage.asSharedFlow()
 
-    private val _isLoading = MutableSharedFlow<Boolean>()
-    val isLoading = _isLoading.asSharedFlow()
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading = _isLoading
 
     private val _isOTPVerified = MutableSharedFlow<Boolean>()
     val isOTPVerified = _isOTPVerified.asSharedFlow()
@@ -76,7 +77,7 @@ class AuthViewModel @Inject constructor(
 
             override fun onVerificationCompleted(credential: PhoneAuthCredential) {
                 viewModelScope.launch {
-                    _isLoading.emit(false)
+                    _isLoading.value = false
                     Log.d(TAG , "onVerificationCompleted Success")
 
                     // This callback will be invoked in two situations:
@@ -93,7 +94,7 @@ class AuthViewModel @Inject constructor(
             override fun onVerificationFailed(e: FirebaseException) {
                 viewModelScope.launch {
                     _codeSent.emit(false)
-                    _isLoading.emit(false)
+                    _isLoading.value = false
                     _errorMessage.emit(e.message.toString())
                     Log.d(TAG , "onVerificationFailed Error: ${e.message}")
                 }
@@ -102,7 +103,7 @@ class AuthViewModel @Inject constructor(
             override fun onCodeAutoRetrievalTimeOut(verificationId: String) {
                 viewModelScope.launch {
                     _codeSent.emit(false)
-                    _isLoading.emit(false)
+                    _isLoading.value = false
                     _errorMessage.emit("OTP Timeout")
                     Log.d(TAG , "onCodeAutoRetrievalTimeOut")
                 }
@@ -117,7 +118,7 @@ class AuthViewModel @Inject constructor(
                 viewModelScope.launch {
                     _verificationId.emit(verificationId)
                     _codeSent.emit(true)
-                    _isLoading.emit(false)
+                    _isLoading.value = false
                     resendToken = token
                     Log.d(TAG,"onCodeSent: $verificationId resendToken: $resendToken")
                 }
@@ -127,7 +128,7 @@ class AuthViewModel @Inject constructor(
 
     fun sendVerificationCode(number: String, requireActivity: FragmentActivity) {
         viewModelScope.launch {
-            _isLoading.emit(true)
+            _isLoading.value = false
             _codeSent.emit(false)
 
             val options = PhoneAuthOptions.newBuilder(auth)
@@ -147,13 +148,15 @@ class AuthViewModel @Inject constructor(
                 if (task.isSuccessful) {
                     viewModelScope.launch {
                         _isOTPVerified.emit(true)
-                        _isLoading.emit(false)
+                        _isLoading.value = false
                         Log.d(TAG , "signInWithPhoneAuthCredential Success")
+                        //save current device locale to shared preferences. currently only supported in Kenya
+                        userPrefs.saveCurrentUserLocale("KE")
                     }
                 } else {
                     viewModelScope.launch{
                         _isOTPVerified.emit(false)
-                        _isLoading.emit(false)
+                        _isLoading.value = false
                         _errorMessage.emit(task.exception?.message.toString())
                         Log.d(TAG , "signInWithPhoneAuthCredential Error: ${task.exception?.message}")
                     }
@@ -162,7 +165,7 @@ class AuthViewModel @Inject constructor(
                         // The verification code entered was invalid
                         viewModelScope.launch {
                             _errorMessage.emit("Invalid code.")
-                            _isLoading.emit(false)
+                            _isLoading.value = false
                             Log.d(TAG , "signInWithPhoneAuthCredential Error: ${task.exception?.message}")
                         }
                     }
@@ -172,7 +175,7 @@ class AuthViewModel @Inject constructor(
 
     fun createUser(newUser: CreateUserRequest) {
         viewModelScope.launch {
-            _isLoading.emit(true)
+            _isLoading.value = true
             val user = auth.currentUser
             if (user != null) {
                 val phoneNumber = user.phoneNumber
@@ -180,13 +183,13 @@ class AuthViewModel @Inject constructor(
                     firestoreDB.collection(Constants.FIREBASE_APP_USERS).document(phoneNumber).set(newUser).addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             viewModelScope.launch {
-                                _isLoading.emit(false)
+                                _isLoading.value = false
                                 _userCreated.emit(true)
                                 Log.d(TAG, "createUser Success")
                             }
                         } else {
                             viewModelScope.launch {
-                                _isLoading.emit(false)
+                                _isLoading.value = false
                                 _userCreated.emit(false)
                                 _errorMessage.emit(task.exception?.message.toString())
                                 Log.d(TAG, "createUser Error: ${task.exception?.message}")
@@ -195,7 +198,7 @@ class AuthViewModel @Inject constructor(
                     }
                 }
             } else {
-                _isLoading.emit(false)
+                _isLoading.value = false
                 _userCreated.emit(false)
                 _errorMessage.emit("User is null")
             }
@@ -204,47 +207,45 @@ class AuthViewModel @Inject constructor(
 
     fun fetchUser(phoneNumber: String){
         Log.d(TAG , "fetchUser")
-        if(!phoneNumber.isNullOrEmpty()){
+        if(phoneNumber.isNotEmpty()){
             viewModelScope.launch {
                 Log.d(TAG , "fetching user: $phoneNumber")
                 userPrefs.clear()
-                _isLoading.emit(true)
-                firestoreDB.collection(Constants.FIREBASE_APP_USERS).document(phoneNumber).get().addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val user = task.result?.toObject(UserResponse::class.java)
-                        if(user != null && user.accountType?.isNotEmpty() == true) {
+                _isLoading.value = true
+            }
+            firestoreDB.collection(Constants.FIREBASE_APP_USERS).document(phoneNumber).get().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val user = task.result?.toObject(UserResponse::class.java)
+                    if(user != null && user.accountType?.isNotEmpty() == true) {
 
-                            viewModelScope.launch {
-                                user.enabled?.let { _userEnabled.emit(it) }
-                                _isLoading.emit(false)
-                                _userExists.value = true
-                                _userDetails.emit(user)
-                                userRepository.insertUsertoRoom(user.toUserEntity(phoneNumber))
-                                //save current workspace(school id) in shared pref
-                                user.schools?.let {
-                                    viewModelScope.launch {
-                                        val currentWorkSpace = userPrefs.getCurrentWorkSpace().first()?.trim()
-                                        if(currentWorkSpace == null) {
-                                            userPrefs.saveCurrentWorkspace(it.entries.first().key.trim(), it.entries.first().value)
-                                        }
-                                        userPrefs.saveAccountType(user.accountType)
+                        viewModelScope.launch {
+                            user.enabled?.let { _userEnabled.emit(it) }
+                            _isLoading.value = false
+                            _userExists.value = true
+                            _userDetails.emit(user)
+                            userRepository.insertUsertoRoom(user.toUserEntity(phoneNumber))
+                            //save current workspace(school id) in shared pref
+                            user.schools?.let {
+                                viewModelScope.launch {
+                                    val currentWorkSpace = userPrefs.getCurrentWorkSpace().first()?.trim()
+                                    if(currentWorkSpace == null) {
+                                        userPrefs.saveCurrentWorkspace(it.entries.first().key.trim(), it.entries.first().value)
                                     }
+                                    userPrefs.saveAccountType(user.accountType)
                                 }
-                            }
-                        } else {
-                            viewModelScope.launch {
-                                _isLoading.emit(false)
-                                _userExists.value = false
-                                Log.d(TAG, "fetchUser Error: User is null")
                             }
                         }
                     } else {
-                        viewModelScope.launch {
-                            _isLoading.emit(false)
-                            _userExists.value = false
-                            _errorMessage.emit(task.exception?.message.toString())
-                            Log.d(TAG, "fetchUser Error: ${task.exception?.message}")
-                        }
+                        _userExists.value = false
+                        _isLoading.value = false
+                        Log.d(TAG, "fetchUser Error: User is null")
+                    }
+                } else {
+                    viewModelScope.launch {
+                        _isLoading.value = false
+                        _userExists.value = false
+                        _errorMessage.emit(task.exception?.message.toString())
+                        Log.d(TAG, "fetchUser Error: ${task.exception?.message}")
                     }
                 }
             }

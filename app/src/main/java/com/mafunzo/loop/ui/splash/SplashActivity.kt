@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.firebase.auth.FirebaseAuth
 import com.mafunzo.loop.databinding.ActivitySplashBinding
 import com.mafunzo.loop.ui.auth.AccountDisabledActivity
 import com.mafunzo.loop.ui.auth.AuthActivity
@@ -25,7 +26,7 @@ import kotlinx.coroutines.launch
 class SplashActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySplashBinding
     private val splashViewModel: SplashViewModel by viewModels()
-    private val authViewModel: AuthViewModel by viewModels()
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private var userEnabled = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,46 +40,42 @@ class SplashActivity : AppCompatActivity() {
 
     private fun initializeObservers() {
         lifecycleScope.launch {
-            authViewModel.userEnabled.collect { enabled ->
+            splashViewModel.userEnabled.collect { enabled ->
                 userEnabled = enabled
                 Log.d("SplashActivity", "User enabled: $userEnabled")
                 if(enabled) {
                     splashViewModel.getSystemSettings()
+                } else {
+                    loadAccountDisabledActivity()
                 }
 
             }
         }
 
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                splashViewModel.systemSettings.collect { systemSetts ->
-                    val allowedMaintainer = authViewModel.userPhoneNumber?.let {
-                        systemSetts.maintainers?.contains(
-                            it
-                        ) ?: false
-                    }
-                    if(systemSetts.offline == true && allowedMaintainer == false) {
-                        loadOffline()
-                    } else {
-                        lifecycleScope.launch {
-                            authViewModel.userExists.observe(this@SplashActivity) { userExists ->
-                                if (userExists) {
-                                    Log.d("SplashActivity", "User exists")
-                                    if (userEnabled) {
-                                        Log.d("SplashActivity", "User exists and enabled")
-                                        loadMainActivity()
-                                    } else {
-                                        Log.d("SplashActivity", "User exists but disabled")
-                                        loadAccountDisabledActivity()
-                                    }
-                                } else {
-                                    Log.d("SplashActivity", "User does not exist")
-                                    loadAuth()
-                                }
-                            }
-                        }
-                    }
-                }
+        splashViewModel.systemSettings.observe(this@SplashActivity) { settings ->
+            val allowedMaintainer = splashViewModel.userPhoneNumber?.let {
+                settings.maintainers?.contains(
+                    it
+                ) ?: false
+            }
+            Log.d("SplashActivity", "Allowed maintainer: $allowedMaintainer")
+            if(settings.offline == true && allowedMaintainer == false) {
+                Log.d("SplashActivity", "Offline mode enabled")
+                loadOffline()
+            } else {
+                initializeOnlineObservers()
+            }
+        }
+    }
+
+    private fun initializeOnlineObservers() {
+        splashViewModel.userExists.observe(this@SplashActivity) { userExists ->
+            if (userExists) {
+                Log.d("SplashActivity", "User exists")
+                loadMainActivity()
+            } else {
+                Log.d("SplashActivity", "User does not exist")
+                loadAuth()
             }
         }
     }
@@ -89,12 +86,11 @@ class SplashActivity : AppCompatActivity() {
         lifecycleScope.launch {
             if(splashViewModel.isUserLoggedIn()){
                 Log.d("SplashActivity", "User is logged in")
-                authViewModel.userPhoneNumber?.let { phoneNumber ->
-                    if(phoneNumber.isNotEmpty()){
-                        authViewModel.fetchUser(phoneNumber)
-                    } else {
-                        loadAuth()
-                    }
+                val phoneNumber = auth.currentUser?.phoneNumber
+                if (phoneNumber != null) {
+                    splashViewModel.fetchUser(phoneNumber)
+                } else {
+                    loadAuth()
                 }
             } else {
                 Log.d("SplashActivity", "User is not logged in")

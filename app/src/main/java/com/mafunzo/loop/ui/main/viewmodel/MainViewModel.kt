@@ -7,18 +7,21 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
+import com.mafunzo.loop.data.local.preferences.AppDatasource
 import com.mafunzo.loop.data.models.responses.SchoolResponse
 import com.mafunzo.loop.di.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     val auth: FirebaseAuth,
-    val firestoreDB: FirebaseFirestore
+    val firestoreDB: FirebaseFirestore,
+    val userPref: AppDatasource
 ) : ViewModel() {
     val TAG = "MainViewModel"
 
@@ -64,6 +67,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun getSchools(countryCode: String){
+        Log.d(TAG, "getSchools: $countryCode")
         viewModelScope.launch {
             _isLoading.emit(true)
             //empty list of schools
@@ -72,6 +76,7 @@ class MainViewModel @Inject constructor(
                 .document(Constants.FIREBASE_APP_SCHOOLS)
                 .collection(countryCode).get().addOnSuccessListener { documents ->
                     for(document in documents){
+                        Log.d(TAG, "DocumentSnapshot data: ${document.data}")
                         viewModelScope.launch {
                             _isLoading.emit(false)
                             document.toObject<SchoolResponse>().let { school ->
@@ -79,6 +84,7 @@ class MainViewModel @Inject constructor(
                                 school.id = document.id
                                 schools.add(school)
                                 _schools.value = schools
+                                Log.d(TAG, "Schools data: ${document.data}")
                             }
                         }
                     }
