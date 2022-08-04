@@ -45,16 +45,8 @@ class PhoneVerificationFragment : Fragment() {
     }
 
     private fun initializeObservers() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                authViewModel.isLoading.collectLatest { isLoading ->
-                    if (isLoading) {
-                        toggleLoading(true)
-                    } else {
-                        toggleLoading(false)
-                    }
-                }
-            }
+        authViewModel.isLoading.observe(viewLifecycleOwner){ isLoading ->
+            toggleLoading(isLoading)
         }
 
         viewLifecycleOwner.lifecycleScope.launch {

@@ -83,9 +83,11 @@ class CalendarFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener  {
                         binding.tvNoEvents.gone()
                         calendarEventAdapter.saveData(events)
                         binding.rvEvents.scrollToPosition(0)
+                        binding.footerPatternIV.gone()
                     } else {
                         binding.rvEvents.gone()
                         binding.tvNoEvents.visible()
+                        binding.footerPatternIV.visible()
                     }
                 }
             }

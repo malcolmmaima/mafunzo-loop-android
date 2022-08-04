@@ -18,6 +18,10 @@
         android:theme="@style/Theme.MafunzoLoop"
         tools:targetApi="31">
         <activity
+            android:name=".ui.splash.SystemOfflineActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MafunzoLoop.NoActionBar" />
+        <activity
             android:name=".ui.auth.AccountDisabledActivity"
             android:exported="false"
             android:theme="@style/Theme.MafunzoLoop.NoActionBar" />

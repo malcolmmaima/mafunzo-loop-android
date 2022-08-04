@@ -32,17 +32,21 @@ class AuthActivity : AppCompatActivity() {
     private fun initializeObservers() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                authViewModel.userExists.collectLatest { exists ->
+                authViewModel.userExists.observe(this@AuthActivity) { exists ->
                     if (exists) {
-                        authViewModel.userEnabled.collectLatest { enabled ->
-                            if (enabled) {
-                                loadMainActivity()
-                            } else {
-                                loadAccountDisabledActivity()
+                        lifecycleScope.launch {
+                            authViewModel.userEnabled.collectLatest { enabled ->
+                                if (enabled) {
+                                    loadMainActivity()
+                                } else {
+                                    loadAccountDisabledActivity()
+                                }
                             }
                         }
                     } else {
-                        authViewModel.signOutUser()
+                        lifecycleScope.launch {
+                            authViewModel.signOutUser()
+                        }
                     }
                 }
             }

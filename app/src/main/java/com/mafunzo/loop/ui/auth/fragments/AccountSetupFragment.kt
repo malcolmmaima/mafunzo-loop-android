@@ -22,11 +22,14 @@ import android.content.Intent
 import android.content.res.Resources
 import androidx.core.os.ConfigurationCompat
 import com.mafunzo.loop.R
+import com.mafunzo.loop.data.local.preferences.AppDatasource
 import com.mafunzo.loop.data.models.responses.SchoolResponse
 import com.mafunzo.loop.ui.auth.AuthActivity
 import com.mafunzo.loop.ui.main.MainActivity
 import com.mafunzo.loop.ui.main.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 
 @AndroidEntryPoint
 class AccountSetupFragment : Fragment() {
@@ -34,6 +37,7 @@ class AccountSetupFragment : Fragment() {
     private lateinit var binding: FragmentAccountSetupBinding
     private val authViewModel: AuthViewModel by viewModels()
     private val mainViewModel: MainViewModel by viewModels()
+    private val userPrefs: AppDatasource by lazy { AppDatasource(requireContext()) }
 
     private val schools = arrayListOf<SchoolResponse>()
 
@@ -65,9 +69,16 @@ class AccountSetupFragment : Fragment() {
     }
 
     private fun setupAccount() {
-        val deviceLocale = ConfigurationCompat.getLocales(Resources.getSystem().configuration)[0].country
         mainViewModel.getAccountTypes()
-        mainViewModel.getSchools(deviceLocale)
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            val userLocale = userPrefs.getCurrentUserLocale().first()?.trim()
+            if (userLocale != null) {
+                mainViewModel.getSchools(userLocale)
+            } else {
+                mainViewModel.getSchools("KE")
+            }
+        }
 
         binding.apply {
             setUpNextButton.setOnClickListener {
@@ -125,34 +136,40 @@ class AccountSetupFragment : Fragment() {
                 }
 
 
-                val firstName = editTextTextFirstName.text.trim().toString()
-                val secondName = editTextTextSecondName.text.trim().toString()
-                val email = editTextEmailAddress.text.trim().toString()
-                val accountType = accountTypeSpinner.selectedItem.toString().uppercase()
-                val school = getSchoolResponse(schoolSpinner.selectedItemId)
-                Log.d("AccountSetup", "school: $school")
+                if(schools.size > 0) {
+                    val firstName = editTextTextFirstName.text.trim().toString()
+                    val secondName = editTextTextSecondName.text.trim().toString()
+                    val email = editTextEmailAddress.text.trim().toString()
+                    val accountType = accountTypeSpinner.selectedItem.toString().uppercase()
+                    val school = schools[schoolSpinner.selectedItemId.toInt()]
+                    Log.d("AccountSetup", "school: $school")
 
-                this.setUpNextButton.showProgress()
-                this.setUpNextButton.enable(false)
-                val userDetails = CreateUserRequest(
-                    email = email,
-                    firstName = firstName,
-                    lastName = secondName,
-                    profilePic = "",
-                    dateCreated = getCurrentTimeInMillis(),
-                    accountType = accountType,
-                    enabled = true,
-                    schools = HashMap<String, Boolean>().apply {
-                        school.id?.let { schoolId -> put(schoolId, false) }
-                    }
-                )
-                registerUser(createUserRequest = userDetails)
+                    this.setUpNextButton.showProgress()
+                    this.setUpNextButton.enable(false)
+                    val userDetails = CreateUserRequest(
+                        email = email,
+                        firstName = firstName,
+                        lastName = secondName,
+                        profilePic = "",
+                        dateCreated = getCurrentTimeInMillis(),
+                        accountType = accountType,
+                        enabled = true,
+                        schools = HashMap<String, Boolean>().apply {
+                            school.id?.let { schoolId -> put(schoolId, false) }
+                        }
+                    )
+                    registerUser(createUserRequest = userDetails)
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.school_required),
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                    setUpNextButton.isEnabled = true
+                }
             }
         }
-    }
-
-    private fun getSchoolResponse(selectedSchoolId: Long): SchoolResponse {
-        return schools[selectedSchoolId.toInt()]
     }
 
     private fun registerUser(createUserRequest: CreateUserRequest) {
@@ -179,8 +196,10 @@ class AccountSetupFragment : Fragment() {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
+            binding.progressBar.visible()
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 mainViewModel.accountTypes.collectLatest { accountTypes ->
+                    binding.progressBar.gone()
                     if (accountTypes.isNotEmpty()) {
                         //add default option to spinner
                         val accounts = arrayListOf<String>()
@@ -194,27 +213,50 @@ class AccountSetupFragment : Fragment() {
                             R.layout.drop_down_spinner_layout,
                             accounts
                         )
+                    } else {
+                        binding.root.snackbar(getString(R.string.error_loading_account_types))
+
+                        //empty spinner with option "No account types available"
+                        val accounts = arrayListOf<String>()
+                        accounts.add("No account types available")
+                        binding.accountTypeSpinner.adapter = ArrayAdapter(
+                            requireContext(),
+                            R.layout.drop_down_spinner_layout,
+                            accounts
+                        )
+                        // wait 3 seconds then mainViewModel.getAccountTypes()
+                        delay(3000)
+                        mainViewModel.getAccountTypes()
                     }
                 }
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mainViewModel.schools.collectLatest { mafunzoSchools ->
-                    if (mafunzoSchools.isNotEmpty()) {
-                        schools.clear()
-                        schools.add(SchoolResponse(schoolName = "Select School"))
-                        mafunzoSchools.sortedBy { it.schoolName }.forEach {
-                            schools.add(it)
-                        }
-                        binding.schoolSpinner.adapter = ArrayAdapter(
-                            requireContext(),
-                            R.layout.drop_down_spinner_layout,
-                            schools.map { it.schoolName }
-                        )
-                    }
+        mainViewModel.schools.observe(viewLifecycleOwner){ mafunzoSchools ->
+            binding.progressBar.gone()
+            Log.d("AccountSetup", "Schools Loaded")
+            if (mafunzoSchools.isNotEmpty()) {
+                schools.clear()
+                schools.add(SchoolResponse(schoolName = "Select School"))
+                mafunzoSchools.sortedBy { it.schoolName }.forEach {
+                    schools.add(it)
                 }
+                Log.d("AccountSetup", "Schools: $schools")
+                binding.schoolSpinner.adapter = ArrayAdapter(
+                    requireContext(),
+                    R.layout.drop_down_spinner_layout,
+                    schools.map { it.schoolName }
+                )
+            } else {
+                binding.root.snackbar(getString(R.string.error_loading_schools))
+                //empty spinner with option "No schools available"
+                val schools = arrayListOf<String>()
+                schools.add("No schools available")
+                binding.schoolSpinner.adapter = ArrayAdapter(
+                    requireContext(),
+                    R.layout.drop_down_spinner_layout,
+                    schools
+                )
             }
         }
 
@@ -232,17 +274,13 @@ class AccountSetupFragment : Fragment() {
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                authViewModel.isLoading.collectLatest { isLoading ->
-                    if (isLoading) {
-                        binding.setUpNextButton.showProgress()
-                        binding.setUpNextButton.enable(false)
-                    } else {
-                        binding.setUpNextButton.enable(true)
-                        binding.setUpNextButton.hideProgress("NEXT")
-                    }
-                }
+        authViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading) {
+                binding.setUpNextButton.showProgress()
+                binding.setUpNextButton.enable(false)
+            } else {
+                binding.setUpNextButton.enable(true)
+                binding.setUpNextButton.hideProgress("NEXT")
             }
         }
 

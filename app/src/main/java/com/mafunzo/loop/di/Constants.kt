@@ -15,6 +15,7 @@ object Constants {
     const val FIREBASE_TEACHERS = "teachers"
     const val FIREBASE_TEACHERS_COLLECTION = "collection"
     const val FIREBASE_SUBJECTS = "subjects"
+    const val FIREBASE_SYSTEM_SETTINGS = "system_settings"
 
     //Parcelable keys
     const val ANNOUNCEMENT_STRING_KEY = "announcement"

@@ -66,17 +66,10 @@ class OtpVerificationFragment : Fragment() {
         binding.tvResend.gone()
         startTimer()
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                authViewModel.isLoading.collectLatest { isLoading ->
-                    if (isLoading) {
-                        toggleLoading(true)
-                    } else {
-                        toggleLoading(false)
-                    }
-                }
-            }
+        authViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            toggleLoading(isLoading)
         }
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 authViewModel.isOTPVerified.collectLatest { isVerified ->
@@ -137,7 +130,7 @@ class OtpVerificationFragment : Fragment() {
         }
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
-                authViewModel.userExists.collectLatest { exists ->
+                authViewModel.userExists.observe(viewLifecycleOwner) { exists ->
                     if (exists && userEnabled) {
                         Log.d(TAG, "User exists and is enabled")
                         val intent = Intent(requireActivity(), MainActivity::class.java)
