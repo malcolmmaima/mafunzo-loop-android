@@ -123,7 +123,7 @@ class HomeFragment : Fragment() {
 
                         myUserDetails = user
                     }
-                    binding.helloMessageTV.text = "Hi ${myUserDetails?.firstName ?: user.firstName},"
+                    binding.helloMessageTV.text = "Hi ${user.firstName},"
 
                     getSchoolDetails(user.schools)
                     when(user.accountType) {
@@ -180,7 +180,7 @@ class HomeFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                splashViewModel.systemSettings.collectLatest { systemSetts ->
+                splashViewModel.systemSettings.observe(viewLifecycleOwner){ systemSetts ->
                     val allowedMaintainer = authViewModel.userPhoneNumber?.let {
                         systemSetts.maintainers?.contains(
                             it
@@ -355,5 +355,6 @@ class HomeFragment : Fragment() {
         super.onResume()
         disableAllModules(true)
         homeViewModel.getCurrentWorkspace()
+        binding.helloMessageTV.text = "Hi ${myUserDetails?.firstName},"
     }
 }

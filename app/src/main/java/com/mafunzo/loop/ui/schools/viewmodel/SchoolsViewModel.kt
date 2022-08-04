@@ -43,19 +43,21 @@ class SchoolsViewModel@Inject constructor(
     fun searchSchools(schoolName: String, resultLimit: Long) {
                 _isLoading.value = true
                 viewModelScope.launch {
-                    val deviceLocale = ConfigurationCompat.getLocales(Resources.getSystem().configuration)[0].country
-                    firestoreDB.collection(Constants.FIREBASE_APP_SETTINGS).document(Constants.FIREBASE_APP_SCHOOLS)
-                        .collection(deviceLocale).limit(resultLimit).get().addOnSuccessListener {
-                            val schools = it.toObjects(SchoolResponse::class.java)
-                            val filteredSchools = schools.filter { school ->
-                                school.schoolName?.lowercase()?.contains(schoolName.lowercase()) ?: false
+                    val deviceLocale = userPrefs.getCurrentUserLocale().first()?.trim()
+                    if (deviceLocale != null) {
+                        firestoreDB.collection(Constants.FIREBASE_APP_SETTINGS).document(Constants.FIREBASE_APP_SCHOOLS)
+                            .collection(deviceLocale).limit(resultLimit).get().addOnSuccessListener {
+                                val schools = it.toObjects(SchoolResponse::class.java)
+                                val filteredSchools = schools.filter { school ->
+                                    school.schoolName?.lowercase()?.contains(schoolName.lowercase()) ?: false
+                                }
+                                _foundSchools.value = filteredSchools
+                                _isLoading.value = false
+                            }.addOnFailureListener {
+                                _errorMessage.value = it.message
+                                _isLoading.value = false
                             }
-                            _foundSchools.value = filteredSchools
-                            _isLoading.value = false
-                        }.addOnFailureListener {
-                            _errorMessage.value = it.message
-                            _isLoading.value = false
-                        }
+                    }
                 }
             }
 

@@ -20,6 +20,7 @@ class AppDatasource @Inject constructor(@ApplicationContext context: Context) {
         val CURRENT_WORKSPACE = stringPreferencesKey("current_workspace")
         val CURRENT_WORSPACE_ENABLED = stringPreferencesKey("current_workspace_enabled")
         val ACCOUNT_TYPE = stringPreferencesKey("account_type")
+        val CURRENT_USER_LOCALE = stringPreferencesKey("current_user_locale")
     }
 
     suspend fun saveCurrentWorkspace(workspace: String, workspaceEnable: Boolean) {
@@ -51,5 +52,15 @@ class AppDatasource @Inject constructor(@ApplicationContext context: Context) {
 
     fun getAccountType(): Flow<String?> = applicationContext.dataStore.data.map { preferences ->
         preferences[ACCOUNT_TYPE]
+    }
+
+    fun getCurrentUserLocale(): Flow<String?> = applicationContext.dataStore.data.map { preferences ->
+        preferences[CURRENT_USER_LOCALE] ?: "KE"
+    }
+
+    suspend fun saveCurrentUserLocale(locale: String) {
+        applicationContext.dataStore.edit { preferences ->
+            preferences[CURRENT_USER_LOCALE] = locale
+        }
     }
 }

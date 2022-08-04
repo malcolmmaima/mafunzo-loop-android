@@ -66,17 +66,14 @@ class OtpVerificationFragment : Fragment() {
         binding.tvResend.gone()
         startTimer()
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                authViewModel.isLoading.collectLatest { isLoading ->
-                    if (isLoading) {
-                        toggleLoading(true)
-                    } else {
-                        toggleLoading(false)
-                    }
-                }
+        authViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading) {
+                toggleLoading(true)
+            } else {
+                toggleLoading(false)
             }
         }
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 authViewModel.isOTPVerified.collectLatest { isVerified ->

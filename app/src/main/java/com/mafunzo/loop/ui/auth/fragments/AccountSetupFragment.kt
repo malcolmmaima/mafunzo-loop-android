@@ -21,14 +21,15 @@ import kotlinx.coroutines.launch
 import android.content.Intent
 import android.content.res.Resources
 import androidx.core.os.ConfigurationCompat
-import androidx.lifecycle.Observer
 import com.mafunzo.loop.R
+import com.mafunzo.loop.data.local.preferences.AppDatasource
 import com.mafunzo.loop.data.models.responses.SchoolResponse
 import com.mafunzo.loop.ui.auth.AuthActivity
 import com.mafunzo.loop.ui.main.MainActivity
 import com.mafunzo.loop.ui.main.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 
 @AndroidEntryPoint
 class AccountSetupFragment : Fragment() {
@@ -36,6 +37,7 @@ class AccountSetupFragment : Fragment() {
     private lateinit var binding: FragmentAccountSetupBinding
     private val authViewModel: AuthViewModel by viewModels()
     private val mainViewModel: MainViewModel by viewModels()
+    private val userPrefs: AppDatasource by lazy { AppDatasource(requireContext()) }
 
     private val schools = arrayListOf<SchoolResponse>()
 
@@ -67,9 +69,16 @@ class AccountSetupFragment : Fragment() {
     }
 
     private fun setupAccount() {
-        val deviceLocale = ConfigurationCompat.getLocales(Resources.getSystem().configuration)[0].country
         mainViewModel.getAccountTypes()
-        mainViewModel.getSchools(deviceLocale)
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            val userLocale = userPrefs.getCurrentUserLocale().first()?.trim()
+            if (userLocale != null) {
+                mainViewModel.getSchools(userLocale)
+            } else {
+                mainViewModel.getSchools("KE")
+            }
+        }
 
         binding.apply {
             setUpNextButton.setOnClickListener {
@@ -223,35 +232,31 @@ class AccountSetupFragment : Fragment() {
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            binding.progressBar.visible()
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mainViewModel.schools.observe(viewLifecycleOwner) { mafunzoSchools ->
-                    binding.progressBar.gone()
-                    if (mafunzoSchools.isNotEmpty()) {
-                        schools.clear()
-                        schools.add(SchoolResponse(schoolName = "Select School"))
-                        mafunzoSchools.sortedBy { it.schoolName }.forEach {
-                            schools.add(it)
-                        }
-                        binding.schoolSpinner.adapter = ArrayAdapter(
-                            requireContext(),
-                            R.layout.drop_down_spinner_layout,
-                            schools.map { it.schoolName }
-                        )
-                    } else {
-                        binding.root.snackbar(getString(R.string.error_loading_schools))
-                        //empty spinner with option "No schools available"
-                        val schools = arrayListOf<String>()
-                        schools.add("No schools available")
-                        binding.schoolSpinner.adapter = ArrayAdapter(
-                            requireContext(),
-                            R.layout.drop_down_spinner_layout,
-                            schools
-                        )
-                        val deviceLocale = ConfigurationCompat.getLocales(Resources.getSystem().configuration)[0].country
-                    }
+        mainViewModel.schools.observe(viewLifecycleOwner){ mafunzoSchools ->
+            binding.progressBar.gone()
+            Log.d("AccountSetup", "Schools Loaded")
+            if (mafunzoSchools.isNotEmpty()) {
+                schools.clear()
+                schools.add(SchoolResponse(schoolName = "Select School"))
+                mafunzoSchools.sortedBy { it.schoolName }.forEach {
+                    schools.add(it)
                 }
+                Log.d("AccountSetup", "Schools: $schools")
+                binding.schoolSpinner.adapter = ArrayAdapter(
+                    requireContext(),
+                    R.layout.drop_down_spinner_layout,
+                    schools.map { it.schoolName }
+                )
+            } else {
+                binding.root.snackbar(getString(R.string.error_loading_schools))
+                //empty spinner with option "No schools available"
+                val schools = arrayListOf<String>()
+                schools.add("No schools available")
+                binding.schoolSpinner.adapter = ArrayAdapter(
+                    requireContext(),
+                    R.layout.drop_down_spinner_layout,
+                    schools
+                )
             }
         }
 
@@ -269,17 +274,13 @@ class AccountSetupFragment : Fragment() {
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                authViewModel.isLoading.collectLatest { isLoading ->
-                    if (isLoading) {
-                        binding.setUpNextButton.showProgress()
-                        binding.setUpNextButton.enable(false)
-                    } else {
-                        binding.setUpNextButton.enable(true)
-                        binding.setUpNextButton.hideProgress("NEXT")
-                    }
-                }
+        authViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading) {
+                binding.setUpNextButton.showProgress()
+                binding.setUpNextButton.enable(false)
+            } else {
+                binding.setUpNextButton.enable(true)
+                binding.setUpNextButton.hideProgress("NEXT")
             }
         }
 

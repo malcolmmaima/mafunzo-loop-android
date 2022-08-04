@@ -22,6 +22,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     val sharedPrefs: AppDatasource,
     val firestoreDB: FirebaseFirestore,
+    val userPrefs: AppDatasource,
 ): ViewModel() {
 
     private val _schoolDetails = MutableSharedFlow<SchoolResponse>()
@@ -74,53 +75,63 @@ class HomeViewModel @Inject constructor(
     //get current workspace from firestore db
     fun getCurrentWorkspaceName(schoolId: String) {
         Log.d("HomeViewModel", "Getting current details from $schoolId")
-        //get device current local e.g. "KE" for Kenya
-        val deviceLocale = ConfigurationCompat.getLocales(Resources.getSystem().configuration)[0].country
+
         viewModelScope.launch {
-            firestoreDB.collection(FIREBASE_APP_SETTINGS).document(FIREBASE_APP_SCHOOLS).collection(deviceLocale).document(schoolId.trim()).get()
-                .addOnSuccessListener { document ->
-                    isLoading.value = false
-                    if (document.exists()) {
-                        viewModelScope.launch {
-                            Log.d("HomeViewModel", "DocumentSnapshot data: ${document.data}")
-                            document.toObject(SchoolResponse::class.java)
-                                ?.let { _schoolDetails.emit(it) }
+            val deviceLocale = userPrefs.getCurrentUserLocale().first()?.trim()
+            if (deviceLocale != null) {
+                firestoreDB.collection(FIREBASE_APP_SETTINGS).document(FIREBASE_APP_SCHOOLS).collection(deviceLocale).document(schoolId.trim()).get()
+                    .addOnSuccessListener { document ->
+                        isLoading.value = false
+                        if (document.exists()) {
+                            viewModelScope.launch {
+                                Log.d("HomeViewModel", "DocumentSnapshot data: ${document.data}")
+                                document.toObject(SchoolResponse::class.java)
+                                    ?.let { _schoolDetails.emit(it) }
+                            }
+                        } else {
+                            viewModelScope.launch {
+                                Log.d("HomeViewModel", "No such document")
+                                _errorMessage.emit("No workspace found")
+                            }
                         }
-                    } else {
+                    }.addOnFailureListener { exception ->
                         viewModelScope.launch {
-                            Log.d("HomeViewModel", "No such document")
-                            _errorMessage.emit("No workspace found")
+                            Log.d("HomeViewModel", "get failed with ", exception)
+                            exception.localizedMessage?.let { _errorMessage.emit(it) }
                         }
                     }
-                }.addOnFailureListener { exception ->
-                    viewModelScope.launch {
-                        Log.d("HomeViewModel", "get failed with ", exception)
-                        exception.localizedMessage?.let { _errorMessage.emit(it) }
-                    }
+            } else {
+                viewModelScope.launch {
+                    Log.d("HomeViewModel", "No locale found")
+                    _errorMessage.emit("No locale found")
+                    _isLoading.value = false
                 }
+            }
         }
     }
 
     fun mySchools(schools: HashMap<String, Boolean>?) {
-        val deviceLocale = ConfigurationCompat.getLocales(Resources.getSystem().configuration)[0].country
         //take a hashmap of school id which translate to Firestore document ids and fetch details from firestore from those specific document ids
         schools?.let {
             viewModelScope.launch {
+                val deviceLocale = userPrefs.getCurrentUserLocale().first()?.trim()
                 val schoolsList = ArrayList<SchoolResponse>()
                 for ((schoolId, enabled) in schools) {
-                    firestoreDB.collection(FIREBASE_APP_SETTINGS).document(FIREBASE_APP_SCHOOLS).collection(deviceLocale).document(schoolId.trim()).get()
-                        .addOnSuccessListener { document ->
-                            document.toObject(SchoolResponse::class.java)
-                                ?.let { school ->
-                                    schoolsList.add(school)
+                    if (deviceLocale != null) {
+                        firestoreDB.collection(FIREBASE_APP_SETTINGS).document(FIREBASE_APP_SCHOOLS).collection(deviceLocale).document(schoolId.trim()).get()
+                            .addOnSuccessListener { document ->
+                                document.toObject(SchoolResponse::class.java)
+                                    ?.let { school ->
+                                        schoolsList.add(school)
+                                    }
+                                _schools.value = schoolsList
+                            }.addOnFailureListener { exception ->
+                                Log.e("HomeViewModel", "get failed with ", exception)
+                                viewModelScope.launch {
+                                    exception.localizedMessage?.let { _errorMessage.emit(it) }
                                 }
-                            _schools.value = schoolsList
-                        }.addOnFailureListener { exception ->
-                            Log.e("HomeViewModel", "get failed with ", exception)
-                            viewModelScope.launch {
-                                exception.localizedMessage?.let { _errorMessage.emit(it) }
                             }
-                        }
+                    }
                 }
             }
         }
