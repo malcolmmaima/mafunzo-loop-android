@@ -1,25 +1,20 @@
 package com.mafunzo.loop.ui.splash
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
-import androidx.lifecycle.Lifecycle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.google.firebase.auth.FirebaseAuth
 import com.mafunzo.loop.databinding.ActivitySplashBinding
 import com.mafunzo.loop.ui.auth.AccountDisabledActivity
 import com.mafunzo.loop.ui.auth.AuthActivity
-import com.mafunzo.loop.ui.auth.viewmodels.AuthViewModel
 import com.mafunzo.loop.ui.main.MainActivity
 import com.mafunzo.loop.ui.splash.viewmodel.SplashViewModel
-import com.mafunzo.loop.utils.snackbar
 import com.mafunzo.loop.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -79,7 +74,6 @@ class SplashActivity : AppCompatActivity() {
             }
         }
     }
-
 
     private fun initSplash() {
         binding.progressBar.visible()

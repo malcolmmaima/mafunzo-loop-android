@@ -264,13 +264,24 @@ class HomeFragment : Fragment() {
         binding.cvTimetable.isEnabled = !disable
     }
 
-    private fun getUserDetails() {
+    private fun getUserDetails(override: Boolean = false) {
         //hide gridlayout items until user details are fetched
         hideCards(true)
         //fetch user details from firebase
-        authViewModel.userPhoneNumber.let { phoneNumber ->
-            if (phoneNumber != null && myUserDetails == null) {
-                authViewModel.fetchUser(phoneNumber)
+        when (override) {
+            true -> {
+                authViewModel.userPhoneNumber.let { phoneNumber ->
+                    if (phoneNumber != null) {
+                        authViewModel.fetchUser(phoneNumber)
+                    }
+                }
+            }
+            false -> {
+                authViewModel.userPhoneNumber.let { phoneNumber ->
+                    if (phoneNumber != null && myUserDetails == null) {
+                        authViewModel.fetchUser(phoneNumber)
+                    }
+                }
             }
         }
     }
@@ -354,6 +365,7 @@ class HomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         disableAllModules(true)
+        getUserDetails(true)
         homeViewModel.getCurrentWorkspace()
         binding.helloMessageTV.text = "Hi ${myUserDetails?.firstName},"
     }
