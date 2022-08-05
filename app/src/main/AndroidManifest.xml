@@ -30,7 +30,7 @@
             android:resource="@color/colorPrimary" />
 
         <service
-            android:name="com.mafunzo.loop.utils.MafunzoService"
+            android:name="com.mafunzo.loop.utils.MafunzoMessagingService"
             android:exported="false"
             tools:ignore="Instantiatable">
             <intent-filter>
