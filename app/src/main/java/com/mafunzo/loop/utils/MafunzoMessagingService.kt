@@ -15,7 +15,8 @@ import com.mafunzo.loop.ui.main.MainActivity
 
 const val channelId = "notification_channel"
 const val channelName = "com.mafunzo.loop"
-class MafunzoService : FirebaseMessagingService() {
+
+class MafunzoMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         if(remoteMessage.notification != null) {
