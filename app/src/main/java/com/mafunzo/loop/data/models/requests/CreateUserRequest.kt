@@ -4,6 +4,7 @@ import androidx.annotation.Keep
 
 @Keep
 data class CreateUserRequest(
+    val phone: String,
     val email: String,
     val firstName: String,
     val lastName: String,
