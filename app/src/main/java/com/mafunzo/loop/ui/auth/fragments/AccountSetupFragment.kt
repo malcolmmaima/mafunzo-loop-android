@@ -146,19 +146,26 @@ class AccountSetupFragment : Fragment() {
 
                     this.setUpNextButton.showProgress()
                     this.setUpNextButton.enable(false)
-                    val userDetails = CreateUserRequest(
-                        email = email,
-                        firstName = firstName,
-                        lastName = secondName,
-                        profilePic = "",
-                        dateCreated = getCurrentTimeInMillis(),
-                        accountType = accountType,
-                        enabled = true,
-                        schools = HashMap<String, Boolean>().apply {
-                            school.id?.let { schoolId -> put(schoolId, false) }
-                        }
-                    )
-                    registerUser(createUserRequest = userDetails)
+                    val userDetails = authViewModel.userPhoneNumber?.let { phoneNumber ->
+                        CreateUserRequest(
+                            phone = phoneNumber,
+                            email = email,
+                            firstName = firstName,
+                            lastName = secondName,
+                            profilePic = "",
+                            dateCreated = getCurrentTimeInMillis(),
+                            accountType = accountType,
+                            enabled = true,
+                            schools = HashMap<String, Boolean>().apply {
+                                school.id?.let { schoolId -> put(schoolId, false) }
+                            }
+                        )
+                    }
+                    if (userDetails != null) {
+                        registerUser(createUserRequest = userDetails)
+                    } else {
+                        Toast.makeText(requireContext(), getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show()
+                    }
                 } else {
                     Toast.makeText(
                         requireContext(),

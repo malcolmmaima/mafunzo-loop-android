@@ -90,4 +90,5 @@
     <string name="no_schools">No schools</string>
     <string name="search">Search</string>
     <string name="search_schools">Search for school</string>
+    <string name="something_went_wrong">Something went wrong</string>
 </resources>
