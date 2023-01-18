@@ -69,7 +69,11 @@ object AppModule {
     @Singleton
     @Provides
     fun provideLaunchDarklyClient(): LDClient {
-        val mobileKey = if(BuildConfig.DEBUG) Constants.LAUNCH_DARKLY_TEST_SDK_KEY else Constants.LAUNCH_DARKLY_SDK_KEY
+        val mobileKey = if(BuildConfig.BUILD_TYPE == "release")
+            Constants.LAUNCH_DARKLY_SDK_KEY
+        else
+            Constants.LAUNCH_DARKLY_TEST_SDK_KEY
+
         val ldConfig: LDConfig = LDConfig.Builder()
             .mobileKey(mobileKey)
             .build()
