@@ -140,4 +140,8 @@ dependencies {
     implementation 'com.google.android.play:integrity:1.0.1'
 
     implementation 'androidx.browser:browser:1.4.0'
+
+    // Launchdarkly
+    implementation 'com.launchdarkly:launchdarkly-android-client-sdk:4.0.0'
+
 }

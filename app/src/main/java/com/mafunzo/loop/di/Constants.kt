@@ -1,6 +1,13 @@
 package com.mafunzo.loop.di
 
 object Constants {
+    // Launch Darkly SDK Key
+    const val LAUNCH_DARKLY_TEST_SDK_KEY = "mob-431c06fd-4394-42af-b883-4712a382cf35"
+    const val LAUNCH_DARKLY_SDK_KEY = "mob-cc698491-5d8c-4b16-b6fa-da20d66d92c4"
+
+    // Launchdarkly Feature Flags
+    const val SYSTEM_OFFLINE = "mafunzo-online"
+
     //Support constants
     const val SUPPORT_EMAIL = "mafunzoloop@gmail.com"
 

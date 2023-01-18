@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.launchdarkly.sdk.android.LDClient
 import com.mafunzo.loop.data.local.preferences.AppDatasource
 import com.mafunzo.loop.data.models.responses.SystemSettingsResponse
 import com.mafunzo.loop.data.models.responses.UserResponse
@@ -23,7 +24,8 @@ class SplashViewModel @Inject constructor(
     val auth: FirebaseAuth,
     val firebaseDB: FirebaseFirestore,
     val firestoreDB: FirebaseFirestore,
-    val userPrefs: AppDatasource
+    val userPrefs: AppDatasource,
+    val launchDarkly: LDClient
 ) : ViewModel() {
 
     private val TAG = "SplashViewModel"
@@ -51,6 +53,8 @@ class SplashViewModel @Inject constructor(
     val loggedOut = _loggedOut.asSharedFlow()
 
     fun isUserLoggedIn() = auth.currentUser != null
+
+    val systemOffline = launchDarkly.boolVariation(Constants.SYSTEM_OFFLINE, false)
 
     fun getSystemSettings() {
         viewModelScope.launch {

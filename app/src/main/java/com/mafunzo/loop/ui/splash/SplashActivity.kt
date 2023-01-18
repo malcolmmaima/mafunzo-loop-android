@@ -48,17 +48,21 @@ class SplashActivity : AppCompatActivity() {
         }
 
         splashViewModel.systemSettings.observe(this@SplashActivity) { settings ->
-            val allowedMaintainer = splashViewModel.userPhoneNumber?.let {
-                settings.maintainers?.contains(
-                    it
-                ) ?: false
-            }
-            Log.d("SplashActivity", "Allowed maintainer: $allowedMaintainer")
-            if(settings.offline == true && allowedMaintainer == false) {
-                Log.d("SplashActivity", "Offline mode enabled")
+            if(splashViewModel.systemOffline) {
                 loadOffline()
             } else {
-                initializeOnlineObservers()
+                val allowedMaintainer = splashViewModel.userPhoneNumber?.let {
+                    settings.maintainers?.contains(
+                        it
+                    ) ?: false
+                }
+                Log.d("SplashActivity", "Allowed maintainer: $allowedMaintainer")
+                if(settings.offline == true && allowedMaintainer == false) {
+                    Log.d("SplashActivity", "Offline mode enabled")
+                    loadOffline()
+                } else {
+                    initializeOnlineObservers()
+                }
             }
         }
     }

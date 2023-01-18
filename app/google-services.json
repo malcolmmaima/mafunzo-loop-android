@@ -30,6 +30,14 @@
           }
         },
         {
+          "client_id": "168281819850-qktsptjejf9g5v89a8emqsmca083nunm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mafunzo.loop",
+            "certificate_hash": "40e0cb022b29e8bec805dbd01cd17d79dd52b110"
+          }
+        },
+        {
           "client_id": "168281819850-rjr0upsqfne05fd5tglc74aja6fdhh6m.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
